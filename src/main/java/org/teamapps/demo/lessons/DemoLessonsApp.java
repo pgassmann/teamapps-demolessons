@@ -16,7 +16,7 @@ import org.teamapps.ux.component.tree.SimpleTree;
 import org.teamapps.ux.session.SessionContext;
 import org.teamapps.webcontroller.SimpleWebController;
 
-public class DemoLessonsApp {
+public class DemoLessonsApp implements DemoLesson {
 
     private final SessionContext sessionContext;
 
@@ -25,6 +25,11 @@ public class DemoLessonsApp {
 
     public DemoLessonsApp(SessionContext sessionContext) {
         this.sessionContext = sessionContext;
+//        this.rootComponent = createRootComponent();
+    }
+
+    @Override
+    public void handleDemoSelected() {
         this.rootComponent = createRootComponent();
     }
 
@@ -51,31 +56,53 @@ public class DemoLessonsApp {
     @SuppressWarnings("unchecked")
     private SimpleTree<DemoLesson> createLessonsTree() {
         SimpleTree<DemoLesson> lessonsTree = new SimpleTree<>();
-        lessonsTree.setTemplatesByDepth(BaseTemplate.LIST_ITEM_VERY_LARGE_ICON_TWO_LINES, BaseTemplate.LIST_ITEM_LARGE_ICON_TWO_LINES);
+        lessonsTree.setTemplatesByDepth(BaseTemplate.LIST_ITEM_LARGE_ICON_TWO_LINES, BaseTemplate.LIST_ITEM_LARGE_ICON_TWO_LINES);
         lessonsTree.setOpenOnSelection(true);
         lessonsTree.setEnforceSingleExpandedPath(true);
         lessonsTree.setShowExpanders(true);
-        lessonsTree.setIndentation(40);
+        lessonsTree.setIndentation(0);
 
         // Register all DemoLessons in lessonsTree
+
+        // Intro Lessons
+        BaseTemplateTreeNode introLessons = new BaseTemplateTreeNode(MaterialIcon.WEB_ASSET, "Introduction", "First Steps with TeamApps");
+        lessonsTree.addNode(introLessons);
+
         BaseTemplateTreeNode<DemoLesson> l01Panel = new BaseTemplateTreeNode(MaterialIcon.WEB_ASSET, null ,"Lesson 1 - Panel", "First Lesson (PanelDemo)","1", new PanelDemo(sessionContext));
+        l01Panel.setParent(introLessons);
         lessonsTree.addNode(l01Panel);
-        BaseTemplateTreeNode<DemoLesson> l02TextField = new BaseTemplateTreeNode(MaterialIcon.WEB, null ,"Lesson 2 - TextField", "TextField Lesson","2", new TextFieldDemo(sessionContext));
+
+        BaseTemplateTreeNode<DemoLesson> l02TextField = new BaseTemplateTreeNode(MaterialIcon.INPUT, null ,"Lesson 2 - TextField", "TextField Lesson","2", new TextFieldDemo(sessionContext));
+        l02TextField.setParent(introLessons);
         lessonsTree.addNode(l02TextField);
 
-        lessonsTree.onNodeSelected.addListener(node -> {
-            DemoLesson lesson = node.getPayload();
+        // Experimental Lessons
+        BaseTemplateTreeNode experimentalLessons = new BaseTemplateTreeNode(MaterialIcon.FLASH_ON, "Experiments", "Just for Fun");
+        lessonsTree.addNode(experimentalLessons);
 
-            // call handleDemoSelected method on selected DemoLesson
-            lesson.handleDemoSelected();
-            // display rootComponent of selected DemoLesson
-            demoView.setComponent(lesson.getRootComponent());
+        BaseTemplateTreeNode<DemoLesson> l99DemoLessonsApp = new BaseTemplateTreeNode(MaterialIcon.WEB, null ,"DemoLessonsApp", "The DemoLessonsApp itself",null, new DemoLessonsApp(sessionContext));
+        l99DemoLessonsApp.setParent(experimentalLessons);
+        lessonsTree.addNode(l99DemoLessonsApp);
+
+        lessonsTree.onNodeSelected.addListener(node -> {
+            if (node.getPayload() instanceof DemoLesson) {
+                DemoLesson lesson = node.getPayload();
+
+                // call handleDemoSelected method on selected DemoLesson
+                lesson.handleDemoSelected();
+                // display rootComponent of selected DemoLesson
+                demoView.setComponent(lesson.getRootComponent());
+            }
         });
         return lessonsTree;
     }
 
     public static void main(String[] args) throws Exception {
-        SimpleWebController controller = new SimpleWebController(context -> new DemoLessonsApp(context).getRootComponent());
+        SimpleWebController controller = new SimpleWebController(context -> {
+            DemoLessonsApp demoLessonsApp = new DemoLessonsApp(context);
+            demoLessonsApp.handleDemoSelected();
+            return demoLessonsApp.getRootComponent();
+        });
         new TeamAppsJettyEmbeddedServer(controller, Files.createTempDir(), 8081).start();
     }
 }
