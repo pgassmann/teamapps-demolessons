@@ -14,17 +14,26 @@ import org.teamapps.webcontroller.SimpleWebController;
 public class TextFieldDemo implements DemoLesson {
 
     private Component rootComponent = new DummyComponent();
+    private SessionContext context;
+
+    // Constructor, only set session context instance variable
+    public TextFieldDemo(SessionContext context) {
+        this.context = context;
+    }
+
     public Component getRootComponent(){
         return rootComponent;
     }
 
-    public TextFieldDemo(SessionContext context) {
+    // This method is called every time the Demo is selected in the DemoLessonApp
+    public void handleDemoSelected() {
+        // show Notification in session context
+        context.showNotification(MaterialIcon.LIGHTBULB_OUTLINE, "My first Notification");
+
+
         // create new Panel and define it as the DemoLesson rootComponent
         Panel panel = new Panel(MaterialIcon.LIGHTBULB_OUTLINE, "Text Field Demo");
         rootComponent = panel;
-
-        // show Notification in session context
-        context.showNotification(MaterialIcon.LIGHTBULB_OUTLINE, "first Notification");
 
         // configure Panel
         panel.setStretchContent(false);
@@ -36,7 +45,7 @@ public class TextFieldDemo implements DemoLesson {
         // set Panel Content
         panel.setContent(textField);
 
-        // act on events
+        // Handle Events
         textField.onValueChanged.addListener(newValue -> {
 
             // showNotification with all Options, use new value of Text Field
@@ -49,14 +58,16 @@ public class TextFieldDemo implements DemoLesson {
                     true
             );
         });
-
     }
 
 
     public static void main(String[] args) throws Exception {
 
         SimpleWebController controller = new SimpleWebController(context -> {
-            return new TextFieldDemo(context).getRootComponent();
+
+            TextFieldDemo textFieldDemo = new TextFieldDemo(context);
+            textFieldDemo.handleDemoSelected();
+            return textFieldDemo.getRootComponent();
         });
         new TeamAppsJettyEmbeddedServer(controller, Files.createTempDir()).start();
     }

@@ -27,9 +27,11 @@ public class DemoLessonsApp {
         this.sessionContext = sessionContext;
         this.rootComponent = createRootComponent();
     }
+
     public Component getRootComponent() {
         return rootComponent;
     }
+
     private Component createRootComponent() {
         ResponsiveApplication responsiveApplication = ResponsiveApplication.createApplication();
         Perspective perspective = Perspective.createPerspective();
@@ -39,6 +41,7 @@ public class DemoLessonsApp {
         perspective.addView(lessonsTreeView);
 
         demoView = View.createView(ExtendedLayout.CENTER, MaterialIcon.HELP, "Demo Content", null);
+        demoView.getPanel().setHideTitleBar(true);
         perspective.addView(demoView);
 
         responsiveApplication.showPerspective(perspective);
@@ -57,20 +60,22 @@ public class DemoLessonsApp {
         // Register all DemoLessons in lessonsTree
         BaseTemplateTreeNode<DemoLesson> l01Panel = new BaseTemplateTreeNode(MaterialIcon.WEB_ASSET, null ,"Lesson 1 - Panel", "First Lesson (PanelDemo)","1", new PanelDemo(sessionContext));
         lessonsTree.addNode(l01Panel);
-        BaseTemplateTreeNode<DemoLesson> l02TextField = new BaseTemplateTreeNode(MaterialIcon.WEB, null ,"Lesson 2 - TextField", "Components for arranging other components","2", new TextFieldDemo(sessionContext));
+        BaseTemplateTreeNode<DemoLesson> l02TextField = new BaseTemplateTreeNode(MaterialIcon.WEB, null ,"Lesson 2 - TextField", "TextField Lesson","2", new TextFieldDemo(sessionContext));
         lessonsTree.addNode(l02TextField);
 
         lessonsTree.onNodeSelected.addListener(node -> {
+            DemoLesson lesson = node.getPayload();
+
+            // call handleDemoSelected method on selected DemoLesson
+            lesson.handleDemoSelected();
             // display rootComponent of selected DemoLesson
-            demoView.setComponent(node.getPayload().getRootComponent());
+            demoView.setComponent(lesson.getRootComponent());
         });
         return lessonsTree;
     }
 
     public static void main(String[] args) throws Exception {
-        SimpleWebController controller = new SimpleWebController(context -> {
-            return new DemoLessonsApp(context).getRootComponent();
-        });
+        SimpleWebController controller = new SimpleWebController(context -> new DemoLessonsApp(context).getRootComponent());
         new TeamAppsJettyEmbeddedServer(controller, Files.createTempDir(), 8081).start();
     }
 }

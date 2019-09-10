@@ -1,13 +1,11 @@
 package org.teamapps.demo.lessons.l01_panel;
 
 import com.google.common.io.Files;
-import org.teamapps.demo.lessons.DemoLesson;
+import org.teamapps.common.format.Color;
 import org.teamapps.icon.material.MaterialIcon;
 import org.teamapps.server.jetty.embedded.TeamAppsJettyEmbeddedServer;
-import org.teamapps.ux.component.Component;
 import org.teamapps.ux.component.dummy.DummyComponent;
 import org.teamapps.ux.component.panel.Panel;
-import org.teamapps.ux.session.SessionContext;
 import org.teamapps.webcontroller.SimpleWebController;
 
 public class PanelExample {
@@ -16,8 +14,14 @@ public class PanelExample {
     public static void main(String[] args) throws Exception {
         SimpleWebController controller = new SimpleWebController(context -> {
 
-            // create first Panel
-            Panel panel = new Panel(MaterialIcon.LIGHTBULB_OUTLINE, "firstPanel");
+            // create new Panel and define it as the DemoLesson rootComponent
+            Panel panel = new Panel(MaterialIcon.LIGHTBULB_OUTLINE, "My first Panel");
+
+            // set a panel property
+            panel.setHeaderBackgroundColor(Color.GOLD);
+
+            // add DummyComponent as panel Content
+            panel.setContent(new DummyComponent());
 
             // SimpleWebController requires returning a Component which will be displayed.
             // return firstPanel as main Component

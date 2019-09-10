@@ -1,6 +1,7 @@
 package org.teamapps.demo.lessons.l01_panel;
 
 import com.google.common.io.Files;
+import org.teamapps.common.format.Color;
 import org.teamapps.demo.lessons.DemoLesson;
 import org.teamapps.icon.material.MaterialIcon;
 import org.teamapps.server.jetty.embedded.TeamAppsJettyEmbeddedServer;
@@ -12,18 +13,24 @@ import org.teamapps.webcontroller.SimpleWebController;
 
 public class PanelDemo implements DemoLesson {
 
-    // DemoLesson interface implementation
-    private Component rootComponent = new DummyComponent();
-    public Component getRootComponent(){
-        return rootComponent;
-    }
+    private Component rootComponent;
 
     // Constructor
     public PanelDemo(SessionContext context) {
 
         // create new Panel and define it as the DemoLesson rootComponent
-        Panel panel = new Panel(MaterialIcon.LIGHTBULB_OUTLINE, "firstPanel");
+        Panel panel = new Panel(MaterialIcon.LIGHTBULB_OUTLINE, "My first Panel");
         rootComponent = panel;
+
+        // set a panel property
+        panel.setHeaderBackgroundColor(Color.GOLD);
+
+        // add DummyComponent as panel Content
+        panel.setContent(new DummyComponent());
+    }
+
+    public Component getRootComponent(){
+        return rootComponent;
     }
 
     public static void main(String[] args) throws Exception {
