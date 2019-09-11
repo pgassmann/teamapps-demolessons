@@ -8,6 +8,7 @@ import org.teamapps.demo.lessons.l04_richtexteditor.RichTextEditorDemo;
 import org.teamapps.demo.lessons.l05_label.LabelDemo;
 import org.teamapps.demo.lessons.l06_button.ButtonDemo;
 import org.teamapps.demo.lessons.l07_checkbox.CheckboxDemo;
+import org.teamapps.demo.lessons.l08_combobox.ComboBoxDemo;
 import org.teamapps.icon.material.MaterialIcon;
 import org.teamapps.server.jetty.embedded.TeamAppsJettyEmbeddedServer;
 import org.teamapps.ux.application.ResponsiveApplication;
@@ -102,6 +103,10 @@ public class DemoLessonsApp implements DemoLesson {
         BaseTemplateTreeNode<DemoLesson> l07_checkbox = new BaseTemplateTreeNode(MaterialIcon.INPUT, null ,"Checkbox", "Checkbox Lesson","7", new CheckboxDemo(sessionContext));
         l07_checkbox.setParent(introLessons);
         lessonsTree.addNode(l07_checkbox);
+
+        BaseTemplateTreeNode<DemoLesson> l08_combobox = new BaseTemplateTreeNode(MaterialIcon.INPUT, null ,"ComboBox", "ComboBox Lesson","8", new ComboBoxDemo(sessionContext));
+        l08_combobox.setParent(introLessons);
+        lessonsTree.addNode(l08_combobox);
 
         // Experimental Lessons
         BaseTemplateTreeNode experimentalLessons = new BaseTemplateTreeNode(MaterialIcon.FLASH_ON, "Experiments", "Just for Fun");

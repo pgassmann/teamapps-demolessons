@@ -39,7 +39,9 @@ public class LabelDemo implements DemoLesson {
         });
 
         VerticalLayout verticalLayout = new VerticalLayout();
+        verticalLayout.addComponent(label1);
         verticalLayout.addComponent(textField1);
+        verticalLayout.addComponent(new Label("new Label"));
         verticalLayout.addComponent(textField2);
         panel.setContent(verticalLayout);
 
