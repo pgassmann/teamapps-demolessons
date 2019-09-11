@@ -3,6 +3,11 @@ package org.teamapps.demo.lessons;
 import com.google.common.io.Files;
 import org.teamapps.demo.lessons.l01_panel.PanelDemo;
 import org.teamapps.demo.lessons.l02_textfield.TextFieldDemo;
+import org.teamapps.demo.lessons.l03_verticallayout.VerticalLayoutDemo;
+import org.teamapps.demo.lessons.l04_richtexteditor.RichTextEditorDemo;
+import org.teamapps.demo.lessons.l05_label.LabelDemo;
+import org.teamapps.demo.lessons.l06_button.ButtonDemo;
+import org.teamapps.demo.lessons.l07_checkbox.CheckboxDemo;
 import org.teamapps.icon.material.MaterialIcon;
 import org.teamapps.server.jetty.embedded.TeamAppsJettyEmbeddedServer;
 import org.teamapps.ux.application.ResponsiveApplication;
@@ -15,6 +20,8 @@ import org.teamapps.ux.component.template.BaseTemplateTreeNode;
 import org.teamapps.ux.component.tree.SimpleTree;
 import org.teamapps.ux.session.SessionContext;
 import org.teamapps.webcontroller.SimpleWebController;
+
+import java.awt.*;
 
 public class DemoLessonsApp implements DemoLesson {
 
@@ -68,13 +75,33 @@ public class DemoLessonsApp implements DemoLesson {
         BaseTemplateTreeNode introLessons = new BaseTemplateTreeNode(MaterialIcon.WEB_ASSET, "Introduction", "First Steps with TeamApps");
         lessonsTree.addNode(introLessons);
 
-        BaseTemplateTreeNode<DemoLesson> l01Panel = new BaseTemplateTreeNode(MaterialIcon.WEB_ASSET, null ,"Lesson 1 - Panel", "First Lesson (PanelDemo)","1", new PanelDemo(sessionContext));
-        l01Panel.setParent(introLessons);
-        lessonsTree.addNode(l01Panel);
+        BaseTemplateTreeNode<DemoLesson> l01_Panel = new BaseTemplateTreeNode(MaterialIcon.WEB_ASSET, null ,"Panel", "First Lesson (PanelDemo)","1", new PanelDemo(sessionContext));
+        l01_Panel.setParent(introLessons);
+        lessonsTree.addNode(l01_Panel);
 
-        BaseTemplateTreeNode<DemoLesson> l02TextField = new BaseTemplateTreeNode(MaterialIcon.INPUT, null ,"Lesson 2 - TextField", "TextField Lesson","2", new TextFieldDemo(sessionContext));
-        l02TextField.setParent(introLessons);
-        lessonsTree.addNode(l02TextField);
+        BaseTemplateTreeNode<DemoLesson> l02_TextField = new BaseTemplateTreeNode(MaterialIcon.INPUT, null ," TextField", "TextField Lesson","2", new TextFieldDemo(sessionContext));
+        l02_TextField.setParent(introLessons);
+        lessonsTree.addNode(l02_TextField);
+
+        BaseTemplateTreeNode<DemoLesson> l03_verticallayout = new BaseTemplateTreeNode(MaterialIcon.INPUT, null ,"Vertical Layout", "VerticalLayout Lesson","3", new VerticalLayoutDemo(sessionContext));
+        l03_verticallayout.setParent(introLessons);
+        lessonsTree.addNode(l03_verticallayout);
+
+        BaseTemplateTreeNode<DemoLesson> l04_richtexteditor = new BaseTemplateTreeNode(MaterialIcon.INPUT, null ,"Rich Text Editor", "RichTextEditor Lesson","4", new RichTextEditorDemo(sessionContext));
+        l04_richtexteditor.setParent(introLessons);
+        lessonsTree.addNode(l04_richtexteditor);
+
+        BaseTemplateTreeNode<DemoLesson> l05_label = new BaseTemplateTreeNode(MaterialIcon.INPUT, null ,"Labels", "TextField Labels Lesson","5", new LabelDemo(sessionContext));
+        l05_label.setParent(introLessons);
+        lessonsTree.addNode(l05_label);
+
+        BaseTemplateTreeNode<DemoLesson> l06_button = new BaseTemplateTreeNode(MaterialIcon.INPUT, null ,"Button", "Button Lesson","6", new ButtonDemo(sessionContext));
+        l06_button.setParent(introLessons);
+        lessonsTree.addNode(l06_button);
+
+        BaseTemplateTreeNode<DemoLesson> l07_checkbox = new BaseTemplateTreeNode(MaterialIcon.INPUT, null ,"Checkbox", "Checkbox Lesson","7", new CheckboxDemo(sessionContext));
+        l07_checkbox.setParent(introLessons);
+        lessonsTree.addNode(l07_checkbox);
 
         // Experimental Lessons
         BaseTemplateTreeNode experimentalLessons = new BaseTemplateTreeNode(MaterialIcon.FLASH_ON, "Experiments", "Just for Fun");

@@ -1,4 +1,4 @@
-package org.teamapps.demo.lessons.l02_textfield;
+package org.teamapps.demo.lessons.l03_verticallayout;
 
 import com.google.common.io.Files;
 import org.teamapps.demo.lessons.DemoLesson;
@@ -7,17 +7,18 @@ import org.teamapps.server.jetty.embedded.TeamAppsJettyEmbeddedServer;
 import org.teamapps.ux.component.Component;
 import org.teamapps.ux.component.dummy.DummyComponent;
 import org.teamapps.ux.component.field.TextField;
+import org.teamapps.ux.component.flexcontainer.VerticalLayout;
 import org.teamapps.ux.component.panel.Panel;
 import org.teamapps.ux.session.SessionContext;
 import org.teamapps.webcontroller.SimpleWebController;
 
-public class TextFieldDemo implements DemoLesson {
+public class VerticalLayoutDemo implements DemoLesson {
 
     private Component rootComponent = new DummyComponent();
     private SessionContext context;
 
     // Constructor, only set session context instance variable
-    public TextFieldDemo(SessionContext context) {
+    public VerticalLayoutDemo(SessionContext context) {
         this.context = context;
     }
 
@@ -27,37 +28,29 @@ public class TextFieldDemo implements DemoLesson {
 
     // This method is called every time the Demo is selected in the DemoLessonApp
     public void handleDemoSelected() {
-        // show Notification in session context
-        context.showNotification(MaterialIcon.LIGHTBULB_OUTLINE, "My first Notification");
-
 
         // create new Panel and define it as the DemoLesson rootComponent
-        Panel panel = new Panel(MaterialIcon.LIGHTBULB_OUTLINE, "Text Field Demo");
+        Panel panel = new Panel(MaterialIcon.LIGHTBULB_OUTLINE, "Vertical Layout Demo");
         rootComponent = panel;
 
-        // configure Panel
         panel.setStretchContent(false);
-        panel.setPadding(5);
+        panel.setPadding(10);
 
-        // define textField
-        TextField textField = new TextField();
-        textField.setEmptyText("write something and press ENTER or click somewhere else");
-        // set Panel Content
-        panel.setContent(textField);
 
-        // Handle Events with lambda expression
-        textField.onValueChanged.addListener(newValue -> {
+        TextField textField1 = new TextField();
+        textField1.setEmptyText("Enter some text here...");
 
-            // showNotification with all Options, use new value of Text Field
-            context.showNotification(
-                    MaterialIcon.NOTIFICATIONS,
-                    "Welcome",
-                    "Hello " + newValue,
-                    true,
-                    10000,
-                    true
-            );
+        TextField textField2 = new TextField();
+
+        textField1.onTextInput.addListener(text -> {
+            textField2.setValue("New Content: " + text);
         });
+
+
+        VerticalLayout verticalLayout = new VerticalLayout();
+        verticalLayout.addComponent(textField1);
+        verticalLayout.addComponent(textField2);
+        panel.setContent(verticalLayout);
     }
 
 
@@ -65,7 +58,7 @@ public class TextFieldDemo implements DemoLesson {
 
         SimpleWebController controller = new SimpleWebController(context -> {
 
-            TextFieldDemo textFieldDemo = new TextFieldDemo(context);
+            VerticalLayoutDemo textFieldDemo = new VerticalLayoutDemo(context);
             textFieldDemo.handleDemoSelected();
             return textFieldDemo.getRootComponent();
         });
