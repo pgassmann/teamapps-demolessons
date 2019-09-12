@@ -38,32 +38,4 @@ public class Meal {
 		this.calories = calories;
 	}
 
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) {
-			return true;
-		}
-		if (o == null || getClass() != o.getClass()) {
-			return false;
-		}
-
-		Meal meal = (Meal) o;
-
-		if (icon != null ? !icon.equals(meal.icon) : meal.icon != null) {
-			return false;
-		}
-		if (name != null ? !name.equals(meal.name) : meal.name != null) {
-			return false;
-		}
-		return calories != null ? calories.equals(meal.calories) : meal.calories == null;
-	}
-
-	@Override
-	public int hashCode() {
-		int result = icon != null ? icon.hashCode() : 0;
-		result = 31 * result + (name != null ? name.hashCode() : 0);
-		result = 31 * result + (calories != null ? calories.hashCode() : 0);
-		return result;
-	}
 }

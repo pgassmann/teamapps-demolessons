@@ -10,6 +10,7 @@ import org.teamapps.server.jetty.embedded.TeamAppsJettyEmbeddedServer;
 import org.teamapps.ux.component.Component;
 import org.teamapps.ux.component.dummy.DummyComponent;
 import org.teamapps.ux.component.field.CheckBox;
+import org.teamapps.ux.component.field.Label;
 import org.teamapps.ux.component.field.combobox.ComboBox;
 import org.teamapps.ux.component.flexcontainer.VerticalLayout;
 import org.teamapps.ux.component.panel.Panel;
@@ -31,15 +32,20 @@ public class ComboBoxDemo implements DemoLesson {
         Panel panel = new Panel(MaterialIcon.LIGHTBULB_OUTLINE, "ComboBox Demo");
         rootComponent = panel;
 
+        VerticalLayout verticalLayout = new VerticalLayout();
+        panel.setContent(verticalLayout);
+
         /* ComboBox of Strings*/
-        ComboBox<String> stringComboBox = new ComboBox<>(Arrays.asList("Kuchen", "Spaghetti", "Fries", "Icecream", "Pizza", "Chocolate"));
+        verticalLayout.addComponent(new Label("ComboBox of Strings"));
+        ComboBox<String> stringComboBox = new ComboBox<>(Arrays.asList("Cake", "Spaghetti", "Fries", "Icecream", "Pizza", "Chocolate"));
         stringComboBox.onValueChanged.addListener(s -> context.showNotification(MaterialIcon.ARROW_DROP_DOWN, s));
         stringComboBox.setShowClearButton(true);
-
+        verticalLayout.addComponent(stringComboBox);
 
         /* ComboBox of Objects*/
+        verticalLayout.addComponent(new Label("ComboBox of Objects"));
         ComboBox<Meal> mealComboBox = new ComboBox<>(Arrays.asList(
-                new Meal(MaterialIcon.CAKE, "Kuchen", "100 kcal"),
+                new Meal(MaterialIcon.CAKE, "Cake", "100 kcal"),
                 new Meal(MaterialIcon.GESTURE, "Spaghetti", "100 kcal"),
                 new Meal(MaterialIcon.CHILD_CARE, "Fries", "100 kcal"),
                 new Meal(MaterialIcon.AC_UNIT, "Icecream", "100 kcal"),
@@ -47,32 +53,24 @@ public class ComboBoxDemo implements DemoLesson {
                 new Meal(MaterialIcon.LOCAL_CAFE, "Coffee", "100 kcal"),
                 new Meal(MaterialIcon.LANDSCAPE, "Chocolate", "100 kcal")
         ));
-        mealComboBox.setTemplate(BaseTemplate.LIST_ITEM_MEDIUM_ICON_TWO_LINES);
-        mealComboBox.setAutoComplete(true);
+        verticalLayout.addComponent(mealComboBox);
 
+        /* Display objects using a Template */
+        mealComboBox.setTemplate(BaseTemplate.LIST_ITEM_MEDIUM_ICON_TWO_LINES);
+        /* BaseTemplate.LIST_ITEM_MEDIUM_ICON_TWO_LINES uses icon, caption and description */
+
+        /* Map Caption and Description to properties of Meal */
+        /* Bean Property Extractor automatically maps Fields with the same Name.
+        Meal already has an Icon Property.
+        Other Properties can be mapped manually:  */
         BeanPropertyExtractor<Meal> extractor = new BeanPropertyExtractor<>();
         extractor.addProperty("caption", meal -> meal.getName());
         extractor.addProperty("description", meal -> meal.getCalories());
         mealComboBox.setPropertyExtractor(extractor);
 
+        /* Define string representation of object for search and autocomplete */
         mealComboBox.setRecordToStringFunction(meal -> meal.getName());
-
-//            mealComboBox.setPropertyExtractor((meal, propertyName) -> {
-//                if (propertyName.equals(BaseTemplate.PROPERTY_CAPTION)) {
-//                    return meal.getName();
-//                } else if (propertyName.equals(BaseTemplate.PROPERTY_DESCRIPTION)) {
-//                    return meal.getCalories();
-//                } else {
-//                    return null;
-//                }
-//            });
-
-
-        VerticalLayout verticalLayout = new VerticalLayout();
-        verticalLayout.addComponent(stringComboBox);
-        verticalLayout.addComponent(mealComboBox);
-        panel.setContent(verticalLayout);
-
+        mealComboBox.setAutoComplete(true);
     }
 
     public Component getRootComponent(){

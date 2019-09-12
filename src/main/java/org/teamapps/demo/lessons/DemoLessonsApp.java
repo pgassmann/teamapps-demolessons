@@ -9,6 +9,7 @@ import org.teamapps.demo.lessons.l05_label.LabelDemo;
 import org.teamapps.demo.lessons.l06_button.ButtonDemo;
 import org.teamapps.demo.lessons.l07_checkbox.CheckboxDemo;
 import org.teamapps.demo.lessons.l08_combobox.ComboBoxDemo;
+import org.teamapps.demo.lessons.l09_propertyextractor.PropertyExtractorDemo;
 import org.teamapps.icon.material.MaterialIcon;
 import org.teamapps.server.jetty.embedded.TeamAppsJettyEmbeddedServer;
 import org.teamapps.ux.application.ResponsiveApplication;
@@ -73,40 +74,44 @@ public class DemoLessonsApp implements DemoLesson {
         // Register all DemoLessons in lessonsTree
 
         // Intro Lessons
-        BaseTemplateTreeNode introLessons = new BaseTemplateTreeNode(MaterialIcon.WEB_ASSET, "Introduction", "First Steps with TeamApps");
+        BaseTemplateTreeNode introLessons = new BaseTemplateTreeNode(MaterialIcon.WEB_ASSET, "Introduction", "First steps with TeamApps");
         lessonsTree.addNode(introLessons);
 
-        BaseTemplateTreeNode<DemoLesson> l01_Panel = new BaseTemplateTreeNode(MaterialIcon.WEB_ASSET, null ,"Panel", "First Lesson (PanelDemo)","1", new PanelDemo(sessionContext));
+        BaseTemplateTreeNode<DemoLesson> l01_Panel = new BaseTemplateTreeNode(MaterialIcon.WEB_ASSET, null ,"Panel", "First lesson (PanelDemo)","1", new PanelDemo(sessionContext));
         l01_Panel.setParent(introLessons);
         lessonsTree.addNode(l01_Panel);
 
-        BaseTemplateTreeNode<DemoLesson> l02_TextField = new BaseTemplateTreeNode(MaterialIcon.INPUT, null ," TextField", "TextField Lesson","2", new TextFieldDemo(sessionContext));
+        BaseTemplateTreeNode<DemoLesson> l02_TextField = new BaseTemplateTreeNode(MaterialIcon.INPUT, null ," TextField", "with event handling","2", new TextFieldDemo(sessionContext));
         l02_TextField.setParent(introLessons);
         lessonsTree.addNode(l02_TextField);
 
-        BaseTemplateTreeNode<DemoLesson> l03_verticallayout = new BaseTemplateTreeNode(MaterialIcon.INPUT, null ,"Vertical Layout", "VerticalLayout Lesson","3", new VerticalLayoutDemo(sessionContext));
+        BaseTemplateTreeNode<DemoLesson> l03_verticallayout = new BaseTemplateTreeNode(MaterialIcon.INPUT, null ,"Vertical Layout", "Multiple components","3", new VerticalLayoutDemo(sessionContext));
         l03_verticallayout.setParent(introLessons);
         lessonsTree.addNode(l03_verticallayout);
 
-        BaseTemplateTreeNode<DemoLesson> l04_richtexteditor = new BaseTemplateTreeNode(MaterialIcon.INPUT, null ,"Rich Text Editor", "RichTextEditor Lesson","4", new RichTextEditorDemo(sessionContext));
+        BaseTemplateTreeNode<DemoLesson> l04_richtexteditor = new BaseTemplateTreeNode(MaterialIcon.INPUT, null ,"Rich Text Editor", "Formatted text","4", new RichTextEditorDemo(sessionContext));
         l04_richtexteditor.setParent(introLessons);
         lessonsTree.addNode(l04_richtexteditor);
 
-        BaseTemplateTreeNode<DemoLesson> l05_label = new BaseTemplateTreeNode(MaterialIcon.INPUT, null ,"Labels", "TextField Labels Lesson","5", new LabelDemo(sessionContext));
+        BaseTemplateTreeNode<DemoLesson> l05_label = new BaseTemplateTreeNode(MaterialIcon.INPUT, null ,"Labels", "TextField labels","5", new LabelDemo(sessionContext));
         l05_label.setParent(introLessons);
         lessonsTree.addNode(l05_label);
 
-        BaseTemplateTreeNode<DemoLesson> l06_button = new BaseTemplateTreeNode(MaterialIcon.INPUT, null ,"Button", "Button Lesson","6", new ButtonDemo(sessionContext));
+        BaseTemplateTreeNode<DemoLesson> l06_button = new BaseTemplateTreeNode(MaterialIcon.INPUT, null ,"Button", "Button","6", new ButtonDemo(sessionContext));
         l06_button.setParent(introLessons);
         lessonsTree.addNode(l06_button);
 
-        BaseTemplateTreeNode<DemoLesson> l07_checkbox = new BaseTemplateTreeNode(MaterialIcon.INPUT, null ,"Checkbox", "Checkbox Lesson","7", new CheckboxDemo(sessionContext));
+        BaseTemplateTreeNode<DemoLesson> l07_checkbox = new BaseTemplateTreeNode(MaterialIcon.INPUT, null ,"CheckBox", "Switches","7", new CheckboxDemo(sessionContext));
         l07_checkbox.setParent(introLessons);
         lessonsTree.addNode(l07_checkbox);
 
-        BaseTemplateTreeNode<DemoLesson> l08_combobox = new BaseTemplateTreeNode(MaterialIcon.INPUT, null ,"ComboBox", "ComboBox Lesson","8", new ComboBoxDemo(sessionContext));
+        BaseTemplateTreeNode<DemoLesson> l08_combobox = new BaseTemplateTreeNode(MaterialIcon.INPUT, null ,"ComboBox", "with BeanPropertyExtractor","8", new ComboBoxDemo(sessionContext));
         l08_combobox.setParent(introLessons);
         lessonsTree.addNode(l08_combobox);
+
+        BaseTemplateTreeNode<DemoLesson> l09_propertyextractor = new BaseTemplateTreeNode(MaterialIcon.INPUT, null ,"PropertyExtractor", "Property Mapping","8", new PropertyExtractorDemo(sessionContext));
+        l09_propertyextractor.setParent(introLessons);
+        lessonsTree.addNode(l09_propertyextractor);
 
         // Experimental Lessons
         BaseTemplateTreeNode experimentalLessons = new BaseTemplateTreeNode(MaterialIcon.FLASH_ON, "Experiments", "Just for Fun");
