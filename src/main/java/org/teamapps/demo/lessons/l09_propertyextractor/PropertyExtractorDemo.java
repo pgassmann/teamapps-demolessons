@@ -67,7 +67,7 @@ public class PropertyExtractorDemo implements DemoLesson {
         mealComboBox.setRecordToStringFunction(meal -> meal.getName()+" ("+ meal.getCalories()+")");
 
         mealComboBox.onValueChanged.addListener(s -> {
-            context.showNotification(s.getIcon(), s.toString());
+            context.showNotification(s.getIcon(), s.getName());
         });
         verticalLayout.addComponent(new Label("ComboBox with manual Property mapping"));
         verticalLayout.addComponent(mealComboBox);

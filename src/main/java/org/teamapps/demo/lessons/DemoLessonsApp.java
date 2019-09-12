@@ -10,6 +10,7 @@ import org.teamapps.demo.lessons.l06_button.ButtonDemo;
 import org.teamapps.demo.lessons.l07_checkbox.CheckboxDemo;
 import org.teamapps.demo.lessons.l08_combobox.ComboBoxDemo;
 import org.teamapps.demo.lessons.l09_propertyextractor.PropertyExtractorDemo;
+import org.teamapps.demo.lessons.l10_responsiveform.ResponsiveFormDemo;
 import org.teamapps.icon.material.MaterialIcon;
 import org.teamapps.server.jetty.embedded.TeamAppsJettyEmbeddedServer;
 import org.teamapps.ux.application.ResponsiveApplication;
@@ -109,9 +110,13 @@ public class DemoLessonsApp implements DemoLesson {
         l08_combobox.setParent(introLessons);
         lessonsTree.addNode(l08_combobox);
 
-        BaseTemplateTreeNode<DemoLesson> l09_propertyextractor = new BaseTemplateTreeNode(MaterialIcon.INPUT, null ,"PropertyExtractor", "Property Mapping","8", new PropertyExtractorDemo(sessionContext));
+        BaseTemplateTreeNode<DemoLesson> l09_propertyextractor = new BaseTemplateTreeNode(MaterialIcon.INPUT, null ,"PropertyExtractor", "Property Mapping","9", new PropertyExtractorDemo(sessionContext));
         l09_propertyextractor.setParent(introLessons);
         lessonsTree.addNode(l09_propertyextractor);
+
+        BaseTemplateTreeNode<DemoLesson> l10_responsiveform = new BaseTemplateTreeNode(MaterialIcon.INPUT, null ,"ResponsiveForm", "Complete Form with Data saving","10", new ResponsiveFormDemo(sessionContext));
+        l10_responsiveform.setParent(introLessons);
+        lessonsTree.addNode(l10_responsiveform);
 
         // Experimental Lessons
         BaseTemplateTreeNode experimentalLessons = new BaseTemplateTreeNode(MaterialIcon.FLASH_ON, "Experiments", "Just for Fun");
@@ -122,7 +127,7 @@ public class DemoLessonsApp implements DemoLesson {
         lessonsTree.addNode(l99DemoLessonsApp);
 
         lessonsTree.onNodeSelected.addListener(node -> {
-            if (node.getPayload() instanceof DemoLesson) {
+            if (node.getPayload() != null) {
                 DemoLesson lesson = node.getPayload();
 
                 // call handleDemoSelected method on selected DemoLesson

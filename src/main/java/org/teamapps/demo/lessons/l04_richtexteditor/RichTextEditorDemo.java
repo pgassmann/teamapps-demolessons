@@ -19,7 +19,6 @@ public class RichTextEditorDemo implements DemoLesson {
     private Component rootComponent = new DummyComponent();
     private SessionContext context;
 
-    // Constructor, only set session context instance variable
     public RichTextEditorDemo(SessionContext context) {
         this.context = context;
 
