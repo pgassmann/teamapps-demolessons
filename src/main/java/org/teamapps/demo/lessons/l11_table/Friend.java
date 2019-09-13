@@ -1,4 +1,4 @@
-package org.teamapps.demo.lessons.l10_responsiveform;
+package org.teamapps.demo.lessons.l11_table;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -11,17 +11,19 @@ public class Friend {
 	private boolean active;
 	private LocalDate birthDate;
 	private Instant createdAt;
+	private Meal favouriteMeal;
 
 	public Friend() {
 		this.createdAt = Instant.now();
 	}
 
-	public Friend(String firstName, String lastName, String street, boolean active, LocalDate birthDate) {
+	public Friend(String firstName, String lastName, String street, boolean active, LocalDate birthDate, Meal favouriteMeal) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.street = street;
 		this.active = active;
 		this.birthDate = birthDate;
+		this.favouriteMeal = favouriteMeal;
 		this.createdAt = Instant.now();
 	}
 
@@ -78,5 +80,13 @@ public class Friend {
 
 	public Instant getCreatedAt() {
 		return createdAt;
+	}
+
+	public Meal getFavouriteMeal() {
+		return favouriteMeal;
+	}
+
+	public void setFavouriteMeal(Meal favouriteMeal) {
+		this.favouriteMeal = favouriteMeal;
 	}
 }

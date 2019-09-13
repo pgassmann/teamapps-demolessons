@@ -9,12 +9,15 @@ import org.teamapps.ux.component.Component;
 import org.teamapps.ux.component.dummy.DummyComponent;
 import org.teamapps.ux.component.field.Label;
 import org.teamapps.ux.component.field.combobox.ComboBox;
+import org.teamapps.ux.component.field.combobox.TagBoxWrappingMode;
+import org.teamapps.ux.component.field.combobox.TagComboBox;
 import org.teamapps.ux.component.flexcontainer.VerticalLayout;
 import org.teamapps.ux.component.panel.Panel;
 import org.teamapps.ux.component.template.BaseTemplate;
 import org.teamapps.ux.session.SessionContext;
 import org.teamapps.webcontroller.SimpleWebController;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,12 +30,12 @@ public class PropertyExtractorDemo implements DemoLesson {
     public PropertyExtractorDemo(SessionContext context) {
         this.context = context;
 
-        Panel panel = new Panel(MaterialIcon.LIGHTBULB_OUTLINE, "ComboBox Demo");
+        Panel panel = new Panel(MaterialIcon.LIGHTBULB_OUTLINE, "Property Extractor and (Tag)ComboBox Demo");
         rootComponent = panel;
         VerticalLayout verticalLayout = new VerticalLayout();
         panel.setContent(verticalLayout);
 
-        /* COMBOBOX with Objects*/
+        // List of Meals
         List<Meal> myMeals = Arrays.asList(
                 new Meal(MaterialIcon.CAKE, "Cake", "100 kcal"),
                 new Meal(MaterialIcon.GESTURE, "Spaghetti", "203 kcal"),
@@ -43,11 +46,17 @@ public class PropertyExtractorDemo implements DemoLesson {
                 new Meal(MaterialIcon.LANDSCAPE, "Chocolate", "700 kcal")
         );
 
+        /* Dropdown with myMeals*/
+        verticalLayout.addComponent(new Label("ComboBox with manual Property mapping"));
         ComboBox<Meal> mealComboBox = new ComboBox<>(myMeals);
+        verticalLayout.addComponent(mealComboBox);
         mealComboBox.setShowClearButton(true);
         mealComboBox.setTemplate(BaseTemplate.LIST_ITEM_MEDIUM_ICON_TWO_LINES);
 
         /* Manual Property Mapping */
+        /* The BaseTemplate.LIST_ITEM_MEDIUM_ICON_TWO_LINES uses three properties
+        * caption, description and Icon.
+        * instead of using strings, the properties can be accessed by public variables of the BaseTemplate class */
         mealComboBox.setPropertyExtractor((meal, propertyName) -> {
             if (propertyName.equals(BaseTemplate.PROPERTY_CAPTION)) {
                 return meal.getName();
@@ -69,11 +78,13 @@ public class PropertyExtractorDemo implements DemoLesson {
         mealComboBox.onValueChanged.addListener(s -> {
             context.showNotification(s.getIcon(), s.getName());
         });
-        verticalLayout.addComponent(new Label("ComboBox with manual Property mapping"));
-        verticalLayout.addComponent(mealComboBox);
 
+
+        /* Second Combobox uses a BeanPropertyExtractor */
         /* Bean Property Extractor */
+        verticalLayout.addComponent(new Label("ComboBox with BeanPropertyExtractor"));
         ComboBox<Meal> mealComboBox2 = new ComboBox<>(myMeals);
+        verticalLayout.addComponent(mealComboBox2);
         mealComboBox2.setShowClearButton(true);
         mealComboBox2.setTemplate(BaseTemplate.LIST_ITEM_MEDIUM_ICON_TWO_LINES);
 
@@ -89,23 +100,32 @@ public class PropertyExtractorDemo implements DemoLesson {
         /* Define string representation of object for search and autocomplete */
         mealComboBox2.setRecordToStringFunction(meal -> meal.getName()+" ("+ meal.getCalories()+")");
 
-        verticalLayout.addComponent(new Label("ComboBox with BeanPropertyExtractor"));
-        verticalLayout.addComponent(mealComboBox2);
 
+        /* TagComboBox */
+        // TagComboBox allows selection of multiple items and displays them as Tags
+        verticalLayout.addComponent(new Label("TagComboBox with dynamic Content. Write your favourite Meals. Max 3."));
+        TagComboBox<Meal> mealTagComboBox = new TagComboBox<>();
+        verticalLayout.addComponent(mealTagComboBox);
 
-        ComboBox<Meal> mealComboBox3 = new ComboBox<>(myMeals);
-        verticalLayout.addComponent(new Label("ComboBox with dynamic Content. Enter your favourite Meal"));
-        verticalLayout.addComponent(mealComboBox3);
+        mealTagComboBox.setWrappingMode(TagBoxWrappingMode.MULTI_LINE);
+        mealTagComboBox.setMaxEntries(3);
+        mealTagComboBox.setTemplate(BaseTemplate.LIST_ITEM_MEDIUM_ICON_TWO_LINES);
 
-        /* The Objects of the Combobox are dynamically created */
+        /* The Objects of the TagCombobox are dynamically created */
         /* In real world application, this could be any query to Database/Backend etc. */
-        mealComboBox3.setModel(queryString -> Arrays.asList(
-                new Meal(MaterialIcon.CAKE, "Free "+ queryString, "100 kcal"),
-                new Meal(MaterialIcon.LANDSCAPE, "Premium "+ queryString+ " with Chocolate", "500kcal")
-        ));
-        mealComboBox3.setRecordToStringFunction(meal -> meal.getName()+" ("+ meal.getCalories()+")");
-        mealComboBox3.setTemplate(BaseTemplate.LIST_ITEM_LARGE_ICON_TWO_LINES);
-        mealComboBox3.setPropertyExtractor(mealPropertyExtractor);
+        mealTagComboBox.setModel(queryString -> {
+            if(queryString != "" ){
+                return Arrays.asList(
+                        new Meal(MaterialIcon.CAKE, "Free " + queryString, "100 kcal"),
+                        new Meal(MaterialIcon.LANDSCAPE, "Premium " + queryString + " with Chocolate", "1234 kcal")
+                );
+            } else {
+                return new ArrayList<>();
+            }
+        });
+
+        mealTagComboBox.setPropertyExtractor(mealPropertyExtractor);
+        mealTagComboBox.setRecordToStringFunction(Meal::getName);
 
     }
 

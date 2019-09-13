@@ -11,6 +11,7 @@ import org.teamapps.demo.lessons.l07_checkbox.CheckboxDemo;
 import org.teamapps.demo.lessons.l08_combobox.ComboBoxDemo;
 import org.teamapps.demo.lessons.l09_propertyextractor.PropertyExtractorDemo;
 import org.teamapps.demo.lessons.l10_responsiveform.ResponsiveFormDemo;
+import org.teamapps.demo.lessons.l11_table.TableDemo;
 import org.teamapps.icon.material.MaterialIcon;
 import org.teamapps.server.jetty.embedded.TeamAppsJettyEmbeddedServer;
 import org.teamapps.ux.application.ResponsiveApplication;
@@ -110,13 +111,17 @@ public class DemoLessonsApp implements DemoLesson {
         l08_combobox.setParent(introLessons);
         lessonsTree.addNode(l08_combobox);
 
-        BaseTemplateTreeNode<DemoLesson> l09_propertyextractor = new BaseTemplateTreeNode(MaterialIcon.INPUT, null ,"PropertyExtractor", "Property Mapping","9", new PropertyExtractorDemo(sessionContext));
+        BaseTemplateTreeNode<DemoLesson> l09_propertyextractor = new BaseTemplateTreeNode(MaterialIcon.INPUT, null ,"PropertyExtractor", "with TagComboBox and Property Mapping","9", new PropertyExtractorDemo(sessionContext));
         l09_propertyextractor.setParent(introLessons);
         lessonsTree.addNode(l09_propertyextractor);
 
         BaseTemplateTreeNode<DemoLesson> l10_responsiveform = new BaseTemplateTreeNode(MaterialIcon.INPUT, null ,"ResponsiveForm", "Complete Form with Data saving","10", new ResponsiveFormDemo(sessionContext));
         l10_responsiveform.setParent(introLessons);
         lessonsTree.addNode(l10_responsiveform);
+
+        BaseTemplateTreeNode<DemoLesson> l11_table = new BaseTemplateTreeNode(MaterialIcon.INPUT, null ,"Table", "Table with various Fields","11", new TableDemo(sessionContext));
+        l11_table.setParent(introLessons);
+        lessonsTree.addNode(l11_table);
 
         // Experimental Lessons
         BaseTemplateTreeNode experimentalLessons = new BaseTemplateTreeNode(MaterialIcon.FLASH_ON, "Experiments", "Just for Fun");
