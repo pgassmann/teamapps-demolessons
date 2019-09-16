@@ -12,6 +12,8 @@ import org.teamapps.demo.lessons.l08_combobox.ComboBoxDemo;
 import org.teamapps.demo.lessons.l09_propertyextractor.PropertyExtractorDemo;
 import org.teamapps.demo.lessons.l10_responsiveform.ResponsiveFormDemo;
 import org.teamapps.demo.lessons.l11_table.TableDemo;
+import org.teamapps.demo.lessons.l12_toolbar.ToolbarDemo;
+import org.teamapps.demo.lessons.l13_tree.TreeDemo;
 import org.teamapps.icon.material.MaterialIcon;
 import org.teamapps.server.jetty.embedded.TeamAppsJettyEmbeddedServer;
 import org.teamapps.ux.application.ResponsiveApplication;
@@ -122,6 +124,14 @@ public class DemoLessonsApp implements DemoLesson {
         BaseTemplateTreeNode<DemoLesson> l11_table = new BaseTemplateTreeNode(MaterialIcon.INPUT, null ,"Table", "Table with various Fields","11", new TableDemo(sessionContext));
         l11_table.setParent(introLessons);
         lessonsTree.addNode(l11_table);
+
+        BaseTemplateTreeNode<DemoLesson> l12_toolbar = new BaseTemplateTreeNode(MaterialIcon.INPUT, null ,"Toolbar", "Toolbar and Custom Icons","12", new ToolbarDemo(sessionContext));
+        l12_toolbar.setParent(introLessons);
+        lessonsTree.addNode(l12_toolbar);
+
+        BaseTemplateTreeNode<DemoLesson> l13_tree = new BaseTemplateTreeNode(MaterialIcon.INPUT, null ,"Tree", "SimpleTree","13", new TreeDemo(sessionContext));
+        l13_tree.setParent(introLessons);
+        lessonsTree.addNode(l13_tree);
 
         // Experimental Lessons
         BaseTemplateTreeNode experimentalLessons = new BaseTemplateTreeNode(MaterialIcon.FLASH_ON, "Experiments", "Just for Fun");
