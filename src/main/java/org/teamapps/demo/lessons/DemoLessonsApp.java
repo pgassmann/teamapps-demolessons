@@ -14,6 +14,7 @@ import org.teamapps.demo.lessons.l10_responsiveform.ResponsiveFormDemo;
 import org.teamapps.demo.lessons.l11_table.TableDemo;
 import org.teamapps.demo.lessons.l12_toolbar.ToolbarDemo;
 import org.teamapps.demo.lessons.l13_tree.TreeDemo;
+import org.teamapps.demo.lessons.l14_backgroundtasks.BackgroundTasksDemo;
 import org.teamapps.icon.material.MaterialIcon;
 import org.teamapps.server.jetty.embedded.TeamAppsJettyEmbeddedServer;
 import org.teamapps.ux.application.ResponsiveApplication;
@@ -63,7 +64,7 @@ public class DemoLessonsApp implements DemoLesson {
         perspective.addView(demoView);
 
         responsiveApplication.showPerspective(perspective);
-        return responsiveApplication.createUi();
+        return responsiveApplication.getUi();
     }
 
     @SuppressWarnings("unchecked")
@@ -132,6 +133,10 @@ public class DemoLessonsApp implements DemoLesson {
         BaseTemplateTreeNode<DemoLesson> l13_tree = new BaseTemplateTreeNode(MaterialIcon.INPUT, null ,"Tree", "SimpleTree","13", new TreeDemo(sessionContext));
         l13_tree.setParent(introLessons);
         lessonsTree.addNode(l13_tree);
+
+        BaseTemplateTreeNode<DemoLesson> l14_tree = new BaseTemplateTreeNode(MaterialIcon.INPUT, null ,"Background Tasks", "Background calculations...","14", new BackgroundTasksDemo(sessionContext));
+        l14_tree.setParent(introLessons);
+        lessonsTree.addNode(l14_tree);
 
         // Experimental Lessons
         BaseTemplateTreeNode experimentalLessons = new BaseTemplateTreeNode(MaterialIcon.FLASH_ON, "Experiments", "Just for Fun");
