@@ -10,6 +10,8 @@ import org.teamapps.ux.component.template.BaseTemplateRecord;
 import org.teamapps.ux.session.SessionContext;
 import org.teamapps.ux.task.ObservableProgress;
 import org.teamapps.ux.task.ProgressCompletableFuture;
+import org.teamapps.ux.task.ProgressMonitor;
+import org.teamapps.ux.task.function.ProgressReportingSupplier;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;
@@ -33,7 +35,9 @@ public class BackgroundTasksDemo implements DemoLesson {
         button.onValueChanged.addListener(aBoolean -> {
 
             ProgressCompletableFuture<Double> future = ProgressCompletableFuture
-                    .supplyAsync(progressMonitor -> calculatePi(2_000));
+                    .supplyAsync(progressMonitor -> {
+                        return BackgroundTasksDemo.this.calculatePi(5_000, progressMonitor);
+                    });
 
             ObservableProgress progress = future.getProgress();
             progressDisplay.setObservedProgress(progress);
@@ -41,7 +45,9 @@ public class BackgroundTasksDemo implements DemoLesson {
             progressDisplay.setTaskName("Calculate Pi");
 
             future.thenAcceptWithCurrentSessionContext(pi -> {
-                sessionContext.showNotification(MaterialIcon.ALARM, "Pi is " + pi);
+                if (pi != null) {
+                    sessionContext.showNotification(MaterialIcon.ALARM, "Pi is " + pi);
+                }
             });
 
         });
@@ -51,8 +57,9 @@ public class BackgroundTasksDemo implements DemoLesson {
         return verticalLayout;
     }
 
-    private double calculatePi(int numberOfIterations) {
-        System.out.println("Will calculate");
+    private Double calculatePi(int numberOfIterations, ProgressMonitor progressMonitor) {
+        progressMonitor.setCancelable(true);
+        progressMonitor.setStatusMessage("Working hard for you!");
         long insideQuarterCircleCount = 0;
         for (long i = 0; i < numberOfIterations; i++) {
             double x = ThreadLocalRandom.current().nextDouble();
@@ -65,8 +72,16 @@ public class BackgroundTasksDemo implements DemoLesson {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            if (i % (numberOfIterations / 100) == 0) {
+                progressMonitor.setProgress((float) i / numberOfIterations, ((i * 100 / numberOfIterations) ) + "%");
+            }
+            if (progressMonitor.isCancellationRequested()) {
+                progressMonitor.markCanceled();
+                return null;
+            }
         }
         double result = insideQuarterCircleCount * 4 / (double) numberOfIterations;
+        progressMonitor.setStatusMessage("We are done!");
         return result;
     }
 }
