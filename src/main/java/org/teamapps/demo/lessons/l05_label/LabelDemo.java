@@ -8,7 +8,6 @@ import org.teamapps.ux.component.Component;
 import org.teamapps.ux.component.dummy.DummyComponent;
 import org.teamapps.ux.component.field.Label;
 import org.teamapps.ux.component.field.TextField;
-import org.teamapps.ux.component.field.richtext.RichTextEditor;
 import org.teamapps.ux.component.flexcontainer.VerticalLayout;
 import org.teamapps.ux.component.panel.Panel;
 import org.teamapps.ux.session.SessionContext;
@@ -29,7 +28,7 @@ public class LabelDemo implements DemoLesson {
         textField1.setEmptyText("John Doe");
 
         Label label1 = new Label("Name", MaterialIcon.PERSON);
-        label1.setTargetField(textField1);
+        label1.setTargetComponent(textField1);
 
         TextField textField2 = new TextField();
 
