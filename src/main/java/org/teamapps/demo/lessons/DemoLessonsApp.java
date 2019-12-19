@@ -15,6 +15,11 @@ import org.teamapps.demo.lessons.l11_table.TableDemo;
 import org.teamapps.demo.lessons.l12_toolbar.ToolbarDemo;
 import org.teamapps.demo.lessons.l13_tree.TreeDemo;
 import org.teamapps.demo.lessons.l14_backgroundtasks.BackgroundTasksDemo;
+import org.teamapps.demo.lessons.l15_externalevent.ExternalEventsDemo;
+import org.teamapps.demo.lessons.l15_externalevent.NotificationManager;
+import org.teamapps.demo.lessons.l16_servlet.ServletDemo;
+import org.teamapps.demo.lessons.l16_servlet.ServletNotificationManager;
+import org.teamapps.demo.lessons.l17_mustachetemplates.MustacheTemplateDemo;
 import org.teamapps.icon.material.MaterialIcon;
 import org.teamapps.server.jetty.embedded.TeamAppsJettyEmbeddedServer;
 import org.teamapps.ux.application.ResponsiveApplication;
@@ -27,8 +32,6 @@ import org.teamapps.ux.component.template.BaseTemplateTreeNode;
 import org.teamapps.ux.component.tree.SimpleTree;
 import org.teamapps.ux.session.SessionContext;
 import org.teamapps.webcontroller.SimpleWebController;
-
-import java.awt.*;
 
 public class DemoLessonsApp implements DemoLesson {
 
@@ -81,6 +84,7 @@ public class DemoLessonsApp implements DemoLesson {
         // Intro Lessons
         BaseTemplateTreeNode introLessons = new BaseTemplateTreeNode(MaterialIcon.WEB_ASSET, "Introduction", "First steps with TeamApps");
         lessonsTree.addNode(introLessons);
+        introLessons.setExpanded(true);
 
         BaseTemplateTreeNode<DemoLesson> l01_Panel = new BaseTemplateTreeNode(MaterialIcon.WEB_ASSET, null ,"Panel", "First lesson (PanelDemo)","1", new PanelDemo(sessionContext));
         l01_Panel.setParent(introLessons);
@@ -137,6 +141,18 @@ public class DemoLessonsApp implements DemoLesson {
         BaseTemplateTreeNode<DemoLesson> l14_tree = new BaseTemplateTreeNode(MaterialIcon.INPUT, null ,"Background Tasks", "Background calculations...","14", new BackgroundTasksDemo(sessionContext));
         l14_tree.setParent(introLessons);
         lessonsTree.addNode(l14_tree);
+
+        BaseTemplateTreeNode<DemoLesson> l15_externalevent = new BaseTemplateTreeNode(MaterialIcon.INPUT, null ,"External Event", "Events between sessions","15", new ExternalEventsDemo(sessionContext));
+        l15_externalevent.setParent(introLessons);
+        lessonsTree.addNode(l15_externalevent);
+
+        BaseTemplateTreeNode<DemoLesson> l16_servlet = new BaseTemplateTreeNode(MaterialIcon.INPUT, null ,"Servlet", "Create Events from an additional Endpoint","16", new ServletDemo(sessionContext));
+        l16_servlet.setParent(introLessons);
+        lessonsTree.addNode(l16_servlet);
+
+        BaseTemplateTreeNode<DemoLesson> l17_mustachetemplate = new BaseTemplateTreeNode(MaterialIcon.INPUT, null ,"MustacheTemplate", "Versatile Custom Elements","17", new MustacheTemplateDemo(sessionContext));
+        l17_mustachetemplate.setParent(introLessons);
+        lessonsTree.addNode(l17_mustachetemplate);
 
         // Experimental Lessons
         BaseTemplateTreeNode experimentalLessons = new BaseTemplateTreeNode(MaterialIcon.FLASH_ON, "Experiments", "Just for Fun");

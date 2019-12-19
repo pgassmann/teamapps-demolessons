@@ -26,7 +26,7 @@ public class ButtonDemo implements DemoLesson {
         Panel panel = new Panel(MaterialIcon.LIGHTBULB_OUTLINE, "Button Demo");
         rootComponent = panel;
 
-        Button<BaseTemplateRecord> button = Button.create("Do it!!!");
+        Button<BaseTemplateRecord> button = Button.create("Do it!!!     Expand it", new DummyComponent("foo"));
         button.onValueChanged.addListener(aBoolean -> {
             context.showNotification(MaterialIcon.FLAG, "Button clicked!");
         });
