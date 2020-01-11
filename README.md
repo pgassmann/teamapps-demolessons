@@ -38,7 +38,7 @@ If all works right, you should see BUILD SUCCESS in the Console window
 
 Now we can start the DemoLessonsApp from IntelliJ IDEA
 
-* In the Project structure (left side oft the window) open `teamapps-demolessons/src/main/java/org.teamapps.demo.lessons`
+* In the Project structure (left side oft the window) open `teamapps-demolessons/src/main/java/org.teamapps.demolessons`
 * Here you see the packages for the individual lessons and at the bottom you see the `DemoLessonsApp` Class
 * Right Click > `Debug 'DemoLessonsApp.main()'`
 * IntelliJ will compile and start the project.
@@ -54,7 +54,7 @@ You can access the Application using your Browser on: https://localhost:8081
 
 ### Running a single Lesson 
 
-* Open the `...Demo` Class in its package. E.g. `teamapps-demolessons/src/main/java/org.teamapps.demo.lessons/l01_panel/PanelDemo`
+* Open the `...Demo` Class in its package. E.g. `teamapps-demolessons/src/main/java/org.teamapps.demolessons/p1_intro/l01_panel/PanelDemo`
 * Right click on the Class and click on `Debug 'PanelDemo.main()'`
 
 This will start another Server on Port 8080. You can access a single DemoLesson using your Browser on: https://localhost:8080
