@@ -2,6 +2,7 @@ package org.teamapps.demolessons.p1_intro.l14_responsiveapplication;
 
 import com.google.common.io.Files;
 import org.teamapps.demolessons.DemoLesson;
+import org.teamapps.demolessons.p1_intro.l04_richtexteditor.RichTextEditorDemo;
 import org.teamapps.demolessons.p1_intro.l10_responsiveform.ResponsiveFormDemo;
 import org.teamapps.demolessons.p1_intro.l11_table.TableDemo;
 import org.teamapps.demolessons.p1_intro.l13_tree.TreeDemo;
@@ -29,13 +30,11 @@ public class ResponsiveApplicationDemo implements DemoLesson {
     // Constructor, only set session context instance variable
     public ResponsiveApplicationDemo(SessionContext context) {
         this.context = context;
-
+        this.rootComponent = createRootComponent();
     }
 
     @Override
     public void handleDemoSelected() {
-        this.rootComponent = createRootComponent();
-//        this.rootComponent = createRootComponentwithDemos();
     }
 
     public Component getRootComponent() {
@@ -115,14 +114,15 @@ public class ResponsiveApplicationDemo implements DemoLesson {
         demoPerspective.addView(rightView);
         rightView.setComponent(new ResponsiveFormDemo(context).getRootComponent());
 
-        View rightView2 = View.createView(ExtendedLayout.RIGHT, MaterialIcon.HELP, "RIGHT 2", new CheckboxDemo(context).getRootComponent());
+        View rightView2 = View.createView(ExtendedLayout.RIGHT, MaterialIcon.HELP, "RIGHT 2", null);
         demoPerspective.addView(rightView2);
 
-        View outerRightView = View.createView(ExtendedLayout.OUTER_RIGHT, MaterialIcon.HELP, "OUTER_RIGHT", new DummyComponent());
+        View RightBottomView = View.createView(ExtendedLayout.RIGHT_BOTTOM, MaterialIcon.HELP, "RIGHT_BOTTOM", new RichTextEditorDemo(context).getRootComponent());
+        demoPerspective.addView(RightBottomView);
+
+        View outerRightView = View.createView(ExtendedLayout.OUTER_RIGHT, MaterialIcon.HELP, "OUTER_RIGHT", new CheckboxDemo(context).getRootComponent());
         demoPerspective.addView(outerRightView);
 
-        View outerRightBottomView = View.createView(ExtendedLayout.OUTER_RIGHT_BOTTOM, MaterialIcon.HELP, "OUTER_RIGHT_BOTTOM", new DummyComponent());
-        demoPerspective.addView(outerRightBottomView);
         return demoPerspective;
     }
 
