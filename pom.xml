@@ -29,6 +29,16 @@
             <version>0.4.5</version>
         </dependency>
         <dependency>
+            <groupId>org.teamapps</groupId>
+            <artifactId>teamapps-antu-icon-provider</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.teamapps</groupId>
+            <artifactId>teamapps-material-design-icon-provider</artifactId>
+            <version>0.9.7</version>
+        </dependency>
+        <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.6</version>

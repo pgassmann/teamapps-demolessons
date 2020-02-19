@@ -7,7 +7,13 @@ import org.teamapps.demolessons.p1_intro.l10_responsiveform.ResponsiveFormDemo;
 import org.teamapps.demolessons.p1_intro.l11_table.TableDemo;
 import org.teamapps.demolessons.p1_intro.l13_tree.TreeDemo;
 import org.teamapps.demolessons.p1_intro.l07_checkbox.CheckboxDemo;
+import org.teamapps.icon.antu.AntuIcon;
+import org.teamapps.icon.antu.AntuIconProvider;
 import org.teamapps.icon.material.MaterialIcon;
+import org.teamapps.icon.material.MaterialIconStyles;
+import org.teamapps.icon.materialdesign.MaterialDesignIcon;
+import org.teamapps.icon.materialdesign.MaterialDesignIconProvider;
+import org.teamapps.icon.materialdesign.MaterialDesignIconStyles;
 import org.teamapps.server.jetty.embedded.TeamAppsJettyEmbeddedServer;
 import org.teamapps.ux.application.ResponsiveApplication;
 import org.teamapps.ux.application.layout.ExtendedLayout;
@@ -50,11 +56,11 @@ public class ResponsiveApplicationDemo implements DemoLesson {
         application.addPerspective(perspective);
 
         //create an empty left panel
-        perspective.addView(View.createView(StandardLayout.LEFT, MaterialIcon.MESSAGE, "Left panel", new DummyComponent()));
+        perspective.addView(View.createView(StandardLayout.LEFT, AntuIcon.STATUS.BATTERY_MISSING_64, "Left panel", new DummyComponent()));
 
         //create a tabbed center panel
-        perspective.addView(View.createView(StandardLayout.CENTER, MaterialIcon.SEARCH, "Center panel", new DummyComponent()));
-        perspective.addView(View.createView(StandardLayout.CENTER, MaterialIcon.PEOPLE, "Center panel 2", new DummyComponent()));
+        perspective.addView(View.createView(StandardLayout.CENTER, AntuIcon.ACTION.ACROBAT_32, "Center panel", new DummyComponent()));
+        perspective.addView(View.createView(StandardLayout.CENTER, AntuIcon.STATUS.MIC_OFF_22, "Center panel 2", new DummyComponent()));
 
         //create a right panel
         perspective.addView(View.createView(StandardLayout.RIGHT, MaterialIcon.FOLDER, "Left panel", new DummyComponent()));
@@ -64,10 +70,14 @@ public class ResponsiveApplicationDemo implements DemoLesson {
 
         //create toolbar buttons
         ToolbarButtonGroup buttonGroup = new ToolbarButtonGroup();
-        buttonGroup.addButton(ToolbarButton.create(MaterialIcon.SAVE, "Save", "Save changes")).onClick.addListener(toolbarButtonClickEvent -> {
+        buttonGroup.addButton(ToolbarButton.create(AntuIcon.ACTION.CHRONOMETER_RESET_24, "AntuIcon.ACTION.CHRONOMETER_RESET_24", "Save changes")).onClick.addListener(toolbarButtonClickEvent -> {
             CurrentSessionContext.get().showNotification(MaterialIcon.MESSAGE, "Save was clicked!");
         });
-        buttonGroup.addButton(ToolbarButton.create(MaterialIcon.DELETE, "Delete", "Delete some items"));
+        buttonGroup.addButton(ToolbarButton.create(AntuIcon.PLACES.DISTRIBUTOR_LOGO_UBUNTU_64, "AntuIcon.PLACES.DISTRIBUTOR_LOGO_UBUNTU_64", "Delete some items"));
+        buttonGroup.addButton(ToolbarButton.create(MaterialDesignIcon.DICE._4.withStyle(MaterialDesignIconStyles.LIGHT_BLUE_900), "MaterialDesignIcon.DICE._4", "Delete some items"));
+        buttonGroup.addButton(ToolbarButton.create(AntuIcon.ACTION.CALL_STOP_32, "AntuIcon.ACTION.CALL_STOP_32", "Delete some items"));
+        buttonGroup.addButton(ToolbarButton.create(MaterialIcon.LAYERS, "MaterialIcon.LAYERS", "Delete some items"));
+        buttonGroup.addButton(ToolbarButton.create(AntuIcon.STATUS.SECURITY_HIGH_64, "AntuIcon.STATUS.SECURITY_HIGH_64", "Delete some items"));
 
         //display these buttons only when this perspective is visible
         perspective.addWorkspaceButtonGroup(buttonGroup);
@@ -83,7 +93,7 @@ public class ResponsiveApplicationDemo implements DemoLesson {
         perspective.addWorkspaceButtonGroup(switchButtonGroup);
         demoPerspective.addWorkspaceButtonGroup(switchButtonGroup);
 
-        ToolbarButton switchButton = ToolbarButton.create(MaterialIcon.LAYERS, "Switch Perspective","");
+        ToolbarButton switchButton = ToolbarButton.create(AntuIcon.ACTION.SHOW_MENU_24, "AntuIcon.ACTION.SHOW_MENU_24","");
         switchButtonGroup.addButton(switchButton);
         switchButton.onClick.addListener(toolbarButtonClickEvent -> {
             if (application.getActivePerspective() == demoPerspective) {
@@ -134,6 +144,8 @@ public class ResponsiveApplicationDemo implements DemoLesson {
             responsiveApplicationDemo.handleDemoSelected();
             return responsiveApplicationDemo.getRootComponent();
         });
+        controller.addAdditionalIconProvider(new MaterialDesignIconProvider());
+        controller.addAdditionalIconProvider(new AntuIconProvider());
         new TeamAppsJettyEmbeddedServer(controller, Files.createTempDir()).start();
     }
 }
