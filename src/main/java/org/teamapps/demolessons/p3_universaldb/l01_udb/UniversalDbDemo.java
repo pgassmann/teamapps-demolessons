@@ -22,7 +22,7 @@ public class UniversalDbDemo {
         if (! dataDir.exists()) {
             dataDir.mkdir();
         }
-        UniversalDB universalDB = UniversalDB.createStandalone(dataDir, new SchemaInfo());
+        UniversalDB.createStandalone(dataDir, SchemaInfo.create());
 
         if (Employee.getCount() == 0) {
             System.out.println("Creating new entries");
