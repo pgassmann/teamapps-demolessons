@@ -19,6 +19,9 @@ import org.teamapps.demolessons.p2_application.l01_backgroundtasks.BackgroundTas
 import org.teamapps.demolessons.p2_application.l02_externalevent.ExternalEventsDemo;
 import org.teamapps.demolessons.p2_application.l03_servlet.ServletDemo;
 import org.teamapps.demolessons.p2_application.l04_mustachetemplates.MustacheTemplateDemo;
+import org.teamapps.demolessons.p2_application.l05_iconviewer.IconViewerDemo;
+import org.teamapps.icon.antu.AntuIcon;
+import org.teamapps.icon.antu.AntuIconProvider;
 import org.teamapps.demolessons.p4_issuetracker.IssueTrackerApp;
 import org.teamapps.icon.material.MaterialIcon;
 import org.teamapps.server.jetty.embedded.TeamAppsJettyEmbeddedServer;
@@ -159,9 +162,13 @@ public class DemoLessonsApp implements DemoLesson {
         l03_servlet.setParent(applicationLessons);
         lessonsTree.addNode(l03_servlet);
 
-        BaseTemplateTreeNode<DemoLesson> l04_mustachetemplate = new BaseTemplateTreeNode(MaterialIcon.INPUT, null ,"MustacheTemplate", "Versatile Custom Elements","03", new MustacheTemplateDemo(sessionContext));
+        BaseTemplateTreeNode<DemoLesson> l04_mustachetemplate = new BaseTemplateTreeNode(MaterialIcon.INPUT, null ,"MustacheTemplate", "Versatile Custom Elements","04", new MustacheTemplateDemo(sessionContext));
         l04_mustachetemplate.setParent(applicationLessons);
         lessonsTree.addNode(l04_mustachetemplate);
+
+        BaseTemplateTreeNode<DemoLesson> l05_iconViewer = new BaseTemplateTreeNode(AntuIcon.APPS.GCSTAR_48, null ,"IconViewer", "IconViewer using InfiniteItemView","05", new IconViewerDemo(sessionContext));
+        l05_iconViewer.setParent(applicationLessons);
+        lessonsTree.addNode(l05_iconViewer);
 
         // Experimental Lessons
         BaseTemplateTreeNode experimentalLessons = new BaseTemplateTreeNode(MaterialIcon.FLASH_ON, "Experiments", "Just for Fun");
@@ -196,6 +203,7 @@ public class DemoLessonsApp implements DemoLesson {
             demoLessonsApp.handleDemoSelected();
             return demoLessonsApp.getRootComponent();
         });
+        controller.addAdditionalIconProvider(new AntuIconProvider());
         controller.setShowBackgroundImage(true);
         new TeamAppsJettyEmbeddedServer(controller, Files.createTempDir(), 8081).start();
     }
