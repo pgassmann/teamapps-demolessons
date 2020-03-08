@@ -34,7 +34,7 @@ public class BackgroundTasksDemo implements DemoLesson {
         verticalLayout.addComponent(button);
         verticalLayout.addComponent(progressDisplay);
 
-        button.onValueChanged.addListener(aBoolean -> {
+        button.onClicked.addListener(aBoolean -> {
 
             ProgressCompletableFuture<Double> future = ProgressCompletableFuture
                     .supplyAsync(progressMonitor -> BackgroundTasksDemo.this.calculatePi(5_000, progressMonitor));

@@ -19,6 +19,8 @@ import org.teamapps.demolessons.p2_application.l01_backgroundtasks.BackgroundTas
 import org.teamapps.demolessons.p2_application.l02_externalevent.ExternalEventsDemo;
 import org.teamapps.demolessons.p2_application.l03_servlet.ServletDemo;
 import org.teamapps.demolessons.p2_application.l04_mustachetemplates.MustacheTemplateDemo;
+import org.teamapps.demolessons.p2_application.l05_iconviewer.IconViewerDemo;
+import org.teamapps.icon.antu.AntuIcon;
 import org.teamapps.demolessons.p4_issuetracker.IssueTrackerApp;
 import org.teamapps.icon.material.MaterialIcon;
 import org.teamapps.server.jetty.embedded.TeamAppsJettyEmbeddedServer;
@@ -29,7 +31,6 @@ import org.teamapps.ux.application.view.View;
 import org.teamapps.ux.component.Component;
 import org.teamapps.ux.component.rootpanel.RootPanel;
 import org.teamapps.ux.component.template.BaseTemplate;
-import org.teamapps.ux.component.template.BaseTemplateRecord;
 import org.teamapps.ux.component.template.BaseTemplateTreeNode;
 import org.teamapps.ux.component.tree.SimpleTree;
 import org.teamapps.ux.session.SessionContext;
@@ -164,6 +165,10 @@ public class DemoLessonsApp implements DemoLesson {
         BaseTemplateTreeNode<DemoLesson> l04_mustachetemplate = new BaseTemplateTreeNode<>(MaterialIcon.INPUT, null ,"MustacheTemplate", "Versatile Custom Elements","03", new MustacheTemplateDemo(sessionContext));
         l04_mustachetemplate.setParent(applicationLessons);
         lessonsTree.addNode(l04_mustachetemplate);
+
+        BaseTemplateTreeNode<DemoLesson> l05_iconViewer = new BaseTemplateTreeNode(AntuIcon.APP_GCSTAR_48, null ,"IconViewer", "IconViewer using InfiniteItemView","05", new IconViewerDemo(sessionContext));
+        l05_iconViewer.setParent(applicationLessons);
+        lessonsTree.addNode(l05_iconViewer);
 
         // Experimental Lessons
         BaseTemplateTreeNode<DemoLesson> experimentalLessons = new BaseTemplateTreeNode<>(MaterialIcon.FLASH_ON, "Experiments", "Just for Fun");

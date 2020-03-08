@@ -90,7 +90,7 @@ public class TableDemo implements DemoLesson {
         Button<BaseTemplateRecord> saveButton = Button.create(MaterialIcon.SAVE, "Save Records");
         panel.setRightHeaderField(new TextField().setEmptyText("..."));
 
-        saveButton.onValueChanged.addListener(aBoolean -> {
+        saveButton.onClicked.addListener(aBoolean -> {
             List<Friend> changedRecords = table.getRecordsWithChangedCellValues();
             for (Friend friend : changedRecords) {
                 Map<String, Object> changedCellValues = table.getChangedCellValues(friend);

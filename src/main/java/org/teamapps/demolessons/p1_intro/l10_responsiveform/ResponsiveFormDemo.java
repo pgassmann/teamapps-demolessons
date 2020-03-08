@@ -53,8 +53,8 @@ public class ResponsiveFormDemo implements DemoLesson {
 
         // Button to save the Values of the Form to the instance variable saved_friend
         Button<BaseTemplateRecord> saveButton = Button.create(MaterialIcon.SAVE, "Save");
-        layout.addLabelAndField(saveButton);
-        saveButton.onValueChanged.addListener(aBoolean -> {
+        layout.addLabelAndComponent(saveButton);
+        saveButton.onClicked.addListener(aBoolean -> {
             saved_friend = new Friend();
             this.form.applyFieldValuesToRecord(saved_friend);
             sessionContext.showNotification(MaterialIcon.SAVE, "Successfully saved your Friend " + saved_friend.getFirstName());
@@ -62,8 +62,8 @@ public class ResponsiveFormDemo implements DemoLesson {
 
         // Button to load the values from the instance variable saved_friend
         Button<BaseTemplateRecord> loadButton = Button.create(MaterialIcon.FILE_UPLOAD, "Load previously saved Friend");
-        layout.addLabelAndField(loadButton);
-        loadButton.onValueChanged.addListener(aBoolean -> {
+        layout.addLabelAndComponent(loadButton);
+        loadButton.onClicked.addListener(aBoolean -> {
             if (saved_friend != null) {
                 this.form.applyRecordValuesToFields(saved_friend);
             } else {
