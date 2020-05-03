@@ -26,7 +26,7 @@
         <dependency>
             <groupId>org.teamapps</groupId>
             <artifactId>universal-db</artifactId>
-            <version>0.2.4</version>
+            <version>0.4.5</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
@@ -55,7 +55,7 @@
                         <configuration>
                             <modelSourceDirectory>${project.basedir}/src/main/model</modelSourceDirectory>
                             <modelClasses>
-                                <modelClass>UniversalDbModel</modelClass>
+                                <modelClass>UniversalDbDemoModel</modelClass>
                             </modelClasses>
                         </configuration>
                     </execution>
