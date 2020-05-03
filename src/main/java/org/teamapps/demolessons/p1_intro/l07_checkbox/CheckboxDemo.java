@@ -27,7 +27,29 @@ public class CheckboxDemo implements DemoLesson {
     // Constructor, only set session context instance variable
     public CheckboxDemo(SessionContext context) {
         this.context = context;
+    }
 
+    private static void handleLightSwitchPressed(Boolean checked) {
+        lightOn = checked;
+        updateUi();
+    }
+
+    private static void updateUi() {
+        lightCheckBox1.setValue(lightOn);
+        lightCheckBox2.setValue(lightOn);
+        if(lightOn) {
+            panel.setHeaderBackgroundColor(Color.GOLD);
+        } else {
+            panel.setHeaderBackgroundColor(Color.MATERIAL_BLUE_GREY_400);
+        }
+    }
+
+    public Component getRootComponent(){
+        return rootComponent;
+    }
+
+    // This method is called every time the Demo is selected in the DemoLessonApp
+    public void handleDemoSelected() {
         panel = new Panel(MaterialIcon.LIGHTBULB_OUTLINE, "Checkbox Demo");
         rootComponent = panel;
         panel.setPadding(50);
@@ -55,30 +77,7 @@ public class CheckboxDemo implements DemoLesson {
         verticalLayout.addComponent(lightCheckBox1);
         verticalLayout.addComponent(lightCheckBox2);
         panel.setContent(verticalLayout);
-
     }
-
-    private static void handleLightSwitchPressed(Boolean checked) {
-        lightOn = checked;
-        updateUi();
-    }
-
-    private static void updateUi() {
-        lightCheckBox1.setValue(lightOn);
-        lightCheckBox2.setValue(lightOn);
-        if(lightOn) {
-            panel.setHeaderBackgroundColor(Color.GOLD);
-        } else {
-            panel.setHeaderBackgroundColor(Color.MATERIAL_BLUE_GREY_400);
-        }
-    }
-
-    public Component getRootComponent(){
-        return rootComponent;
-    }
-
-    // This method is called every time the Demo is selected in the DemoLessonApp
-    public void handleDemoSelected() { }
 
 
     public static void main(String[] args) throws Exception {
