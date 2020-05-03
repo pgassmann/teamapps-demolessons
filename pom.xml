@@ -56,6 +56,7 @@
                             <modelSourceDirectory>${project.basedir}/src/main/model</modelSourceDirectory>
                             <modelClasses>
                                 <modelClass>UniversalDbDemoModel</modelClass>
+                                <modelClass>IssueTrackerModel</modelClass>
                             </modelClasses>
                         </configuration>
                     </execution>
