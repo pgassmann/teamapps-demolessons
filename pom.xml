@@ -24,6 +24,11 @@
             <version>${teamapps.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.teamapps</groupId>
+            <artifactId>universal-db</artifactId>
+            <version>0.4.5</version>
+        </dependency>
+        <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.6</version>
@@ -35,4 +40,28 @@
             <version>1.7.25</version>
         </dependency>
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.teamapps</groupId>
+                <artifactId>universal-db-maven-plugin</artifactId>
+                <version>1.2</version>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate-model</goal>
+                        </goals>
+                        <configuration>
+                            <modelSourceDirectory>${project.basedir}/src/main/model</modelSourceDirectory>
+                            <modelClasses>
+                                <modelClass>UniversalDbDemoModel</modelClass>
+                                <modelClass>IssueTrackerModel</modelClass>
+                            </modelClasses>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

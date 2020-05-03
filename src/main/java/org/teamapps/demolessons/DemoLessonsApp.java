@@ -19,6 +19,7 @@ import org.teamapps.demolessons.p2_application.l01_backgroundtasks.BackgroundTas
 import org.teamapps.demolessons.p2_application.l02_externalevent.ExternalEventsDemo;
 import org.teamapps.demolessons.p2_application.l03_servlet.ServletDemo;
 import org.teamapps.demolessons.p2_application.l04_mustachetemplates.MustacheTemplateDemo;
+import org.teamapps.demolessons.p4_issuetracker.IssueTrackerApp;
 import org.teamapps.icon.material.MaterialIcon;
 import org.teamapps.server.jetty.embedded.TeamAppsJettyEmbeddedServer;
 import org.teamapps.ux.application.ResponsiveApplication;
@@ -170,6 +171,12 @@ public class DemoLessonsApp implements DemoLesson {
         l99DemoLessonsApp.setParent(experimentalLessons);
         lessonsTree.addNode(l99DemoLessonsApp);
 
+
+        // Issue Tracker
+
+        BaseTemplateTreeNode issueTracker = new BaseTemplateTreeNode(MaterialIcon.BUG_REPORT, null,"IssueTracker", "Real Application with Database", null, new IssueTrackerApp(sessionContext));
+        lessonsTree.addNode(issueTracker);
+
         lessonsTree.onNodeSelected.addListener(node -> {
             if (node.getPayload() != null) {
                 DemoLesson lesson = node.getPayload();
@@ -189,6 +196,7 @@ public class DemoLessonsApp implements DemoLesson {
             demoLessonsApp.handleDemoSelected();
             return demoLessonsApp.getRootComponent();
         });
+        controller.setShowBackgroundImage(true);
         new TeamAppsJettyEmbeddedServer(controller, Files.createTempDir(), 8081).start();
     }
 }

@@ -34,6 +34,13 @@ First we need to install the necessary dependencies using Maven. This can take s
 
 If all works right, you should see BUILD SUCCESS in the Console window
 
+### Mark directories for IDEA
+
+To enable Auto completion and Validation, IDEA has to know what kind of content is in some Folders.
+
+* Right click `src/main/model` > Mark Directory as > Sources Root
+* Right click `target/generated-sources/model-api` > Mark as Generated Sources Root
+
 ### Running the DemoLessonsApp
 
 Now we can start the DemoLessonsApp from IntelliJ IDEA
