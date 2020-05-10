@@ -14,10 +14,7 @@ import org.teamapps.ux.application.perspective.Perspective;
 import org.teamapps.ux.application.view.View;
 import org.teamapps.ux.component.Component;
 import org.teamapps.ux.component.absolutelayout.Length;
-import org.teamapps.ux.component.field.AbstractField;
-import org.teamapps.ux.component.field.Fields;
-import org.teamapps.ux.component.field.MultiLineTextField;
-import org.teamapps.ux.component.field.TextField;
+import org.teamapps.ux.component.field.*;
 import org.teamapps.ux.component.form.ResponsiveForm;
 import org.teamapps.ux.component.form.ResponsiveFormLayout;
 import org.teamapps.ux.component.table.Table;
@@ -300,8 +297,11 @@ public class IssueTrackerApp implements DemoLesson {
             } else {
                 reporterField.setValue(null);
             }
-
+        } else {
+            formFields.forEach(field -> field.setValue(null));
         }
+        FieldEditingMode editingMode = issue != null ? FieldEditingMode.EDITABLE : FieldEditingMode.DISABLED;
+        formFields.forEach(field -> field.setEditingMode(editingMode));
     }
 
     // FilterTextField which calls the Consumer onTextInput
