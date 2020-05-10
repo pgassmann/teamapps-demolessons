@@ -13,6 +13,7 @@ public class IssueTrackerModel implements SchemaInfoProvider {
 
         // Define the Tables, add creation and modification timestamp fields, keep deleted objects ("recycle bin")
         Table user = database.addTable("user", TableOption.TRACK_CREATION, TableOption.TRACK_MODIFICATION, TableOption.KEEP_DELETED);
+        Table group = database.addTable("group", TableOption.TRACK_CREATION, TableOption.TRACK_MODIFICATION, TableOption.KEEP_DELETED);
         Table issue = database.addTable("issue", TableOption.TRACK_CREATION, TableOption.TRACK_MODIFICATION, TableOption.KEEP_DELETED);
 
         user
@@ -20,7 +21,12 @@ public class IssueTrackerModel implements SchemaInfoProvider {
                 .addText("email")
                 .addBinary("avatar")
                 .addReference("assignedIssues", issue, true, "assignedTo")
-                .addReference("reportedIssues", issue, true, "reporter");
+                .addReference("reportedIssues", issue, true, "reporter")
+                .addReference("groups", group, true, "members");
+
+        group
+                .addText("name")
+                .addReference("members", user, true, "groups");
 
         issue
                 .addText("type")

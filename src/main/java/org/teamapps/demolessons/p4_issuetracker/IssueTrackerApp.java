@@ -1,10 +1,12 @@
 package org.teamapps.demolessons.p4_issuetracker;
 
 import com.google.common.io.Files;
+import org.jetbrains.annotations.NotNull;
 import org.teamapps.databinding.TwoWayBindableValue;
 import org.teamapps.demolessons.DemoLesson;
 import org.teamapps.demolessons.issuetracker.model.SchemaInfo;
 import org.teamapps.demolessons.issuetracker.model.issuetrackerdb.Issue;
+import org.teamapps.demolessons.issuetracker.model.issuetrackerdb.User;
 import org.teamapps.icon.material.MaterialIcon;
 import org.teamapps.server.jetty.embedded.TeamAppsJettyEmbeddedServer;
 import org.teamapps.universaldb.UniversalDB;
@@ -21,6 +23,7 @@ import org.teamapps.ux.component.table.Table;
 import org.teamapps.ux.component.table.TableColumn;
 import org.teamapps.ux.component.toolbar.ToolbarButton;
 import org.teamapps.ux.component.toolbar.ToolbarButtonGroup;
+import org.teamapps.ux.component.toolbar.ToolbarButtonGroupPosition;
 import org.teamapps.ux.session.SessionContext;
 import org.teamapps.webcontroller.SimpleWebController;
 
@@ -46,6 +49,9 @@ public class IssueTrackerApp implements DemoLesson {
     private final TwoWayBindableValue<Issue> displayedIssue = TwoWayBindableValue.create();
     private Table<Issue> issueTable;
     private IssueTableModel issueTableModel;
+    private ResponsiveApplication issueTrackerApplication;
+    private Perspective userPerspective;
+    private Perspective issuePerspective;
 
     // Constructor, only set session context instance variable
     public IssueTrackerApp(SessionContext context){
@@ -78,11 +84,38 @@ public class IssueTrackerApp implements DemoLesson {
     }
 
     private void createDemoData() {
-        if (Issue.getCount() == 0) {
+        if (User.getCount() == 0) {
+            User user1 = User.create()
+                    .setName("Major First")
+                    .setEmail("majorfirst@example.com")
+                    .save();
+            User user2 = User.create()
+                    .setName("John Second")
+                    .setEmail("john@example.com")
+                    .save();
+            User user3 = User.create()
+                    .setName("John Maier")
+                    .setEmail("johnmaier@example.com")
+                    .save();
+            User user4 = User.create()
+                    .setName("Tim Meier")
+                    .setEmail("meiertim@example.com")
+                    .save();
+            User user5 = User.create()
+                    .setName("Micky Meyer")
+                    .setEmail("mickmeyer@example.com")
+                    .save();
+            User user6 = User.create()
+                    .setName("Nick Johnson")
+                    .setEmail("nickj@example.com")
+                    .save();
+
             Issue.create()
                     .setType("BUG")
                     .setSummary("VerticalLayout scroll")
                     .setDescription("VerticalLayout is not Scrollable")
+//                    .setReporter(user1)
+//                    .setAssignedTo(user5, user2, user3)
                     .save();
             Issue.create()
                     .setType("TODO")
@@ -90,24 +123,29 @@ public class IssueTrackerApp implements DemoLesson {
                     .setState("NEW")
                     .setSummary("issueTracker")
                     .setDescription("Finish implementation of issue tracker")
+//                    .setAssignedTo(user1)
                     .save();
             Issue.create()
                     .setType("FEATURE")
                     .setPriority("LOW")
                     .setSummary("WorkspaceLayout: Remove Panel")
                     .setDescription("This feature is missing")
+//                    .setReporter(user2)
+//                    .setAssignedTo(user5, user6, user1, user4)
                     .save();
             Issue.create()
                     .setType("FEATURE")
                     .setPriority("LOW")
                     .setSummary("IssueTracker: Use Enums")
                     .setDescription("Type, Priority should use ENUMs")
+//                    .setReporter(user3)
                     .save();
             Issue.create()
                     .setType("FEATURE")
                     .setPriority("MEDIUM")
                     .setSummary("IssueTracker: References")
                     .setDescription("Assignee, Reporter")
+//                    .setReporter(user3)
                     .save();
             Issue.create()
                     .setType("FEATURE")
@@ -115,6 +153,7 @@ public class IssueTrackerApp implements DemoLesson {
                     .setState("DONE")
                     .setSummary("IssueTracker: MultiLine")
                     .setDescription("MultiLine Field for Description")
+//                    .setReporter(user5)
                     .save();
         }
     }
@@ -122,17 +161,46 @@ public class IssueTrackerApp implements DemoLesson {
     // Design of the IssueTracker Application
     private Component createUI() {
         // create a responsive application that will run on desktops as well as on smart phones
-        ResponsiveApplication application = ResponsiveApplication.createApplication();
+        issueTrackerApplication = ResponsiveApplication.createApplication();
 
         // create perspective with default layout
-        Perspective perspective = Perspective.createPerspective();
-        application.addPerspective(perspective);
+        issuePerspective = createIssuePerspective();
+        issueTrackerApplication.addPerspective(issuePerspective);
+        issuePerspective.addWorkspaceButtonGroup(createPerspectiveSwitcher());
 
+        userPerspective = new UserPerspective().getPerspective();
+        issueTrackerApplication.addPerspective(userPerspective);
+        userPerspective.addWorkspaceButtonGroup(createPerspectiveSwitcher());
+
+        issueTrackerApplication.showPerspective(issuePerspective);
+        issueTrackerApplication.showPerspective(issuePerspective);
+        return issueTrackerApplication.getUi();
+    }
+
+    private ToolbarButtonGroup createPerspectiveSwitcher() {
+        ToolbarButtonGroup group = new ToolbarButtonGroup();
+        group.setPosition(ToolbarButtonGroupPosition.FIRST);
+        ToolbarButton switchPerspective = ToolbarButton.createSmall(MaterialIcon.SWAP_VERTICAL_CIRCLE, "Switch Perspective", "");
+        group.addButton(switchPerspective);
+        switchPerspective.onClick.addListener(() -> {
+            if (issueTrackerApplication.getActivePerspective().equals(issuePerspective)) {
+                issueTrackerApplication.showPerspective(userPerspective);
+            } else {
+                issueTrackerApplication.showPerspective(issuePerspective);
+            }
+        });
+
+        return group;
+    }
+
+    @NotNull
+    private Perspective createIssuePerspective() {
+        Perspective issuePerspective = Perspective.createPerspective();
         // Issue Table with a Table Model for Query and Filtering
         issueTableModel = new IssueTableModel();
         issueTable = createIssueTable(issueTableModel);
         View tableView = View.createView(StandardLayout.CENTER, MaterialIcon.REPORT_PROBLEM, "Issue List", issueTable);
-        perspective.addView(tableView);
+        issuePerspective.addView(tableView);
 
         // Add Global Search Field to Panel
         tableView.getPanel().setRightHeaderField(createFilterTextField(s -> issueTableModel.setFullTextFilter(s)));
@@ -141,7 +209,9 @@ public class IssueTrackerApp implements DemoLesson {
         Component issueForm = createIssueDetailForm();
         View formView = View.createView(StandardLayout.RIGHT, MaterialIcon.BUG_REPORT, "Issue Details", issueForm);
         formView.addLocalButtonGroup(createFormToolbarButtonGroup());
-        perspective.addView(formView);
+        issuePerspective.addView(formView);
+
+        issuePerspective.addWorkspaceButtonGroup(createWorkspaceToolbar());
 
         // displayedIssue is a TwoWayBindableValue<Issue>
         // we can add listeners to this Object that will fire every time we update the content.
@@ -161,10 +231,9 @@ public class IssueTrackerApp implements DemoLesson {
             // show the form when an element is selected in the list.
             formView.focus();
         });
-
-        application.showPerspective(perspective);
-        return application.getUi();
+        return issuePerspective;
     }
+
 
     // Define Table / List of Issues in the Center view
     private Table<Issue> createIssueTable(IssueTableModel tableModel) {
@@ -259,6 +328,30 @@ public class IssueTrackerApp implements DemoLesson {
         return group;
     }
 
+    private ToolbarButtonGroup createWorkspaceToolbar() {
+        ToolbarButtonGroup group = new ToolbarButtonGroup();
+
+        // New
+        ToolbarButton newButton = ToolbarButton.createSmall(MaterialIcon.ADD, "New", "Create Issue");
+        group.addButton(newButton);
+        newButton.onClick.addListener(toolbarButtonClickEvent -> {
+            displayedIssue.set(Issue.create());
+        });
+
+        // Delete
+        ToolbarButton deleteButton = ToolbarButton.createSmall(MaterialIcon.DELETE, "Delete", "Delete issue");
+        group.addButton(deleteButton);
+        deleteButton.onClick.addListener(toolbarButtonClickEvent -> {
+            deleteIssue(displayedIssue.get());
+        });
+
+        // show delete button only when an issue is displayed
+        displayedIssue.bindWritingTo(issue -> {
+            deleteButton.setVisible(issue != null);
+        });
+        return group;
+    }
+
     private void deleteIssue(Issue issue) {
         if (issue != null) {
             issue.delete();
@@ -326,4 +419,5 @@ public class IssueTrackerApp implements DemoLesson {
         controller.setShowBackgroundImage(true);
         new TeamAppsJettyEmbeddedServer(controller, Files.createTempDir()).start();
     }
+
 }
