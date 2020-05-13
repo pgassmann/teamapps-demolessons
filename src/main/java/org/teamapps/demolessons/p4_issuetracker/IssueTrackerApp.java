@@ -19,6 +19,8 @@ import org.teamapps.ux.component.absolutelayout.Length;
 import org.teamapps.ux.component.field.*;
 import org.teamapps.ux.component.form.ResponsiveForm;
 import org.teamapps.ux.component.form.ResponsiveFormLayout;
+import org.teamapps.ux.component.itemview.SimpleItemGroup;
+import org.teamapps.ux.component.itemview.SimpleItemView;
 import org.teamapps.ux.component.table.Table;
 import org.teamapps.ux.component.table.TableColumn;
 import org.teamapps.ux.component.toolbar.ToolbarButton;
@@ -31,6 +33,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public class IssueTrackerApp implements DemoLesson {
 
@@ -114,8 +117,8 @@ public class IssueTrackerApp implements DemoLesson {
                     .setType("BUG")
                     .setSummary("VerticalLayout scroll")
                     .setDescription("VerticalLayout is not Scrollable")
-//                    .setReporter(user1)
-//                    .setAssignedTo(user5, user2, user3)
+                    .setReporter(user1)
+                    .setAssignedTo(user5, user2, user3)
                     .save();
             Issue.create()
                     .setType("TODO")
@@ -123,29 +126,38 @@ public class IssueTrackerApp implements DemoLesson {
                     .setState("NEW")
                     .setSummary("issueTracker")
                     .setDescription("Finish implementation of issue tracker")
-//                    .setAssignedTo(user1)
+                    .setAssignedTo(user1)
                     .save();
             Issue.create()
                     .setType("FEATURE")
                     .setPriority("LOW")
                     .setSummary("WorkspaceLayout: Remove Panel")
                     .setDescription("This feature is missing")
-//                    .setReporter(user2)
-//                    .setAssignedTo(user5, user6, user1, user4)
+                    .setReporter(user2)
+                    .setAssignedTo(user5, user6, user1, user4)
                     .save();
             Issue.create()
                     .setType("FEATURE")
                     .setPriority("LOW")
                     .setSummary("IssueTracker: Use Enums")
                     .setDescription("Type, Priority should use ENUMs")
-//                    .setReporter(user3)
+                    .setReporter(user3)
                     .save();
             Issue.create()
                     .setType("FEATURE")
                     .setPriority("MEDIUM")
+                    .setState("DONE")
                     .setSummary("IssueTracker: References")
                     .setDescription("Assignee, Reporter")
-//                    .setReporter(user3)
+                    .setReporter(user3)
+                    .save();
+            Issue.create()
+                    .setType("FEATURE")
+                    .setPriority("MEDIUM")
+                    .setState("DONE")
+                    .setSummary("IssueTracker: Reference Editor")
+                    .setDescription("Select Assignee, Reporter with (Tag)ComboBox")
+                    .setReporter(null)
                     .save();
             Issue.create()
                     .setType("FEATURE")
@@ -153,7 +165,7 @@ public class IssueTrackerApp implements DemoLesson {
                     .setState("DONE")
                     .setSummary("IssueTracker: MultiLine")
                     .setDescription("MultiLine Field for Description")
-//                    .setReporter(user5)
+                    .setReporter(user5)
                     .save();
         }
     }
@@ -182,13 +194,23 @@ public class IssueTrackerApp implements DemoLesson {
         group.setPosition(ToolbarButtonGroupPosition.FIRST);
         ToolbarButton switchPerspective = ToolbarButton.createSmall(MaterialIcon.SWAP_VERTICAL_CIRCLE, "Switch Perspective", "");
         group.addButton(switchPerspective);
-        switchPerspective.onClick.addListener(() -> {
-            if (issueTrackerApplication.getActivePerspective().equals(issuePerspective)) {
-                issueTrackerApplication.showPerspective(userPerspective);
-            } else {
-                issueTrackerApplication.showPerspective(issuePerspective);
-            }
-        });
+        // DropDown Menu for Perspectives
+        SimpleItemView<Object> perspectiveMenu = new SimpleItemView<>();
+        switchPerspective.setDropDownComponent(perspectiveMenu);
+        SimpleItemGroup<Object> perspectiveMenuGroup = perspectiveMenu.addSingleColumnGroup(MaterialIcon.SWAP_VERT, "Perspectives");
+        perspectiveMenuGroup.addItem(MaterialIcon.PEOPLE, "User Perspective", "manage Users")
+                .onClick.addListener(s -> issueTrackerApplication.showPerspective(userPerspective));
+        perspectiveMenuGroup.addItem(MaterialIcon.BUG_REPORT, "Issue Perspective", "manage Issues")
+                .onClick.addListener(s -> issueTrackerApplication.showPerspective(issuePerspective));
+
+
+//        switchPerspective.onClick.addListener(() -> {
+//            if (issueTrackerApplication.getActivePerspective().equals(issuePerspective)) {
+//                issueTrackerApplication.showPerspective(userPerspective);
+//            } else {
+//                issueTrackerApplication.showPerspective(issuePerspective);
+//            }
+//        });
 
         return group;
     }
@@ -244,8 +266,26 @@ public class IssueTrackerApp implements DemoLesson {
         table.addColumn(new TableColumn<Issue>("state", "State", new TextField()).setMaxWidth(80));
         table.addColumn(new TableColumn<>("summary", "Summary", new TextField()));
         table.addColumn(new TableColumn<>("description", "Description", new TextField()));
-        table.addColumn(new TableColumn<>("assignedTo", "assigned to", new TextField()));
-        table.addColumn(new TableColumn<>("reporter", "Reporter", new TextField()));
+
+        // Reporter Column with custom Value Extractor to convert referenced User to a String.
+        table.addColumn(new TableColumn<Issue>("reporter", "Reporter", new TextField())
+                .setValueExtractor(issue -> {
+                    if (issue.getReporter() != null) {
+                        return issue.getReporter().getName();
+                    } else {
+                        return null;
+                    }
+                }));
+
+        // Assigned To Column with custom value extractor that maps referenced users to a single, comma-separated string
+        table.addColumn(new TableColumn<Issue>("assignedTo", "assigned to", new TextField())
+                .setValueExtractor(issue -> {
+                    return issue.getAssignedTo().stream()
+                            .limit(3)
+                            .map(user -> user.getName())
+                            .collect(Collectors.joining(", "));
+
+        }));
 
         table.setForceFitWidth(true);
         table.setDisplayAsList(true);
@@ -330,6 +370,7 @@ public class IssueTrackerApp implements DemoLesson {
 
     private ToolbarButtonGroup createWorkspaceToolbar() {
         ToolbarButtonGroup group = new ToolbarButtonGroup();
+        group.setPosition(ToolbarButtonGroupPosition.CENTER);
 
         // New
         ToolbarButton newButton = ToolbarButton.createSmall(MaterialIcon.ADD, "New", "Create Issue");
@@ -382,8 +423,15 @@ public class IssueTrackerApp implements DemoLesson {
             stateField.setValue(issue.getState());
             summaryField.setValue(issue.getSummary());
             descriptionField.setValue(issue.getDescription());
-            String assignees = "TODO";
-            assignedToField.setValue(assignees);
+            if (issue.getAssignedTo().isEmpty()){
+                assignedToField.setValue("NOT ASSIGNED");
+            } else {
+                String assignees = issue.getAssignedTo().stream()
+                        .map(user -> user.getName())
+                        .collect(Collectors.joining(", "));
+                assignedToField.setValue(assignees);
+
+            }
 
             if (issue.getReporter() != null ) {
                 reporterField.setValue(issue.getReporter().getName());
