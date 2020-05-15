@@ -1,27 +1,20 @@
 package org.teamapps.demolessons.p2_application.l05_iconviewer;
 
 import com.google.common.io.Files;
-import org.apache.commons.io.IOUtils;
-import org.teamapps.data.extract.BeanPropertyExtractor;
 import org.teamapps.demolessons.DemoLesson;
-import org.teamapps.demolessons.p1_intro.l10_responsiveform.Friend;
-import org.teamapps.demolessons.p2_application.l04_mustachetemplates.StoreItem;
 import org.teamapps.icon.antu.AntuIcon;
 import org.teamapps.icon.antu.AntuIconProvider;
-import org.teamapps.icon.material.AbstractMaterialIconStyle;
-import org.teamapps.icon.material.MaterialIcon;
-import org.teamapps.icon.material.MaterialIconStyles;
+import org.teamapps.icons.api.IconStyle;
 import org.teamapps.server.jetty.embedded.TeamAppsJettyEmbeddedServer;
 import org.teamapps.ux.component.Component;
-import org.teamapps.ux.component.field.Label;
 import org.teamapps.ux.component.field.TemplateField;
 import org.teamapps.ux.component.field.TextField;
+import org.teamapps.ux.component.field.combobox.ComboBox;
 import org.teamapps.ux.component.field.combobox.TagComboBox;
 import org.teamapps.ux.component.flexcontainer.VerticalLayout;
 import org.teamapps.ux.component.form.ResponsiveForm;
 import org.teamapps.ux.component.form.ResponsiveFormLayout;
 import org.teamapps.ux.component.infiniteitemview.InfiniteItemView;
-import org.teamapps.ux.component.infiniteitemview.ListInfiniteItemViewModel;
 import org.teamapps.ux.component.notification.Notification;
 import org.teamapps.ux.component.notification.NotificationPosition;
 import org.teamapps.ux.component.panel.Panel;
@@ -31,13 +24,8 @@ import org.teamapps.ux.component.template.Template;
 import org.teamapps.ux.session.SessionContext;
 import org.teamapps.webcontroller.SimpleWebController;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class IconViewerDemo implements DemoLesson {
 
@@ -89,6 +77,7 @@ public class IconViewerDemo implements DemoLesson {
 		});
 		model = createModel();
 		itemView.setModel(model);
+		itemView.setCssStyle("background-color", "#999999");
 
 		// Print Icon ID in Notification
 
@@ -143,8 +132,28 @@ public class IconViewerDemo implements DemoLesson {
 			}
 			return null;
 		});
-
 		layout.addLabelAndField(AntuIcon.ACTION.VIEW_CATEGORIES_24, "Icon Category", categoryComboBox);
+
+		// Style Selector
+		List<IconStyle> iconStyleList = Arrays.asList(AntuIconProvider.DARK, AntuIconProvider.STANDARD);
+		ComboBox<IconStyle> styleSelector = new ComboBox<>(iconStyleList);
+		styleSelector.setTemplate(BaseTemplate.LIST_ITEM_MEDIUM_ICON_SINGLE_LINE);
+		styleSelector.setPropertyExtractor((style, propertyName) -> {
+				switch (propertyName) {
+					case BaseTemplate.PROPERTY_ICON:
+						return AntuIcon.ACTION.DRAW_BRUSH_24;
+					case BaseTemplate.PROPERTY_CAPTION:
+						return style.getStyleId();
+				}
+				return null;
+		});
+		styleSelector.setRecordToStringFunction(style -> style.getStyleName());
+		styleSelector.setShowClearButton(true);
+		styleSelector.onValueChanged.addListener(style -> {
+
+			model.setIconStyle(style);
+		});
+		layout.addLabelAndField(AntuIcon.ACTION.DRAW_BRUSH_24, "Icon Style", styleSelector);
 		verticalLayout.addComponentFillRemaining(component);
 		return verticalLayout;
 	}
