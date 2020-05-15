@@ -8,22 +8,28 @@ import org.teamapps.icons.api.StyledIcon;
 public class CategorizedIcon {
 	private final String category;
 	private final StyledIcon icon;
+	private final String iconName;
 
-	public CategorizedIcon(String category, SimpleIcon icon, IconStyle style) {
+	public CategorizedIcon(String category, String iconName, SimpleIcon icon, IconStyle style) {
 		this.category = category;
-		this.icon = new StyledIcon(AntuIconProvider.LIBRARY_ID, style.getStyleId(),icon.getIconName());
+		this.iconName = iconName;
+		this.icon = new StyledIcon(AntuIconProvider.LIBRARY_ID, style.getStyleId(), icon.getIconName());
 	}
 
 	public String getCategory() {
 		return category;
 	}
 
+	public String getName() {
+		return iconName;
+	}
 	public StyledIcon getIcon() {
 		return icon;
 	}
 
+
 	@Override
 	public String toString() {
-		return "AntuIcon." + getCategory() + "." + getIcon().getIconName();
+		return "AntuIcon." + getCategory() + "." + getName();
 	}
 }

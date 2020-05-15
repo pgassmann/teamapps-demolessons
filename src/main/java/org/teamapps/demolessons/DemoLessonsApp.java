@@ -166,9 +166,6 @@ public class DemoLessonsApp implements DemoLesson {
         l04_mustachetemplate.setParent(applicationLessons);
         lessonsTree.addNode(l04_mustachetemplate);
 
-        BaseTemplateTreeNode<DemoLesson> l05_iconViewer = new BaseTemplateTreeNode(AntuIcon.APP_GCSTAR_48, null ,"IconViewer", "IconViewer using InfiniteItemView","05", new IconViewerDemo(sessionContext));
-        l05_iconViewer.setParent(applicationLessons);
-        lessonsTree.addNode(l05_iconViewer);
 
         // Experimental Lessons
         BaseTemplateTreeNode<DemoLesson> experimentalLessons = new BaseTemplateTreeNode<>(MaterialIcon.FLASH_ON, "Experiments", "Just for Fun");
@@ -178,6 +175,9 @@ public class DemoLessonsApp implements DemoLesson {
         l99DemoLessonsApp.setParent(experimentalLessons);
         lessonsTree.addNode(l99DemoLessonsApp);
 
+        BaseTemplateTreeNode<DemoLesson> l05_iconViewer = new BaseTemplateTreeNode(AntuIcon.APP_GCSTAR_48, null ,"IconViewer", "IconViewer using InfiniteItemView","05", new IconViewerDemo(sessionContext));
+        l05_iconViewer.setParent(experimentalLessons);
+        lessonsTree.addNode(l05_iconViewer);
 
         // Issue Tracker
 

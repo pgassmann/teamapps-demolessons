@@ -52,7 +52,8 @@ public class IconViewerDemo implements DemoLesson {
 //			return LocalDate.now().minusDays(30).compareTo(storeItem.getReleaseDate()) < 0;
 //		}));
 
-        panel.setContent(createIconFinder(createIconViewComponent()));
+		Component iconFinder = createIconFinder();
+		panel.setContent(iconFinder);
         panel.setTitle("Icon Viewer");
         panel.setIcon(AntuIcon.APPS.GCSTAR_48);
 		return panel;
@@ -68,7 +69,7 @@ public class IconViewerDemo implements DemoLesson {
 			if (prop.equals("icon")) {
 				return icon.getIcon();
 			} else if (prop.equals("caption")) {
-				return icon.getIcon().toString();
+				return icon.getName();
 			} else if (prop.equals("description")) {
 				return icon.getCategory();
 			} else {
@@ -77,7 +78,6 @@ public class IconViewerDemo implements DemoLesson {
 		});
 		model = createModel();
 		itemView.setModel(model);
-		itemView.setCssStyle("background-color", "#999999");
 
 		// Print Icon ID in Notification
 
@@ -96,7 +96,9 @@ public class IconViewerDemo implements DemoLesson {
 		return itemView;
 	}
 
-	protected Component createIconFinder(InfiniteItemView<CategorizedIcon> component) {
+	protected Component createIconFinder() {
+		InfiniteItemView<CategorizedIcon> iconViewComponent = createIconViewComponent();
+
 		VerticalLayout verticalLayout = new VerticalLayout();
 		// New Component: ResponsiveForm
 		ResponsiveForm responsiveForm = new ResponsiveForm<>(100,200,0);
@@ -147,14 +149,19 @@ public class IconViewerDemo implements DemoLesson {
 				}
 				return null;
 		});
-		styleSelector.setRecordToStringFunction(style -> style.getStyleName());
+		styleSelector.setRecordToStringFunction(style -> style.getStyleId());
 		styleSelector.setShowClearButton(true);
 		styleSelector.onValueChanged.addListener(style -> {
 
 			model.setIconStyle(style);
+			if (style.getStyleId().equals("AntuDark")) {
+				iconViewComponent.setCssStyle("background-color", "#777");
+			} else {
+				iconViewComponent.setCssStyle("background-color", "inherit");
+			}
 		});
 		layout.addLabelAndField(AntuIcon.ACTION.DRAW_BRUSH_24, "Icon Style", styleSelector);
-		verticalLayout.addComponentFillRemaining(component);
+		verticalLayout.addComponentFillRemaining(iconViewComponent);
 		return verticalLayout;
 	}
 
