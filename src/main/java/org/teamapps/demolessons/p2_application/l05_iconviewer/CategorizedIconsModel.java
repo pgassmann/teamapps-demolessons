@@ -1,6 +1,8 @@
 package org.teamapps.demolessons.p2_application.l05_iconviewer;
 
-import org.teamapps.icons.api.Icon;
+import org.teamapps.icon.antu.AntuIconProvider;
+import org.teamapps.icons.api.IconStyle;
+import org.teamapps.icons.api.SimpleIcon;
 import org.teamapps.ux.component.infiniteitemview.AbstractInfiniteItemViewModel;
 
 import java.util.Arrays;
@@ -12,6 +14,7 @@ public class CategorizedIconsModel extends AbstractInfiniteItemViewModel<Categor
 	private List<CategorizedIcon> categorizedIcons;
 	private String filterString;
 	private List<AntuIconCategory> iconCategories;
+	private IconStyle iconStyle;
 
 	public CategorizedIconsModel(List<AntuIconCategory> iconCategories) {
 		this.iconCategories = iconCategories;
@@ -28,11 +31,22 @@ public class CategorizedIconsModel extends AbstractInfiniteItemViewModel<Categor
 		updateIcons();
 	}
 
+	public void setIconStyle(IconStyle iconStyle) {
+		this.iconStyle = iconStyle;
+		updateIcons();
+	}
+
 	private void updateIcons() {
 		List<CategorizedIcon> categorizedIcons =
 				iconCategories.stream()
 				.flatMap(iconCategory -> Arrays.stream(iconCategory.getIconClass().getEnumConstants())
-							.map(icon ->  new CategorizedIcon(iconCategory.getCategoryName(), (Icon) icon) )
+							.map(icon -> {
+								if (iconStyle != null) {
+									return new CategorizedIcon(iconCategory.getCategoryName(), (SimpleIcon) icon, iconStyle);
+								} else {
+									return new CategorizedIcon(iconCategory.getCategoryName(), (SimpleIcon) icon, AntuIconProvider.STANDARD);
+								}
+							})
 				).filter(categorizedIcon -> {
 					return filterString == null || categorizedIcon.getIcon().toString().toLowerCase().contains(filterString.toLowerCase());
 				})
@@ -53,5 +67,4 @@ public class CategorizedIconsModel extends AbstractInfiniteItemViewModel<Categor
 				.limit(length)
 				.collect(Collectors.toList());
 	}
-
 }
