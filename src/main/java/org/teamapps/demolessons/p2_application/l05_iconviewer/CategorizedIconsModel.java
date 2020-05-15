@@ -42,9 +42,9 @@ public class CategorizedIconsModel extends AbstractInfiniteItemViewModel<Categor
 				.flatMap(iconCategory -> Arrays.stream(iconCategory.getIconClass().getEnumConstants())
 							.map(icon -> {
 								if (iconStyle != null) {
-									return new CategorizedIcon(iconCategory.getCategoryName(), (SimpleIcon) icon, iconStyle);
+									return new CategorizedIcon(iconCategory.getCategoryName(), icon.toString(),  (SimpleIcon) icon, iconStyle);
 								} else {
-									return new CategorizedIcon(iconCategory.getCategoryName(), (SimpleIcon) icon, AntuIconProvider.STANDARD);
+									return new CategorizedIcon(iconCategory.getCategoryName(), icon.toString(), (SimpleIcon) icon, AntuIconProvider.STANDARD);
 								}
 							})
 				).filter(categorizedIcon -> {
