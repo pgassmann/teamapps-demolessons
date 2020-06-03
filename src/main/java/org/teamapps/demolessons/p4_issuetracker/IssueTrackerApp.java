@@ -17,12 +17,15 @@ import org.teamapps.ux.application.view.View;
 import org.teamapps.ux.component.Component;
 import org.teamapps.ux.component.absolutelayout.Length;
 import org.teamapps.ux.component.field.*;
+import org.teamapps.ux.component.field.combobox.ComboBox;
+import org.teamapps.ux.component.field.combobox.TagComboBox;
 import org.teamapps.ux.component.form.ResponsiveForm;
 import org.teamapps.ux.component.form.ResponsiveFormLayout;
 import org.teamapps.ux.component.itemview.SimpleItemGroup;
 import org.teamapps.ux.component.itemview.SimpleItemView;
 import org.teamapps.ux.component.table.Table;
 import org.teamapps.ux.component.table.TableColumn;
+import org.teamapps.ux.component.template.BaseTemplate;
 import org.teamapps.ux.component.toolbar.ToolbarButton;
 import org.teamapps.ux.component.toolbar.ToolbarButtonGroup;
 import org.teamapps.ux.component.toolbar.ToolbarButtonGroupPosition;
@@ -45,8 +48,8 @@ public class IssueTrackerApp implements DemoLesson {
     private TextField stateField;
     private TextField summaryField;
     private MultiLineTextField descriptionField;
-    private TextField assignedToField;
-    private TextField reporterField;
+    private TagComboBox<User> assignedToTagComboBox;
+    private ComboBox<User> reporterComboBox;
     private List<AbstractField<?>> formFields;
 
     private final TwoWayBindableValue<Issue> displayedIssue = TwoWayBindableValue.create();
@@ -313,8 +316,40 @@ public class IssueTrackerApp implements DemoLesson {
         summaryField = new TextField();
         descriptionField = new MultiLineTextField();
         descriptionField.setMinHeight(Length.ofPixels(200));
-        assignedToField = new TextField();
-        reporterField = new TextField();
+        reporterComboBox = new ComboBox<>(BaseTemplate.LIST_ITEM_SMALL_ICON_SINGLE_LINE);
+        reporterComboBox.setModel(s -> User.filter().parseFullTextFilter(s).execute());
+        reporterComboBox.setShowClearButton(true);
+        reporterComboBox.setPropertyExtractor((user, propertyName) -> {
+            switch (propertyName) {
+                case BaseTemplate.PROPERTY_ICON:
+                    return MaterialIcon.PERSON;
+                case BaseTemplate.PROPERTY_CAPTION:
+                    return user.getName();
+                case BaseTemplate.PROPERTY_DESCRIPTION:
+                    return user.getEmail();
+                default:
+                    return null;
+            }
+        });
+        reporterComboBox.setRecordToStringFunction(user -> user.getName());
+
+        assignedToTagComboBox = new TagComboBox<User>();
+        assignedToTagComboBox.setTemplate(BaseTemplate.LIST_ITEM_SMALL_ICON_SINGLE_LINE);
+        assignedToTagComboBox.setShowClearButton(true);
+        assignedToTagComboBox.setModel(s -> User.filter().parseFullTextFilter(s).execute());
+        assignedToTagComboBox.setPropertyExtractor((user, propertyName) -> {
+            switch (propertyName) {
+                case BaseTemplate.PROPERTY_ICON:
+                    return MaterialIcon.PERSON;
+                case BaseTemplate.PROPERTY_CAPTION:
+                    return user.getName();
+                case BaseTemplate.PROPERTY_DESCRIPTION:
+                    return user.getEmail();
+                default:
+                    return null;
+            }
+        });
+        assignedToTagComboBox.setRecordToStringFunction(user -> user.getName());
 
         summaryField.setRequired(true);
         descriptionField.setRequired(true);
@@ -325,8 +360,8 @@ public class IssueTrackerApp implements DemoLesson {
                 stateField,
                 summaryField,
                 descriptionField,
-                assignedToField,
-                reporterField);
+                assignedToTagComboBox,
+                reporterComboBox);
 
         formLayout.addSection(MaterialIcon.INFO, "Issue");
         formLayout.addLabelAndField(null, "Type", typeField);
@@ -334,8 +369,8 @@ public class IssueTrackerApp implements DemoLesson {
         formLayout.addLabelAndField(null, "State", stateField);
         formLayout.addLabelAndField(null, "Summary", summaryField);
         formLayout.addLabelAndField(null, "Description", descriptionField);
-        formLayout.addLabelAndField(null, "assigned to", assignedToField);
-        formLayout.addLabelAndField(null, "Reporter", reporterField);
+        formLayout.addLabelAndField(null, "assigned to", assignedToTagComboBox);
+        formLayout.addLabelAndField(null, "Reporter", reporterComboBox);
         return form;
     }
 
@@ -409,7 +444,10 @@ public class IssueTrackerApp implements DemoLesson {
             issue.setState(stateField.getValue());
             issue.setSummary(summaryField.getValue());
             issue.setDescription(descriptionField.getValue());
+            issue.setAssignedTo(assignedToTagComboBox.getValue());
+            issue.setReporter(reporterComboBox.getValue());
             issue.save();
+            context.showNotification(MaterialIcon.INFO, "Issue successfully saved");
             issueTable.refreshData();
             issueTable.selectSingleRow(issue,true);
         }
@@ -423,21 +461,9 @@ public class IssueTrackerApp implements DemoLesson {
             stateField.setValue(issue.getState());
             summaryField.setValue(issue.getSummary());
             descriptionField.setValue(issue.getDescription());
-            if (issue.getAssignedTo().isEmpty()){
-                assignedToField.setValue("NOT ASSIGNED");
-            } else {
-                String assignees = issue.getAssignedTo().stream()
-                        .map(user -> user.getName())
-                        .collect(Collectors.joining(", "));
-                assignedToField.setValue(assignees);
+            assignedToTagComboBox.setValue(issue.getAssignedTo());
+            reporterComboBox.setValue(issue.getReporter());
 
-            }
-
-            if (issue.getReporter() != null ) {
-                reporterField.setValue(issue.getReporter().getName());
-            } else {
-                reporterField.setValue(null);
-            }
         } else {
             formFields.forEach(field -> field.setValue(null));
         }
