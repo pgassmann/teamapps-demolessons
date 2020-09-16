@@ -63,7 +63,7 @@ public class TableDemo implements DemoLesson {
                 new Meal(MaterialIcon.LOCAL_CAFE, "Coffee", "623 kcal"),
                 new Meal(MaterialIcon.LANDSCAPE, "Chocolate", "700 kcal")
         );
-        ComboBox<Meal> mealComboBox = new ComboBox<>(meals);
+        ComboBox<Meal> mealComboBox = ComboBox.createForList(meals);
         mealComboBox.setTemplate(BaseTemplate.LIST_ITEM_MEDIUM_ICON_TWO_LINES);
         mealComboBox.setAutoComplete(true);
 

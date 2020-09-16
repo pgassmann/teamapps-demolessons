@@ -34,14 +34,14 @@ public class ComboBoxDemo implements DemoLesson {
 
         /* ComboBox of Strings*/
         verticalLayout.addComponent(new Label("ComboBox of Strings"));
-        ComboBox<String> stringComboBox = new ComboBox<>(Arrays.asList("Cake", "Spaghetti", "Fries", "Icecream", "Pizza", "Chocolate"));
+        ComboBox<String> stringComboBox = ComboBox.createForList(Arrays.asList("Cake", "Spaghetti", "Fries", "Icecream", "Pizza", "Chocolate"));
         stringComboBox.onValueChanged.addListener(s -> context.showNotification(MaterialIcon.ARROW_DROP_DOWN, s));
         stringComboBox.setShowClearButton(true);
         verticalLayout.addComponent(stringComboBox);
 
         /* ComboBox of Objects*/
         verticalLayout.addComponent(new Label("ComboBox of Objects"));
-        ComboBox<Meal> mealComboBox = new ComboBox<>(Arrays.asList(
+        ComboBox<Meal> mealComboBox = ComboBox.createForList(Arrays.asList(
                 new Meal(MaterialIcon.CAKE, "Cake", "100 kcal"),
                 new Meal(MaterialIcon.GESTURE, "Spaghetti", "100 kcal"),
                 new Meal(MaterialIcon.CHILD_CARE, "Fries", "100 kcal"),

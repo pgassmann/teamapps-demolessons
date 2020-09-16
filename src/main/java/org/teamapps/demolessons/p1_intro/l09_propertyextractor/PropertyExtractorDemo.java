@@ -48,7 +48,7 @@ public class PropertyExtractorDemo implements DemoLesson {
 
         /* Dropdown with myMeals*/
         verticalLayout.addComponent(new Label("ComboBox with manual Property mapping"));
-        ComboBox<Meal> mealComboBox = new ComboBox<>(myMeals);
+        ComboBox<Meal> mealComboBox = ComboBox.createForList(myMeals);
         verticalLayout.addComponent(mealComboBox);
         mealComboBox.setShowClearButton(true);
         mealComboBox.setTemplate(BaseTemplate.LIST_ITEM_MEDIUM_ICON_TWO_LINES);
@@ -83,7 +83,7 @@ public class PropertyExtractorDemo implements DemoLesson {
         /* Second Combobox uses a BeanPropertyExtractor */
         /* Bean Property Extractor */
         verticalLayout.addComponent(new Label("ComboBox with BeanPropertyExtractor"));
-        ComboBox<Meal> mealComboBox2 = new ComboBox<>(myMeals);
+        ComboBox<Meal> mealComboBox2 = ComboBox.createForList(myMeals);
         verticalLayout.addComponent(mealComboBox2);
         mealComboBox2.setShowClearButton(true);
         mealComboBox2.setTemplate(BaseTemplate.LIST_ITEM_MEDIUM_ICON_TWO_LINES);
