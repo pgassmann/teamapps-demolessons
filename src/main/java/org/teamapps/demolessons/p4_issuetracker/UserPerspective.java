@@ -1,6 +1,5 @@
 package org.teamapps.demolessons.p4_issuetracker;
 
-import org.jetbrains.annotations.NotNull;
 import org.teamapps.data.extract.BeanPropertyExtractor;
 import org.teamapps.data.extract.PropertyExtractor;
 import org.teamapps.demolessons.issuetracker.model.issuetrackerdb.Group;
@@ -72,7 +71,6 @@ public class UserPerspective {
         return form;
     }
 
-    @NotNull
     private InfiniteItemView<User> createUserItemView() {
         InfiniteItemView<User> userItemView = new InfiniteItemView<>();
         userItemView.setModel(new UserInfiniteItemViewModel());

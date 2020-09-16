@@ -1,12 +1,12 @@
 package org.teamapps.demolessons.p4_issuetracker;
 
 import com.google.common.io.Files;
-import org.jetbrains.annotations.NotNull;
 import org.teamapps.databinding.TwoWayBindableValue;
 import org.teamapps.demolessons.DemoLesson;
 import org.teamapps.demolessons.issuetracker.model.SchemaInfo;
 import org.teamapps.demolessons.issuetracker.model.issuetrackerdb.Issue;
 import org.teamapps.demolessons.issuetracker.model.issuetrackerdb.User;
+import org.teamapps.event.Event;
 import org.teamapps.icon.material.MaterialIcon;
 import org.teamapps.server.jetty.embedded.TeamAppsJettyEmbeddedServer;
 import org.teamapps.universaldb.UniversalDB;
@@ -60,7 +60,7 @@ public class IssueTrackerApp implements DemoLesson {
     private Perspective issuePerspective;
 
     // Constructor, only set session context instance variable
-    public IssueTrackerApp(SessionContext context){
+    public IssueTrackerApp(SessionContext context) {
         this.context = context;
         startDb();
         createDemoData();
@@ -79,7 +79,7 @@ public class IssueTrackerApp implements DemoLesson {
 
     private static void startDb() {
         File storagePath = new File("./server-data/db-storage");
-        if (! storagePath.exists()) {
+        if (!storagePath.exists()) {
             storagePath.mkdirs();
         }
         try {
@@ -188,7 +188,6 @@ public class IssueTrackerApp implements DemoLesson {
         userPerspective.addWorkspaceButtonGroup(createPerspectiveSwitcher());
 
         issueTrackerApplication.showPerspective(issuePerspective);
-        issueTrackerApplication.showPerspective(issuePerspective);
         return issueTrackerApplication.getUi();
     }
 
@@ -218,7 +217,6 @@ public class IssueTrackerApp implements DemoLesson {
         return group;
     }
 
-    @NotNull
     private Perspective createIssuePerspective() {
         Perspective issuePerspective = Perspective.createPerspective();
         // Issue Table with a Table Model for Query and Filtering
@@ -288,7 +286,7 @@ public class IssueTrackerApp implements DemoLesson {
                             .map(user -> user.getName())
                             .collect(Collectors.joining(", "));
 
-        }));
+                }));
 
         table.setForceFitWidth(true);
         table.setDisplayAsList(true);
@@ -297,10 +295,19 @@ public class IssueTrackerApp implements DemoLesson {
         // When their value changes, in the tableModel, the filter for the corresponding field is updated
         table.setShowHeaderRow(true);
         table.setHeaderRowField("type", createFilterTextField(searchString -> tableModel.setTextFilter("type", searchString), "..."));
-        table.setHeaderRowField("priority", createFilterTextField(searchString -> tableModel.setTextFilter("priority", searchString),"..."));
+        table.setHeaderRowField("priority", createFilterTextField(searchString -> tableModel.setTextFilter("priority", searchString), "..."));
         table.setHeaderRowField("state", createFilterTextField(searchString -> tableModel.setTextFilter("state", searchString)));
         table.setHeaderRowField("summary", createFilterTextField(searchString -> tableModel.setTextFilter("summary", searchString)));
         table.setHeaderRowField("description", createFilterTextField(searchString -> tableModel.setTextFilter("description", searchString)));
+
+        //  Add Context Menu
+        IssueContextMenuProvider contextMenuProvider = new IssueContextMenuProvider(table);
+        table.setContextMenuProvider(contextMenuProvider);
+        contextMenuProvider.onIssueChanged.addListener(issue -> {
+            table.refreshData();
+            displayedIssue.set(issue);
+            updateForm(issue);
+        });
 
         return table;
     }
@@ -438,7 +445,7 @@ public class IssueTrackerApp implements DemoLesson {
 
     // Save values from formFields to Issue in Database
     private void saveForm(Issue issue) {
-        if (issue != null && Fields.validateAll(formFields)){
+        if (issue != null && Fields.validateAll(formFields)) {
             issue.setType(typeField.getValue());
             issue.setPriority(priorityField.getValue());
             issue.setState(stateField.getValue());
@@ -449,7 +456,7 @@ public class IssueTrackerApp implements DemoLesson {
             issue.save();
             context.showNotification(MaterialIcon.INFO, "Issue successfully saved");
             issueTable.refreshData();
-            issueTable.selectSingleRow(issue,true);
+            issueTable.selectSingleRow(issue, true);
         }
     }
 
@@ -478,6 +485,7 @@ public class IssueTrackerApp implements DemoLesson {
         searchField.onTextInput.addListener(searchTextHandler);
         return searchField;
     }
+
     private TextField createFilterTextField(Consumer<String> searchTextHandler) {
         return createFilterTextField(searchTextHandler, "Search...");
     }
