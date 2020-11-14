@@ -1,12 +1,10 @@
 package org.teamapps.demolessons.p1_intro.l11_table;
 
-import com.google.common.io.Files;
 import org.teamapps.data.extract.BeanPropertyExtractor;
 import org.teamapps.demolessons.DemoLesson;
 import org.teamapps.icon.material.MaterialIcon;
 import org.teamapps.server.jetty.embedded.TeamAppsJettyEmbeddedServer;
 import org.teamapps.ux.component.Component;
-import org.teamapps.ux.component.dummy.DummyComponent;
 import org.teamapps.ux.component.field.Button;
 import org.teamapps.ux.component.field.CheckBox;
 import org.teamapps.ux.component.field.FieldEditingMode;
@@ -14,13 +12,14 @@ import org.teamapps.ux.component.field.TextField;
 import org.teamapps.ux.component.field.combobox.ComboBox;
 import org.teamapps.ux.component.field.datetime.LocalDateField;
 import org.teamapps.ux.component.panel.Panel;
+import org.teamapps.ux.component.rootpanel.RootPanel;
 import org.teamapps.ux.component.table.ListTableModel;
 import org.teamapps.ux.component.table.Table;
 import org.teamapps.ux.component.table.TableColumn;
 import org.teamapps.ux.component.template.BaseTemplate;
 import org.teamapps.ux.component.template.BaseTemplateRecord;
 import org.teamapps.ux.session.SessionContext;
-import org.teamapps.webcontroller.SimpleWebController;
+import org.teamapps.webcontroller.WebController;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -29,30 +28,28 @@ import java.util.Map;
 
 public class TableDemo implements DemoLesson {
 
-    private Component rootComponent = new DummyComponent();
-    private SessionContext context;
+    private Component rootComponent;
 
-    public TableDemo(SessionContext context) {
-        this.context = context;
+    public TableDemo(SessionContext sessionContext) {
 
         Panel panel = new Panel(MaterialIcon.LIGHTBULB_OUTLINE, "Table Demo");
         rootComponent = panel;
 
         Table<Friend> table = new Table<>();
-        table.addColumn(new TableColumn("firstName", MaterialIcon.PERSON, "Name", new TextField())
-                .setDefaultWidth(150));
+        TableColumn<Friend> firstNameColumn = new TableColumn<>("firstName", MaterialIcon.PERSON, "Name", new TextField());
+        firstNameColumn.setDefaultWidth(150);
+        table.addColumn(firstNameColumn);
 
         TextField lastNameTextField = new TextField();
         lastNameTextField.setEditingMode(FieldEditingMode.READONLY);
-        table.addColumn(new TableColumn("lastName", MaterialIcon.PERSON, "Surname", lastNameTextField));
+        table.addColumn(new TableColumn<>("lastName", MaterialIcon.PERSON, "Surname", lastNameTextField));
 
         TextField streetTextField = new TextField();
         streetTextField.setEditingMode(FieldEditingMode.DISABLED);
-        table.addColumn(new TableColumn("street", MaterialIcon.PERSON, "Street", streetTextField));
+        table.addColumn(new TableColumn<>("street", MaterialIcon.PERSON, "Street", streetTextField));
 
-        table.addColumn(new TableColumn("active", MaterialIcon.PERSON, "Active", new CheckBox()));
-        table.addColumn(new TableColumn("birthDate", MaterialIcon.PERSON, "Birth Date", new LocalDateField())
-                .setDefaultWidth(200));
+        table.addColumn(new TableColumn<>("active", MaterialIcon.PERSON, "Active", new CheckBox()));
+        table.addColumn(new TableColumn<Friend>("birthDate", MaterialIcon.PERSON, "Birth Date", new LocalDateField()).setDefaultWidth(200));
 
         List<Meal> meals = Arrays.asList(
                 new Meal(MaterialIcon.CAKE, "Cake", "100 kcal"),
@@ -68,12 +65,12 @@ public class TableDemo implements DemoLesson {
         mealComboBox.setAutoComplete(true);
 
         BeanPropertyExtractor<Meal> extractor = new BeanPropertyExtractor<>();
-        extractor.addProperty("caption", meal -> meal.getName());
-        extractor.addProperty("description", meal -> meal.getCalories());
+        extractor.addProperty("caption", Meal::getName);
+        extractor.addProperty("description", Meal::getCalories);
         mealComboBox.setPropertyExtractor(extractor);
         mealComboBox.setRecordToStringFunction(Meal::getName);
 
-        table.addColumn(new TableColumn("favouriteMeal", "Favourite Meal", mealComboBox));
+        table.addColumn(new TableColumn<>("favouriteMeal", "Favourite Meal", mealComboBox));
 
         table.setForceFitWidth(true);
 
@@ -98,16 +95,13 @@ public class TableDemo implements DemoLesson {
             for (Friend friend : changedRecords) {
                 Map<String, Object> changedCellValues = table.getChangedCellValues(friend);
                 changedCellValues.forEach((propertyName, value) -> {
-                    if (propertyName.equals("firstName")) {
-                        friend.setFirstName((String) value);
-                    } else if (propertyName.equals("lastName")) {
-                        friend.setLastName((String) value);
-                    } else if (propertyName.equals("street")) {
-                        friend.setStreet((String) value);
-                    } else if (propertyName.equals("isActive")) {
-                        friend.setActive((Boolean) value);
-                    } else if (propertyName.equals("birthDate")) {
-                        friend.setBirthDate((LocalDate) value);
+                    switch (propertyName) {
+                        case "firstName" -> friend.setFirstName((String) value);
+                        case "lastName" -> friend.setLastName((String) value);
+                        case "street" -> friend.setStreet((String) value);
+                        case "isActive" -> friend.setActive((Boolean) value);
+                        case "birthDate" -> friend.setBirthDate((LocalDate) value);
+                        default -> throw new IllegalStateException("Unexpected property: " + propertyName);
                     }
                 });
                 System.out.println(friend);
@@ -116,9 +110,7 @@ public class TableDemo implements DemoLesson {
             table.clearAllCellMarkings();
         });
 
-        table.onCellValueChanged.addListener(data -> {
-            table.setCellMarked(data.getRecord(), data.getPropertyName(), true);
-        });
+        table.onCellValueChanged.addListener(data -> table.setCellMarked(data.getRecord(), data.getPropertyName(), true));
 
         panel.setContent(table);
 
@@ -132,14 +124,20 @@ public class TableDemo implements DemoLesson {
     public void handleDemoSelected() {   }
 
 
+    // main method to launch the Demo standalone
     public static void main(String[] args) throws Exception {
+        WebController controller = sessionContext -> {
+            RootPanel rootPanel = new RootPanel();
+            sessionContext.addRootPanel(null, rootPanel);
 
-        SimpleWebController controller = new SimpleWebController(context -> {
+            // create new instance of the Demo Class
+            DemoLesson demo = new TableDemo(sessionContext);
 
-            TableDemo textFieldDemo = new TableDemo(context);
-            textFieldDemo.handleDemoSelected();
-            return textFieldDemo.getRootComponent();
-        });
-        new TeamAppsJettyEmbeddedServer(controller, Files.createTempDir()).start();
+            // call the method defined in the DemoLesson Interface
+            demo.handleDemoSelected();
+
+            rootPanel.setContent(demo.getRootComponent());
+        };
+        new TeamAppsJettyEmbeddedServer(controller).start();
     }
 }

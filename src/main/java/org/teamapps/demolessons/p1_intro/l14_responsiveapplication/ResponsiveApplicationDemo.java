@@ -1,12 +1,11 @@
 package org.teamapps.demolessons.p1_intro.l14_responsiveapplication;
 
-import com.google.common.io.Files;
 import org.teamapps.demolessons.DemoLesson;
 import org.teamapps.demolessons.p1_intro.l04_richtexteditor.RichTextEditorDemo;
+import org.teamapps.demolessons.p1_intro.l07_checkbox.CheckboxDemo;
 import org.teamapps.demolessons.p1_intro.l10_responsiveform.ResponsiveFormDemo;
 import org.teamapps.demolessons.p1_intro.l11_table.TableDemo;
 import org.teamapps.demolessons.p1_intro.l13_tree.TreeDemo;
-import org.teamapps.demolessons.p1_intro.l07_checkbox.CheckboxDemo;
 import org.teamapps.icon.material.MaterialIcon;
 import org.teamapps.server.jetty.embedded.TeamAppsJettyEmbeddedServer;
 import org.teamapps.ux.application.ResponsiveApplication;
@@ -16,15 +15,16 @@ import org.teamapps.ux.application.perspective.Perspective;
 import org.teamapps.ux.application.view.View;
 import org.teamapps.ux.component.Component;
 import org.teamapps.ux.component.dummy.DummyComponent;
+import org.teamapps.ux.component.rootpanel.RootPanel;
 import org.teamapps.ux.component.toolbar.ToolbarButton;
 import org.teamapps.ux.component.toolbar.ToolbarButtonGroup;
 import org.teamapps.ux.session.CurrentSessionContext;
 import org.teamapps.ux.session.SessionContext;
-import org.teamapps.webcontroller.SimpleWebController;
+import org.teamapps.webcontroller.WebController;
 
 public class ResponsiveApplicationDemo implements DemoLesson {
 
-    private Component rootComponent = new DummyComponent();
+    private Component rootComponent;
     private SessionContext context;
 
     // Constructor, only set session context instance variable
@@ -64,9 +64,8 @@ public class ResponsiveApplicationDemo implements DemoLesson {
 
         //create toolbar buttons
         ToolbarButtonGroup buttonGroup = new ToolbarButtonGroup();
-        buttonGroup.addButton(ToolbarButton.create(MaterialIcon.SAVE, "Save", "Save changes")).onClick.addListener(toolbarButtonClickEvent -> {
-            CurrentSessionContext.get().showNotification(MaterialIcon.MESSAGE, "Save was clicked!");
-        });
+        ToolbarButton saveButton = buttonGroup.addButton(ToolbarButton.create(MaterialIcon.SAVE, "Save", "Save changes"));
+        saveButton.onClick.addListener(toolbarButtonClickEvent -> CurrentSessionContext.get().showNotification(MaterialIcon.MESSAGE, "Save was clicked!"));
         buttonGroup.addButton(ToolbarButton.create(MaterialIcon.DELETE, "Delete", "Delete some items"));
 
         //display these buttons only when this perspective is visible
@@ -126,14 +125,20 @@ public class ResponsiveApplicationDemo implements DemoLesson {
         return demoPerspective;
     }
 
+    // main method to launch the Demo standalone
     public static void main(String[] args) throws Exception {
+        WebController controller = sessionContext -> {
+            RootPanel rootPanel = new RootPanel();
+            sessionContext.addRootPanel(null, rootPanel);
 
-        SimpleWebController controller = new SimpleWebController(context -> {
+            // create new instance of the Demo Class
+            DemoLesson demo = new ResponsiveApplicationDemo(sessionContext);
 
-            ResponsiveApplicationDemo responsiveApplicationDemo = new ResponsiveApplicationDemo(context);
-            responsiveApplicationDemo.handleDemoSelected();
-            return responsiveApplicationDemo.getRootComponent();
-        });
-        new TeamAppsJettyEmbeddedServer(controller, Files.createTempDir()).start();
+            // call the method defined in the DemoLesson Interface
+            demo.handleDemoSelected();
+
+            rootPanel.setContent(demo.getRootComponent());
+        };
+        new TeamAppsJettyEmbeddedServer(controller).start();
     }
 }

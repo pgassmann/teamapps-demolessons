@@ -1,6 +1,5 @@
 package org.teamapps.demolessons.p1_intro.l02_textfield;
 
-import com.google.common.io.Files;
 import org.teamapps.demolessons.DemoLesson;
 import org.teamapps.icon.material.MaterialIcon;
 import org.teamapps.server.jetty.embedded.TeamAppsJettyEmbeddedServer;
@@ -8,8 +7,9 @@ import org.teamapps.ux.component.Component;
 import org.teamapps.ux.component.dummy.DummyComponent;
 import org.teamapps.ux.component.field.TextField;
 import org.teamapps.ux.component.panel.Panel;
+import org.teamapps.ux.component.rootpanel.RootPanel;
 import org.teamapps.ux.session.SessionContext;
-import org.teamapps.webcontroller.SimpleWebController;
+import org.teamapps.webcontroller.WebController;
 
 public class TextFieldDemo implements DemoLesson {
 
@@ -61,14 +61,24 @@ public class TextFieldDemo implements DemoLesson {
     }
 
 
+    // main method to launch the Demo standalone
     public static void main(String[] args) throws Exception {
+        WebController controller = sessionContext -> {
 
-        SimpleWebController controller = new SimpleWebController(context -> {
+            // RootPanel is the global container of every element
+            RootPanel rootPanel = new RootPanel();
+            sessionContext.addRootPanel(null, rootPanel);
 
-            TextFieldDemo textFieldDemo = new TextFieldDemo(context);
+            // create new instance of the Demo Class
+            TextFieldDemo textFieldDemo = new TextFieldDemo(sessionContext);
+
+            // call the method defined in the DemoLesson Interface
             textFieldDemo.handleDemoSelected();
-            return textFieldDemo.getRootComponent();
-        });
-        new TeamAppsJettyEmbeddedServer(controller, Files.createTempDir()).start();
+
+            // get the rootComponent of the Demo and set it as the content of the global container (rootPanel)
+            rootPanel.setContent(textFieldDemo.getRootComponent());
+
+        };
+        new TeamAppsJettyEmbeddedServer(controller).start();
     }
 }

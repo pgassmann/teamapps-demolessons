@@ -1,16 +1,16 @@
 package org.teamapps.demolessons.p2_application.l02_externalevent;
 
-import com.google.common.io.Files;
 import org.teamapps.demolessons.DemoLesson;
 import org.teamapps.icon.material.MaterialIcon;
 import org.teamapps.server.jetty.embedded.TeamAppsJettyEmbeddedServer;
 import org.teamapps.ux.component.Component;
 import org.teamapps.ux.component.panel.Panel;
+import org.teamapps.ux.component.rootpanel.RootPanel;
 import org.teamapps.ux.component.toolbar.Toolbar;
 import org.teamapps.ux.component.toolbar.ToolbarButton;
 import org.teamapps.ux.component.toolbar.ToolbarButtonGroup;
 import org.teamapps.ux.session.SessionContext;
-import org.teamapps.webcontroller.SimpleWebController;
+import org.teamapps.webcontroller.WebController;
 
 public class ExternalEventsDemo implements DemoLesson {
 
@@ -22,9 +22,7 @@ public class ExternalEventsDemo implements DemoLesson {
         this.sessionContext = sessionContext;
         this.notificationManager = notificationManager;
 
-        notificationManager.onNotificationPosted.addListener(text -> {
-            sessionContext.showNotification(MaterialIcon.ALARM, text);
-        });
+        notificationManager.onNotificationPosted.addListener(text -> sessionContext.showNotification(MaterialIcon.ALARM, text));
     }
 
     // When created without notification Manager, use the global Notification manager defined as static Class variable
@@ -32,9 +30,7 @@ public class ExternalEventsDemo implements DemoLesson {
         this.sessionContext = sessionContext;
         this.notificationManager = staticNotificationManager;
 
-        notificationManager.onNotificationPosted.addListener(text -> {
-            sessionContext.showNotification(MaterialIcon.ALARM, text);
-        });
+        notificationManager.onNotificationPosted.addListener(text -> sessionContext.showNotification(MaterialIcon.ALARM, text));
     }
 
     @Override
@@ -44,9 +40,7 @@ public class ExternalEventsDemo implements DemoLesson {
         ToolbarButtonGroup buttonGroup = new ToolbarButtonGroup();
 
         ToolbarButton notifyButton = ToolbarButton.create(MaterialIcon.ALARM_ON, "Notify all!", "Will notify all users!");
-        notifyButton.onClick.addListener(toolbarButtonClickEvent -> {
-            notificationManager.postNotification("Somebody pressed the button!");
-        });
+        notifyButton.onClick.addListener(toolbarButtonClickEvent -> notificationManager.postNotification("Somebody pressed the button!"));
 
         buttonGroup.addButton(notifyButton);
         toolbar.addButtonGroup(buttonGroup);
@@ -54,16 +48,26 @@ public class ExternalEventsDemo implements DemoLesson {
         return panel;
     }
 
+    // main method to launch the Demo standalone
     public static void main(String[] args) throws Exception {
+
+        // Create an instance of NotificationManager outside of the Webcontroller (outside of a SessionContext)
+        // So one instance of NotificationManager can be shared by all user sessions
         NotificationManager notificationManager = new NotificationManager();
 
-        SimpleWebController controller = new SimpleWebController(sessionContext -> {
-            ExternalEventsDemo textFieldDemo = new ExternalEventsDemo(sessionContext, notificationManager);
-            textFieldDemo.handleDemoSelected();
-            return textFieldDemo.getRootComponent();
-        });
+        WebController controller = sessionContext -> {
+            RootPanel rootPanel = new RootPanel();
+            sessionContext.addRootPanel(null, rootPanel);
 
-        new TeamAppsJettyEmbeddedServer(controller, Files.createTempDir()).start();
+            // create new instance of the Demo Class
+            // pass notificationManager as second argument
+            DemoLesson demo = new ExternalEventsDemo(sessionContext, notificationManager);
+
+            // call the method defined in the DemoLesson Interface
+            demo.handleDemoSelected();
+
+            rootPanel.setContent(demo.getRootComponent());
+        };
+        new TeamAppsJettyEmbeddedServer(controller).start();
     }
-
 }

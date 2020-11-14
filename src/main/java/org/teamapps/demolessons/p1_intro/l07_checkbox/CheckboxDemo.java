@@ -1,6 +1,5 @@
 package org.teamapps.demolessons.p1_intro.l07_checkbox;
 
-import com.google.common.io.Files;
 import org.teamapps.common.format.Color;
 import org.teamapps.demolessons.DemoLesson;
 import org.teamapps.icon.material.MaterialIcon;
@@ -10,8 +9,9 @@ import org.teamapps.ux.component.dummy.DummyComponent;
 import org.teamapps.ux.component.field.CheckBox;
 import org.teamapps.ux.component.flexcontainer.VerticalLayout;
 import org.teamapps.ux.component.panel.Panel;
+import org.teamapps.ux.component.rootpanel.RootPanel;
 import org.teamapps.ux.session.SessionContext;
-import org.teamapps.webcontroller.SimpleWebController;
+import org.teamapps.webcontroller.WebController;
 
 public class CheckboxDemo implements DemoLesson {
 
@@ -80,14 +80,20 @@ public class CheckboxDemo implements DemoLesson {
     }
 
 
+    // main method to launch the Demo standalone
     public static void main(String[] args) throws Exception {
+        WebController controller = sessionContext -> {
+            RootPanel rootPanel = new RootPanel();
+            sessionContext.addRootPanel(null, rootPanel);
 
-        SimpleWebController controller = new SimpleWebController(context -> {
+            // create new instance of the Demo Class
+            DemoLesson demo = new CheckboxDemo(sessionContext);
 
-            CheckboxDemo textFieldDemo = new CheckboxDemo(context);
-            textFieldDemo.handleDemoSelected();
-            return textFieldDemo.getRootComponent();
-        });
-        new TeamAppsJettyEmbeddedServer(controller, Files.createTempDir()).start();
+            // call the method defined in the DemoLesson Interface
+            demo.handleDemoSelected();
+
+            rootPanel.setContent(demo.getRootComponent());
+        };
+        new TeamAppsJettyEmbeddedServer(controller).start();
     }
 }

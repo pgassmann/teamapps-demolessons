@@ -9,11 +9,10 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.source>14</maven.compiler.source>
+        <maven.compiler.target>14</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <teamapps.version>0.9.71</teamapps.version>
         <maven.build.timestamp.format>yyyyMMdd-HHmmssSSS</maven.build.timestamp.format>
     </properties>
 
@@ -21,17 +20,17 @@
         <dependency>
             <groupId>org.teamapps</groupId>
             <artifactId>teamapps-server-jetty-embedded</artifactId>
-            <version>${teamapps.version}</version>
+            <version>0.9.82</version>
         </dependency>
         <dependency>
             <groupId>org.teamapps</groupId>
             <artifactId>universal-db</artifactId>
-            <version>0.4.11</version>
+            <version>0.4.14</version>
         </dependency>
         <dependency>
             <groupId>org.teamapps</groupId>
             <artifactId>teamapps-universal-db-integration</artifactId>
-            <version>0.5</version>
+            <version>0.8</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>

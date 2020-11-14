@@ -1,6 +1,5 @@
 package org.teamapps.demolessons.p1_intro.l09_propertyextractor;
 
-import com.google.common.io.Files;
 import org.teamapps.data.extract.BeanPropertyExtractor;
 import org.teamapps.demolessons.DemoLesson;
 import org.teamapps.icon.material.MaterialIcon;
@@ -13,9 +12,10 @@ import org.teamapps.ux.component.field.combobox.TagBoxWrappingMode;
 import org.teamapps.ux.component.field.combobox.TagComboBox;
 import org.teamapps.ux.component.flexcontainer.VerticalLayout;
 import org.teamapps.ux.component.panel.Panel;
+import org.teamapps.ux.component.rootpanel.RootPanel;
 import org.teamapps.ux.component.template.BaseTemplate;
 import org.teamapps.ux.session.SessionContext;
-import org.teamapps.webcontroller.SimpleWebController;
+import org.teamapps.webcontroller.WebController;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,12 +23,10 @@ import java.util.List;
 
 public class PropertyExtractorDemo implements DemoLesson {
 
-    private Component rootComponent = new DummyComponent();
-    private SessionContext context;
+    private Component rootComponent;
 
     // Constructor, only set session context instance variable
-    public PropertyExtractorDemo(SessionContext context) {
-        this.context = context;
+    public PropertyExtractorDemo(SessionContext sessionContext) {
 
         Panel panel = new Panel(MaterialIcon.LIGHTBULB_OUTLINE, "Property Extractor and (Tag)ComboBox Demo");
         rootComponent = panel;
@@ -57,16 +55,11 @@ public class PropertyExtractorDemo implements DemoLesson {
         /* The BaseTemplate.LIST_ITEM_MEDIUM_ICON_TWO_LINES uses three properties
         * caption, description and Icon.
         * instead of using strings, the properties can be accessed by public variables of the BaseTemplate class */
-        mealComboBox.setPropertyExtractor((meal, propertyName) -> {
-            if (propertyName.equals(BaseTemplate.PROPERTY_CAPTION)) {
-                return meal.getName();
-            } else if (propertyName.equals(BaseTemplate.PROPERTY_DESCRIPTION)) {
-                return meal.getCalories();
-            } else if (propertyName.equals(BaseTemplate.PROPERTY_ICON)) {
-                return meal.getIcon();
-            } else {
-                return null;
-            }
+        mealComboBox.setPropertyExtractor((meal, propertyName) -> switch (propertyName) {
+            case BaseTemplate.PROPERTY_CAPTION -> meal.getName();
+            case BaseTemplate.PROPERTY_DESCRIPTION -> meal.getCalories();
+            case BaseTemplate.PROPERTY_ICON -> meal.getIcon();
+            default -> null;
         });
 
         // Preselect first Meal
@@ -75,9 +68,7 @@ public class PropertyExtractorDemo implements DemoLesson {
         /* Define string representation of object for search and autocomplete */
         mealComboBox.setRecordToStringFunction(meal -> meal.getName()+" ("+ meal.getCalories()+")");
 
-        mealComboBox.onValueChanged.addListener(s -> {
-            context.showNotification(s.getIcon(), s.getName());
-        });
+        mealComboBox.onValueChanged.addListener(s -> sessionContext.showNotification(s.getIcon(), s.getName()));
 
 
         /* Second Combobox uses a BeanPropertyExtractor */
@@ -93,7 +84,7 @@ public class PropertyExtractorDemo implements DemoLesson {
         Meal already has an Icon Property.
         Other Properties can be mapped manually:  */
         BeanPropertyExtractor<Meal> mealPropertyExtractor = new BeanPropertyExtractor<>();
-        mealPropertyExtractor.addProperty("caption", meal -> meal.getName());
+        mealPropertyExtractor.addProperty("caption", Meal::getName);
         mealPropertyExtractor.addProperty( BaseTemplate.PROPERTY_DESCRIPTION, Meal::getCalories);
         mealComboBox2.setPropertyExtractor(mealPropertyExtractor);
 
@@ -114,7 +105,7 @@ public class PropertyExtractorDemo implements DemoLesson {
         /* The Objects of the TagCombobox are dynamically created */
         /* In real world application, this could be any query to Database/Backend etc. */
         mealTagComboBox.setModel(queryString -> {
-            if(queryString != "" ){
+            if(!queryString.equals("")){
                 return Arrays.asList(
                         new Meal(MaterialIcon.CAKE, "Free " + queryString, "100 kcal"),
                         new Meal(MaterialIcon.LANDSCAPE, "Premium " + queryString + " with Chocolate", "1234 kcal")
@@ -137,14 +128,20 @@ public class PropertyExtractorDemo implements DemoLesson {
     public void handleDemoSelected() { }
 
 
+    // main method to launch the Demo standalone
     public static void main(String[] args) throws Exception {
+        WebController controller = sessionContext -> {
+            RootPanel rootPanel = new RootPanel();
+            sessionContext.addRootPanel(null, rootPanel);
 
-        SimpleWebController controller = new SimpleWebController(context -> {
+            // create new instance of the Demo Class
+            DemoLesson demo = new PropertyExtractorDemo(sessionContext);
 
-            PropertyExtractorDemo textFieldDemo = new PropertyExtractorDemo(context);
-            textFieldDemo.handleDemoSelected();
-            return textFieldDemo.getRootComponent();
-        });
-        new TeamAppsJettyEmbeddedServer(controller, Files.createTempDir()).start();
+            // call the method defined in the DemoLesson Interface
+            demo.handleDemoSelected();
+
+            rootPanel.setContent(demo.getRootComponent());
+        };
+        new TeamAppsJettyEmbeddedServer(controller).start();
     }
 }

@@ -1,6 +1,5 @@
 package org.teamapps.demolessons.p2_application.l04_mustachetemplates;
 
-import com.google.common.io.Files;
 import org.apache.commons.io.IOUtils;
 import org.teamapps.data.extract.BeanPropertyExtractor;
 import org.teamapps.demolessons.DemoLesson;
@@ -10,9 +9,10 @@ import org.teamapps.ux.component.Component;
 import org.teamapps.ux.component.infiniteitemview.InfiniteItemView;
 import org.teamapps.ux.component.infiniteitemview.ListInfiniteItemViewModel;
 import org.teamapps.ux.component.panel.Panel;
+import org.teamapps.ux.component.rootpanel.RootPanel;
 import org.teamapps.ux.component.template.htmltemplate.MustacheTemplate;
 import org.teamapps.ux.session.SessionContext;
-import org.teamapps.webcontroller.SimpleWebController;
+import org.teamapps.webcontroller.WebController;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -38,24 +38,13 @@ public class MustacheTemplateDemo implements DemoLesson {
         itemView.setItemWidth(0);
         itemView.setRowHeight(100);
 
-        itemView.setItemPropertyExtractor(new BeanPropertyExtractor<StoreItem>().addProperty("isNew", storeItem -> {
-			return LocalDate.now().minusDays(30).compareTo(storeItem.getReleaseDate()) < 0;
-		}));
+        // add custom property isNew to (default) BeanPropertyExtractor
+        itemView.setItemPropertyExtractor(new BeanPropertyExtractor<StoreItem>().addProperty("isNew", storeItem -> LocalDate.now().minusDays(30).compareTo(storeItem.getReleaseDate()) < 0));
 
         panel.setContent(itemView);
         panel.setTitle("My Shop");
         panel.setIcon(MaterialIcon.SHOP);
 		return panel;
-	}
-
-	public static void main(String[] args) throws Exception {
-		SimpleWebController controller = new SimpleWebController(sessionContext -> {
-			MustacheTemplateDemo textFieldDemo = new MustacheTemplateDemo(sessionContext);
-			textFieldDemo.handleDemoSelected();
-			return textFieldDemo.getRootComponent();
-		});
-
-		new TeamAppsJettyEmbeddedServer(controller, Files.createTempDir()).start();
 	}
 
     private static String loadResourceString(String resourceName) {
@@ -66,4 +55,21 @@ public class MustacheTemplateDemo implements DemoLesson {
         }
     }
 
+
+	// main method to launch the Demo standalone
+	public static void main(String[] args) throws Exception {
+		WebController controller = sessionContext -> {
+			RootPanel rootPanel = new RootPanel();
+			sessionContext.addRootPanel(null, rootPanel);
+
+			// create new instance of the Demo Class
+			DemoLesson demo = new MustacheTemplateDemo(sessionContext);
+
+			// call the method defined in the DemoLesson Interface
+			demo.handleDemoSelected();
+
+			rootPanel.setContent(demo.getRootComponent());
+		};
+		new TeamAppsJettyEmbeddedServer(controller).start();
+	}
 }

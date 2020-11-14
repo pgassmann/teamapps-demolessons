@@ -1,10 +1,7 @@
 package org.teamapps.demolessons.p2_application.l03_servlet;
 
-import com.google.common.io.Files;
 import org.teamapps.demolessons.DemoLesson;
 import org.teamapps.icon.material.MaterialIcon;
-import org.teamapps.server.ServletRegistration;
-import org.teamapps.server.UxServerContext;
 import org.teamapps.server.jetty.embedded.TeamAppsJettyEmbeddedServer;
 import org.teamapps.ux.component.Component;
 import org.teamapps.ux.component.field.DisplayField;
@@ -14,33 +11,26 @@ import org.teamapps.ux.component.toolbar.Toolbar;
 import org.teamapps.ux.component.toolbar.ToolbarButton;
 import org.teamapps.ux.component.toolbar.ToolbarButtonGroup;
 import org.teamapps.ux.session.SessionContext;
-import org.teamapps.webcontroller.SimpleWebController;
 import org.teamapps.webcontroller.WebController;
 
-import java.util.Arrays;
-import java.util.Collection;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.ServletRegistration;
 
 public class ServletDemo implements DemoLesson {
 
-    private SessionContext sessionContext;
     private ServletNotificationManager notificationManager;
     private static ServletNotificationManager staticNotificationManager = new ServletNotificationManager();
 
     public ServletDemo(SessionContext sessionContext, ServletNotificationManager notificationManager) {
-        this.sessionContext = sessionContext;
         this.notificationManager = notificationManager;
 
-        notificationManager.onNotificationPosted.addListener(text -> {
-            sessionContext.showNotification(MaterialIcon.ALARM, text);
-        });
+        notificationManager.onNotificationPosted.addListener(text -> sessionContext.showNotification(MaterialIcon.ALARM, text));
     }
     public ServletDemo(SessionContext sessionContext) {
-        this.sessionContext = sessionContext;
         this.notificationManager = staticNotificationManager;
 
-        notificationManager.onNotificationPosted.addListener(text -> {
-            sessionContext.showNotification(MaterialIcon.ALARM, text);
-        });
+        notificationManager.onNotificationPosted.addListener(text -> sessionContext.showNotification(MaterialIcon.ALARM, text));
     }
 
     @Override
@@ -50,9 +40,7 @@ public class ServletDemo implements DemoLesson {
         ToolbarButtonGroup buttonGroup = new ToolbarButtonGroup();
 
         ToolbarButton notifyButton = ToolbarButton.create(MaterialIcon.ALARM_ON, "Notify all!", "Will notify all users!");
-        notifyButton.onClick.addListener(toolbarButtonClickEvent -> {
-            notificationManager.postNotification("Somebody pressed the button!");
-        });
+        notifyButton.onClick.addListener(toolbarButtonClickEvent -> notificationManager.postNotification("Somebody pressed the button!"));
 
         buttonGroup.addButton(notifyButton);
         toolbar.addButtonGroup(buttonGroup);
@@ -65,43 +53,52 @@ public class ServletDemo implements DemoLesson {
         return panel;
     }
 
-    public static void main1(String[] args) throws Exception {
-        ServletNotificationManager notificationManager = new ServletNotificationManager();
 
-        SimpleWebController controller = new SimpleWebController(sessionContext -> {
-            ServletDemo textFieldDemo = new ServletDemo(sessionContext, notificationManager);
-            textFieldDemo.handleDemoSelected();
-            return textFieldDemo.getRootComponent();
-        });
-
-        new TeamAppsJettyEmbeddedServer(controller, Files.createTempDir()).start();
-    }
-
+    // main method to launch the Demo standalone
     public static void main(String[] args) throws Exception {
 
+        // Create an instance of ServletNotificationManager outside of the Webcontroller (outside of a SessionContext)
+        // So one instance of NotificationManager can be shared by all user sessions
         ServletNotificationManager notificationManager = new ServletNotificationManager();
 
-        // Additional Servlets require the use of Webcontroller instead of SimpleWebcontroller.
-        // WebController requires a onSession Start method that creates a RootPanel
-        WebController controller = new WebController() {
-            @Override
-            public void onSessionStart(SessionContext sessionContext) {
-                RootPanel rootPanel = new RootPanel();
-                sessionContext.addRootComponent(null, rootPanel);
+        WebController controller = sessionContext -> {
+            RootPanel rootPanel = new RootPanel();
+            sessionContext.addRootPanel(null, rootPanel);
 
-                ServletDemo textFieldDemo = new ServletDemo(sessionContext, notificationManager);
-                textFieldDemo.handleDemoSelected();
-                rootPanel.setContent(textFieldDemo.getRootComponent());
-            }
+            // create new instance of the Demo Class
+            // pass notificationManager as second argument
+            DemoLesson demo = new ServletDemo(sessionContext, notificationManager);
 
-            @Override
-            public Collection<ServletRegistration> getServletRegistrations(UxServerContext serverContext) {
-                return Arrays.asList(
-                        new ServletRegistration(new MyServlet(notificationManager), "/api/*")
-                );
-            }
+            // call the method defined in the DemoLesson Interface
+            demo.handleDemoSelected();
+
+            rootPanel.setContent(demo.getRootComponent());
         };
-        new TeamAppsJettyEmbeddedServer(controller, Files.createTempDir()).start();
+
+        // Create server, but don't start directly.
+        TeamAppsJettyEmbeddedServer server = new TeamAppsJettyEmbeddedServer(controller);
+
+        // Register Servlet in the TeamAppsJettyEmbeddedServer
+        server.addServletContextListener(new ServletContextListener() {
+            @Override
+            public void contextInitialized(ServletContextEvent sce) {
+
+                // Add servlet with a name and an Instance of the Servlet.
+                // add url mapping to Servlet Registration
+                MyServlet servlet = new MyServlet(notificationManager);
+                ServletRegistration.Dynamic servletRegistration = sce.getServletContext().addServlet("servletdemo", servlet);
+                servletRegistration.addMapping("/api/*");
+
+                // in one line
+                sce.getServletContext().addServlet("servletdemo2", new MyServlet(notificationManager)).addMapping("/apiv2/*");
+            }
+
+            @Override
+            public void contextDestroyed(ServletContextEvent sce) {  }
+        });
+
+        // Start Server after adding the Servlet
+        server.start();
     }
 
 }

@@ -1,6 +1,5 @@
 package org.teamapps.demolessons.p1_intro.l10_responsiveform;
 
-import com.google.common.io.Files;
 import org.teamapps.demolessons.DemoLesson;
 import org.teamapps.icon.material.MaterialIcon;
 import org.teamapps.server.jetty.embedded.TeamAppsJettyEmbeddedServer;
@@ -15,31 +14,31 @@ import org.teamapps.ux.component.field.datetime.LocalDateField;
 import org.teamapps.ux.component.form.ResponsiveForm;
 import org.teamapps.ux.component.form.ResponsiveFormLayout;
 import org.teamapps.ux.component.panel.Panel;
+import org.teamapps.ux.component.rootpanel.RootPanel;
 import org.teamapps.ux.component.template.BaseTemplateRecord;
 import org.teamapps.ux.session.SessionContext;
-import org.teamapps.webcontroller.SimpleWebController;
+import org.teamapps.webcontroller.WebController;
 
 import java.time.LocalDate;
 
 public class ResponsiveFormDemo implements DemoLesson {
 
-    private Component rootComponent = new DummyComponent();
-    private SessionContext context;
+    private Component rootComponent;
 
     private Friend saved_friend;
     private ResponsiveForm<Friend> form;
 
-    public ResponsiveFormDemo(SessionContext context) {
-        this.context = context;
+    public ResponsiveFormDemo(SessionContext sessionContext) {
 
         Panel panel = new Panel(MaterialIcon.LIGHTBULB_OUTLINE, "Responsive Form Demo");
         rootComponent = panel;
 
         // New Component: ResponsiveForm
-        this.form = new ResponsiveForm<Friend>(100,200,0);
-        panel.setContent(form);
+        // reference in field so it's accessible in other methods
+        this.form = new ResponsiveForm<>(100, 200, 0);
+        panel.setContent(this.form);
 
-        ResponsiveFormLayout layout = form.addResponsiveFormLayout(400);
+        ResponsiveFormLayout layout = this.form.addResponsiveFormLayout(400);
         layout.addSection(MaterialIcon.FOLDER,"Account Data");
         // the third (optional) Argument is a propertyName of the Friend Class
         layout.addLabelAndField(MaterialIcon.PERSON, "Name","firstName", new TextField());
@@ -57,8 +56,8 @@ public class ResponsiveFormDemo implements DemoLesson {
         layout.addLabelAndField(saveButton);
         saveButton.onValueChanged.addListener(aBoolean -> {
             saved_friend = new Friend();
-            form.applyFieldValuesToRecord(saved_friend);
-            context.showNotification(MaterialIcon.SAVE, "Successfully saved your Friend " + saved_friend.getFirstName());
+            this.form.applyFieldValuesToRecord(saved_friend);
+            sessionContext.showNotification(MaterialIcon.SAVE, "Successfully saved your Friend " + saved_friend.getFirstName());
         });
 
         // Button to load the values from the instance variable saved_friend
@@ -66,9 +65,9 @@ public class ResponsiveFormDemo implements DemoLesson {
         layout.addLabelAndField(loadButton);
         loadButton.onValueChanged.addListener(aBoolean -> {
             if (saved_friend != null) {
-                form.applyRecordValuesToFields(saved_friend);
+                this.form.applyRecordValuesToFields(saved_friend);
             } else {
-                context.showNotification(MaterialIcon.ERROR, "No saved Friend found");
+                sessionContext.showNotification(MaterialIcon.ERROR, "No saved Friend found");
             }
         });
 
@@ -87,14 +86,20 @@ public class ResponsiveFormDemo implements DemoLesson {
     }
 
 
+    // main method to launch the Demo standalone
     public static void main(String[] args) throws Exception {
+        WebController controller = sessionContext -> {
+            RootPanel rootPanel = new RootPanel();
+            sessionContext.addRootPanel(null, rootPanel);
 
-        SimpleWebController controller = new SimpleWebController(context -> {
+            // create new instance of the Demo Class
+            DemoLesson demo = new ResponsiveFormDemo(sessionContext);
 
-            ResponsiveFormDemo textFieldDemo = new ResponsiveFormDemo(context);
-            textFieldDemo.handleDemoSelected();
-            return textFieldDemo.getRootComponent();
-        });
-        new TeamAppsJettyEmbeddedServer(controller, Files.createTempDir()).start();
+            // call the method defined in the DemoLesson Interface
+            demo.handleDemoSelected();
+
+            rootPanel.setContent(demo.getRootComponent());
+        };
+        new TeamAppsJettyEmbeddedServer(controller).start();
     }
 }

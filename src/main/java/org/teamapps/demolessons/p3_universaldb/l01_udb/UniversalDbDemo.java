@@ -2,16 +2,17 @@ package org.teamapps.demolessons.p3_universaldb.l01_udb;
 
 
 import org.teamapps.demolessons.model.SchemaInfo;
-import org.teamapps.demolessons.model.myfirstudb.*;
+import org.teamapps.demolessons.model.myfirstudb.Company;
+import org.teamapps.demolessons.model.myfirstudb.Employee;
+import org.teamapps.demolessons.model.myfirstudb.EmployeeQuery;
+import org.teamapps.demolessons.model.myfirstudb.Rank;
 import org.teamapps.universaldb.UniversalDB;
-import org.teamapps.universaldb.index.enumeration.EnumFilter;
 import org.teamapps.universaldb.index.enumeration.EnumFilterType;
 import org.teamapps.universaldb.index.numeric.NumericFilter;
 import org.teamapps.universaldb.index.text.TextFilter;
-import org.teamapps.universaldb.query.Sorting;
+import org.teamapps.universaldb.pojo.Entity;
 
 import java.io.File;
-import java.sql.Date;
 import java.time.Instant;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -34,14 +35,14 @@ public class UniversalDbDemo {
     private static void startDb() throws Exception {
         File storagePath = new File("./server-data/db-storage");
         if (! storagePath.exists()) {
-            storagePath.mkdirs();
+            if (! storagePath.mkdirs()) System.out.println("Error creating Database directory!");
         }
         UniversalDB.createStandalone(storagePath, SchemaInfo.create());
     }
     private static void clearDbEntries() {
         System.out.println("\nClear all Employees and Companies");
-        Employee.getAll().forEach(employee -> employee.delete());
-        Company.getAll().forEach(company -> company.delete());
+        Employee.getAll().forEach(Entity::delete);
+        Company.getAll().forEach(Entity::delete);
     }
 
     private static void createDemoData() {
@@ -77,9 +78,7 @@ public class UniversalDbDemo {
         secondEmployee.setEmployer(firstCompany);
         secondEmployee.save();
         System.out.println("Employees of firstCompany:");
-        firstCompany.getEmployee().forEach(employee -> {
-            System.out.println(employee.getName() + ", Rank " + employee.getRank() + " joined at " + employee.getJoinedDate());
-        });
+        firstCompany.getEmployee().forEach(employee -> System.out.println(employee.getName() + ", Rank " + employee.getRank() + " joined at " + employee.getJoinedDate()));
 
         // Create some more companies
         Company.create().setName("DemoComp").setDescription("Company organising Demonstrations").setValue(100).save();
@@ -121,9 +120,7 @@ public class UniversalDbDemo {
         Company firstCompany = Company.getById(1);
         System.out.println("firstCompany Name: " + firstCompany.getName());
         System.out.println("firstCompany Employees:");
-        firstCompany.getEmployee().forEach(employee -> {
-            System.out.println(employee.getName() + ", Rank " + employee.getRank() + " joined at " + employee.getJoinedDate());
-        });
+        firstCompany.getEmployee().forEach(employee -> System.out.println(employee.getName() + ", Rank " + employee.getRank() + " joined at " + employee.getJoinedDate()));
     }
 
     private static void filterQuery1() {
@@ -142,9 +139,7 @@ public class UniversalDbDemo {
 
         // Iterate over list, print some information:
         System.out.println("\nEmployees of firstComp:");
-        employeeList1.forEach(employee -> {
-            System.out.println(employee.getName() + ", Rank " + employee.getRank() + " joined at " + employee.getJoinedDate());
-        });
+        employeeList1.forEach(employee -> System.out.println(employee.getName() + ", Rank " + employee.getRank() + " joined at " + employee.getJoinedDate()));
     }
     private static void filterQuery2() {
         System.out.println("\nfilterQuery2()");
@@ -154,9 +149,7 @@ public class UniversalDbDemo {
         EmployeeQuery employeeQuery2 = Employee.filter()
                 .rank(EnumFilterType.EQUALS, Rank.MANAGER);
         List<Employee> employeeList = employeeQuery2.execute();
-        employeeList.forEach(employee -> {
-            System.out.println(employee.getName() + ", Company: " + employee.getEmployer().getName() + " joined at " + employee.getJoinedDate());
-        });
+        employeeList.forEach(employee -> System.out.println(employee.getName() + ", Company: " + employee.getEmployer().getName() + " joined at " + employee.getJoinedDate()));
 
         System.out.println("\nEmployees joined after 2020-01-01:");
         long compareDateinMillis = new GregorianCalendar(2020, Calendar.JANUARY, 1).getTimeInMillis();

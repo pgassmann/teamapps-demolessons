@@ -1,6 +1,5 @@
 package org.teamapps.demolessons.p1_intro.l03_verticallayout;
 
-import com.google.common.io.Files;
 import org.teamapps.demolessons.DemoLesson;
 import org.teamapps.icon.material.MaterialIcon;
 import org.teamapps.server.jetty.embedded.TeamAppsJettyEmbeddedServer;
@@ -9,8 +8,9 @@ import org.teamapps.ux.component.dummy.DummyComponent;
 import org.teamapps.ux.component.field.TextField;
 import org.teamapps.ux.component.flexcontainer.VerticalLayout;
 import org.teamapps.ux.component.panel.Panel;
+import org.teamapps.ux.component.rootpanel.RootPanel;
 import org.teamapps.ux.session.SessionContext;
-import org.teamapps.webcontroller.SimpleWebController;
+import org.teamapps.webcontroller.WebController;
 
 public class VerticalLayoutDemo implements DemoLesson {
 
@@ -42,9 +42,7 @@ public class VerticalLayoutDemo implements DemoLesson {
 
         TextField textField2 = new TextField();
 
-        textField1.onTextInput.addListener(text -> {
-            textField2.setValue("New Content: " + text);
-        });
+        textField1.onTextInput.addListener(text -> textField2.setValue("New Content: " + text));
 
 
         VerticalLayout verticalLayout = new VerticalLayout();
@@ -54,14 +52,24 @@ public class VerticalLayoutDemo implements DemoLesson {
     }
 
 
+    // main method to launch the Demo standalone
     public static void main(String[] args) throws Exception {
+        WebController controller = sessionContext -> {
 
-        SimpleWebController controller = new SimpleWebController(context -> {
+            // RootPanel is the global container of every element
+            RootPanel rootPanel = new RootPanel();
+            sessionContext.addRootPanel(null, rootPanel);
 
-            VerticalLayoutDemo textFieldDemo = new VerticalLayoutDemo(context);
-            textFieldDemo.handleDemoSelected();
-            return textFieldDemo.getRootComponent();
-        });
-        new TeamAppsJettyEmbeddedServer(controller, Files.createTempDir()).start();
+            // create new instance of the Demo Class
+            VerticalLayoutDemo demoInstance = new VerticalLayoutDemo(sessionContext);
+
+            // call the method defined in the DemoLesson Interface
+            demoInstance.handleDemoSelected();
+
+            // get the rootComponent of the Demo and set it as the content of the global container (rootPanel)
+            rootPanel.setContent(demoInstance.getRootComponent());
+
+        };
+        new TeamAppsJettyEmbeddedServer(controller).start();
     }
 }

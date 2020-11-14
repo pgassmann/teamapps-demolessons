@@ -1,16 +1,20 @@
 package org.teamapps.demolessons.p2_application.l01_backgroundtasks;
 
 import org.teamapps.demolessons.DemoLesson;
+import org.teamapps.demolessons.p1_intro.l12_toolbar.ToolbarDemo;
 import org.teamapps.icon.material.MaterialIcon;
+import org.teamapps.server.jetty.embedded.TeamAppsJettyEmbeddedServer;
 import org.teamapps.ux.component.Component;
 import org.teamapps.ux.component.field.Button;
 import org.teamapps.ux.component.flexcontainer.VerticalLayout;
 import org.teamapps.ux.component.progress.ProgressDisplay;
+import org.teamapps.ux.component.rootpanel.RootPanel;
 import org.teamapps.ux.component.template.BaseTemplateRecord;
 import org.teamapps.ux.session.SessionContext;
 import org.teamapps.ux.task.ObservableProgress;
 import org.teamapps.ux.task.ProgressCompletableFuture;
 import org.teamapps.ux.task.ProgressMonitor;
+import org.teamapps.webcontroller.WebController;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -33,9 +37,7 @@ public class BackgroundTasksDemo implements DemoLesson {
         button.onValueChanged.addListener(aBoolean -> {
 
             ProgressCompletableFuture<Double> future = ProgressCompletableFuture
-                    .supplyAsync(progressMonitor -> {
-                        return BackgroundTasksDemo.this.calculatePi(5_000, progressMonitor);
-                    });
+                    .supplyAsync(progressMonitor -> BackgroundTasksDemo.this.calculatePi(5_000, progressMonitor));
 
             ObservableProgress progress = future.getProgress();
             progressDisplay.setObservedProgress(progress);
@@ -81,5 +83,22 @@ public class BackgroundTasksDemo implements DemoLesson {
         double result = insideQuarterCircleCount * 4 / (double) numberOfIterations;
         progressMonitor.setStatusMessage("We are done!");
         return result;
+    }
+
+    // main method to launch the Demo standalone
+    public static void main(String[] args) throws Exception {
+        WebController controller = sessionContext -> {
+            RootPanel rootPanel = new RootPanel();
+            sessionContext.addRootPanel(null, rootPanel);
+
+            // create new instance of the Demo Class
+            DemoLesson demo = new BackgroundTasksDemo(sessionContext);
+
+            // call the method defined in the DemoLesson Interface
+            demo.handleDemoSelected();
+
+            rootPanel.setContent(demo.getRootComponent());
+        };
+        new TeamAppsJettyEmbeddedServer(controller).start();
     }
 }

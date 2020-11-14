@@ -1,6 +1,5 @@
 package org.teamapps.demolessons.p1_intro.l08_combobox;
 
-import com.google.common.io.Files;
 import org.teamapps.data.extract.BeanPropertyExtractor;
 import org.teamapps.demolessons.DemoLesson;
 import org.teamapps.icon.material.MaterialIcon;
@@ -11,20 +10,19 @@ import org.teamapps.ux.component.field.Label;
 import org.teamapps.ux.component.field.combobox.ComboBox;
 import org.teamapps.ux.component.flexcontainer.VerticalLayout;
 import org.teamapps.ux.component.panel.Panel;
+import org.teamapps.ux.component.rootpanel.RootPanel;
 import org.teamapps.ux.component.template.BaseTemplate;
 import org.teamapps.ux.session.SessionContext;
-import org.teamapps.webcontroller.SimpleWebController;
+import org.teamapps.webcontroller.WebController;
 
 import java.util.Arrays;
 
 public class ComboBoxDemo implements DemoLesson {
 
-    private Component rootComponent = new DummyComponent();
-    private SessionContext context;
+    private Component rootComponent;
 
     // Constructor, only set session context instance variable
-    public ComboBoxDemo(SessionContext context) {
-        this.context = context;
+    public ComboBoxDemo(SessionContext sessionContext) {
 
         Panel panel = new Panel(MaterialIcon.LIGHTBULB_OUTLINE, "ComboBox Demo");
         rootComponent = panel;
@@ -35,7 +33,7 @@ public class ComboBoxDemo implements DemoLesson {
         /* ComboBox of Strings*/
         verticalLayout.addComponent(new Label("ComboBox of Strings"));
         ComboBox<String> stringComboBox = ComboBox.createForList(Arrays.asList("Cake", "Spaghetti", "Fries", "Icecream", "Pizza", "Chocolate"));
-        stringComboBox.onValueChanged.addListener(s -> context.showNotification(MaterialIcon.ARROW_DROP_DOWN, s));
+        stringComboBox.onValueChanged.addListener(s -> sessionContext.showNotification(MaterialIcon.ARROW_DROP_DOWN, s));
         stringComboBox.setShowClearButton(true);
         verticalLayout.addComponent(stringComboBox);
 
@@ -61,12 +59,12 @@ public class ComboBoxDemo implements DemoLesson {
         Meal already has an Icon Property.
         Other Properties can be mapped manually:  */
         BeanPropertyExtractor<Meal> extractor = new BeanPropertyExtractor<>();
-        extractor.addProperty("caption", meal -> meal.getName());
-        extractor.addProperty("description", meal -> meal.getCalories());
+        extractor.addProperty("caption", Meal::getName);
+        extractor.addProperty("description", Meal::getCalories);
         mealComboBox.setPropertyExtractor(extractor);
 
         /* Define string representation of object for search and autocomplete */
-        mealComboBox.setRecordToStringFunction(meal -> meal.getName());
+        mealComboBox.setRecordToStringFunction(Meal::getName);
         mealComboBox.setAutoComplete(true);
     }
 
@@ -78,14 +76,20 @@ public class ComboBoxDemo implements DemoLesson {
     public void handleDemoSelected() { }
 
 
+    // main method to launch the Demo standalone
     public static void main(String[] args) throws Exception {
+        WebController controller = sessionContext -> {
+            RootPanel rootPanel = new RootPanel();
+            sessionContext.addRootPanel(null, rootPanel);
 
-        SimpleWebController controller = new SimpleWebController(context -> {
+            // create new instance of the Demo Class
+            DemoLesson demo = new ComboBoxDemo(sessionContext);
 
-            ComboBoxDemo textFieldDemo = new ComboBoxDemo(context);
-            textFieldDemo.handleDemoSelected();
-            return textFieldDemo.getRootComponent();
-        });
-        new TeamAppsJettyEmbeddedServer(controller, Files.createTempDir()).start();
+            // call the method defined in the DemoLesson Interface
+            demo.handleDemoSelected();
+
+            rootPanel.setContent(demo.getRootComponent());
+        };
+        new TeamAppsJettyEmbeddedServer(controller).start();
     }
 }

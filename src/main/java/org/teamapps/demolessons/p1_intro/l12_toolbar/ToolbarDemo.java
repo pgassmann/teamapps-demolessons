@@ -1,31 +1,29 @@
 package org.teamapps.demolessons.p1_intro.l12_toolbar;
 
-import com.google.common.io.Files;
 import org.teamapps.demolessons.DemoLesson;
 import org.teamapps.icon.material.MaterialIcon;
 import org.teamapps.icon.material.MaterialIconStyles;
-import org.teamapps.icons.api.CompositeIcon;
-import org.teamapps.icons.api.Icon;
+import org.teamapps.icons.Icon;
+import org.teamapps.icons.composite.CompositeIcon;
 import org.teamapps.server.jetty.embedded.TeamAppsJettyEmbeddedServer;
 import org.teamapps.ux.component.Component;
 import org.teamapps.ux.component.dummy.DummyComponent;
 import org.teamapps.ux.component.field.TextField;
 import org.teamapps.ux.component.flexcontainer.VerticalLayout;
 import org.teamapps.ux.component.panel.Panel;
+import org.teamapps.ux.component.rootpanel.RootPanel;
 import org.teamapps.ux.component.toolbar.Toolbar;
 import org.teamapps.ux.component.toolbar.ToolbarButton;
 import org.teamapps.ux.component.toolbar.ToolbarButtonGroup;
 import org.teamapps.ux.session.SessionContext;
-import org.teamapps.webcontroller.SimpleWebController;
+import org.teamapps.webcontroller.WebController;
 
 public class ToolbarDemo implements DemoLesson {
 
-    private Component rootComponent = new DummyComponent();
-    private SessionContext context;
+    private Component rootComponent;
 
     // Constructor, only set session context instance variable
-    public ToolbarDemo(SessionContext context) {
-        this.context = context;
+    public ToolbarDemo(SessionContext sessionContext) {
 
         Panel panel = new Panel(MaterialIcon.LIGHTBULB_OUTLINE, "Toolbar Demo");
         rootComponent = panel;
@@ -56,13 +54,9 @@ public class ToolbarDemo implements DemoLesson {
         buttonGroup2.addButton(robotButton2);
 
         /* ToolbarButtons have onClick events */
-        robotButton.onClick.addListener(toolbarButtonClickEvent -> {
-            toggleRobot(context, robotButton, robotButton2);
-        });
+        robotButton.onClick.addListener(toolbarButtonClickEvent -> toggleRobot(sessionContext, robotButton, robotButton2));
 
-        robotButton2.onClick.addListener(toolbarButtonClickEvent -> {
-            toggleRobot(context, robotButton, robotButton2);
-        });
+        robotButton2.onClick.addListener(toolbarButtonClickEvent -> toggleRobot(sessionContext, robotButton, robotButton2));
 
         // Toolbar belongs to the Panel, it is not part of the panel content.
         // Content can be anything.
@@ -80,12 +74,12 @@ public class ToolbarDemo implements DemoLesson {
             /* Manually fire onValueChanged event on textField2 */
             textField2.onValueChanged.fire(textField2.getValue());
         });
-        textField2.onValueChanged.addListener(s -> context.showNotification(MaterialIcon.NOTIFICATIONS, s));
+        textField2.onValueChanged.addListener(s -> sessionContext.showNotification(MaterialIcon.NOTIFICATIONS, s));
 
     }
 
     private static void toggleRobot(SessionContext context, ToolbarButton robotButton, ToolbarButton robotButton2) {
-        Boolean robotStatus = robotButton.isVisible();
+        boolean robotStatus = robotButton.isVisible();
         if (robotStatus) {
             context.showNotification(MaterialIcon.SCHOOL, "Learning!");
 
@@ -102,14 +96,20 @@ public class ToolbarDemo implements DemoLesson {
     public void handleDemoSelected() { }
 
 
+    // main method to launch the Demo standalone
     public static void main(String[] args) throws Exception {
+        WebController controller = sessionContext -> {
+            RootPanel rootPanel = new RootPanel();
+            sessionContext.addRootPanel(null, rootPanel);
 
-        SimpleWebController controller = new SimpleWebController(context -> {
+            // create new instance of the Demo Class
+            DemoLesson demo = new ToolbarDemo(sessionContext);
 
-            ToolbarDemo toolbarDemo = new ToolbarDemo(context);
-            toolbarDemo.handleDemoSelected();
-            return toolbarDemo.getRootComponent();
-        });
-        new TeamAppsJettyEmbeddedServer(controller, Files.createTempDir()).start();
+            // call the method defined in the DemoLesson Interface
+            demo.handleDemoSelected();
+
+            rootPanel.setContent(demo.getRootComponent());
+        };
+        new TeamAppsJettyEmbeddedServer(controller).start();
     }
 }

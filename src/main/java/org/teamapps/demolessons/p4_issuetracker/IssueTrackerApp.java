@@ -1,12 +1,11 @@
 package org.teamapps.demolessons.p4_issuetracker;
 
-import com.google.common.io.Files;
 import org.teamapps.databinding.TwoWayBindableValue;
 import org.teamapps.demolessons.DemoLesson;
 import org.teamapps.demolessons.issuetracker.model.SchemaInfo;
 import org.teamapps.demolessons.issuetracker.model.issuetrackerdb.Issue;
 import org.teamapps.demolessons.issuetracker.model.issuetrackerdb.User;
-import org.teamapps.event.Event;
+import org.teamapps.demolessons.p1_intro.l12_toolbar.ToolbarDemo;
 import org.teamapps.icon.material.MaterialIcon;
 import org.teamapps.server.jetty.embedded.TeamAppsJettyEmbeddedServer;
 import org.teamapps.universaldb.UniversalDB;
@@ -23,6 +22,7 @@ import org.teamapps.ux.component.form.ResponsiveForm;
 import org.teamapps.ux.component.form.ResponsiveFormLayout;
 import org.teamapps.ux.component.itemview.SimpleItemGroup;
 import org.teamapps.ux.component.itemview.SimpleItemView;
+import org.teamapps.ux.component.rootpanel.RootPanel;
 import org.teamapps.ux.component.table.Table;
 import org.teamapps.ux.component.table.TableColumn;
 import org.teamapps.ux.component.template.BaseTemplate;
@@ -30,7 +30,7 @@ import org.teamapps.ux.component.toolbar.ToolbarButton;
 import org.teamapps.ux.component.toolbar.ToolbarButtonGroup;
 import org.teamapps.ux.component.toolbar.ToolbarButtonGroupPosition;
 import org.teamapps.ux.session.SessionContext;
-import org.teamapps.webcontroller.SimpleWebController;
+import org.teamapps.webcontroller.WebController;
 
 import java.io.File;
 import java.util.Arrays;
@@ -80,7 +80,7 @@ public class IssueTrackerApp implements DemoLesson {
     private static void startDb() {
         File storagePath = new File("./server-data/db-storage");
         if (!storagePath.exists()) {
-            storagePath.mkdirs();
+            if (! storagePath.mkdirs()) System.out.println("Error creating Database directory!");
         }
         try {
             UniversalDB.createStandalone(storagePath, SchemaInfo.create());
@@ -280,13 +280,12 @@ public class IssueTrackerApp implements DemoLesson {
 
         // Assigned To Column with custom value extractor that maps referenced users to a single, comma-separated string
         table.addColumn(new TableColumn<Issue>("assignedTo", "assigned to", new TextField())
-                .setValueExtractor(issue -> {
-                    return issue.getAssignedTo().stream()
-                            .limit(3)
-                            .map(user -> user.getName())
-                            .collect(Collectors.joining(", "));
-
-                }));
+                .setValueExtractor(issue -> issue.getAssignedTo().stream()
+                        .limit(3)
+                        .map(User::getName)
+                        .collect(Collectors.joining(", "))
+                )
+        );
 
         table.setForceFitWidth(true);
         table.setDisplayAsList(true);
@@ -326,37 +325,25 @@ public class IssueTrackerApp implements DemoLesson {
         reporterComboBox = new ComboBox<>(BaseTemplate.LIST_ITEM_SMALL_ICON_SINGLE_LINE);
         reporterComboBox.setModel(s -> User.filter().parseFullTextFilter(s).execute());
         reporterComboBox.setShowClearButton(true);
-        reporterComboBox.setPropertyExtractor((user, propertyName) -> {
-            switch (propertyName) {
-                case BaseTemplate.PROPERTY_ICON:
-                    return MaterialIcon.PERSON;
-                case BaseTemplate.PROPERTY_CAPTION:
-                    return user.getName();
-                case BaseTemplate.PROPERTY_DESCRIPTION:
-                    return user.getEmail();
-                default:
-                    return null;
-            }
+        reporterComboBox.setPropertyExtractor((user, propertyName) -> switch (propertyName) {
+            case BaseTemplate.PROPERTY_ICON -> MaterialIcon.PERSON;
+            case BaseTemplate.PROPERTY_CAPTION -> user.getName();
+            case BaseTemplate.PROPERTY_DESCRIPTION -> user.getEmail();
+            default -> null;
         });
-        reporterComboBox.setRecordToStringFunction(user -> user.getName());
+        reporterComboBox.setRecordToStringFunction(User::getName);
 
-        assignedToTagComboBox = new TagComboBox<User>();
+        assignedToTagComboBox = new TagComboBox<>();
         assignedToTagComboBox.setTemplate(BaseTemplate.LIST_ITEM_SMALL_ICON_SINGLE_LINE);
         assignedToTagComboBox.setShowClearButton(true);
         assignedToTagComboBox.setModel(s -> User.filter().parseFullTextFilter(s).execute());
-        assignedToTagComboBox.setPropertyExtractor((user, propertyName) -> {
-            switch (propertyName) {
-                case BaseTemplate.PROPERTY_ICON:
-                    return MaterialIcon.PERSON;
-                case BaseTemplate.PROPERTY_CAPTION:
-                    return user.getName();
-                case BaseTemplate.PROPERTY_DESCRIPTION:
-                    return user.getEmail();
-                default:
-                    return null;
-            }
+        assignedToTagComboBox.setPropertyExtractor((user, propertyName) -> switch (propertyName) {
+            case BaseTemplate.PROPERTY_ICON -> MaterialIcon.PERSON;
+            case BaseTemplate.PROPERTY_CAPTION -> user.getName();
+            case BaseTemplate.PROPERTY_DESCRIPTION -> user.getEmail();
+            default -> null;
         });
-        assignedToTagComboBox.setRecordToStringFunction(user -> user.getName());
+        assignedToTagComboBox.setRecordToStringFunction(User::getName);
 
         summaryField.setRequired(true);
         descriptionField.setRequired(true);
@@ -386,22 +373,16 @@ public class IssueTrackerApp implements DemoLesson {
         // Save
         ToolbarButton saveButton = ToolbarButton.createSmall(MaterialIcon.SAVE, "Save", "Save Issue");
         group.addButton(saveButton);
-        saveButton.onClick.addListener(toolbarButtonClickEvent -> {
-            saveForm(displayedIssue.get());
-        });
+        saveButton.onClick.addListener(toolbarButtonClickEvent -> saveForm(displayedIssue.get()));
 
         // New
         ToolbarButton newButton = ToolbarButton.createSmall(MaterialIcon.ADD, "New", "Create Issue");
         group.addButton(newButton);
-        newButton.onClick.addListener(toolbarButtonClickEvent -> {
-            displayedIssue.set(Issue.create());
-        });
+        newButton.onClick.addListener(toolbarButtonClickEvent -> displayedIssue.set(Issue.create()));
         // Delete
         ToolbarButton deleteButton = ToolbarButton.createSmall(MaterialIcon.DELETE, "Delete", "Delete issue");
         group.addButton(deleteButton);
-        deleteButton.onClick.addListener(toolbarButtonClickEvent -> {
-            deleteIssue(displayedIssue.get());
-        });
+        deleteButton.onClick.addListener(toolbarButtonClickEvent -> deleteIssue(displayedIssue.get()));
         // show save and delete button only when an issue is displayed
         displayedIssue.bindWritingTo(issue -> {
             deleteButton.setVisible(issue != null);
@@ -417,21 +398,15 @@ public class IssueTrackerApp implements DemoLesson {
         // New
         ToolbarButton newButton = ToolbarButton.createSmall(MaterialIcon.ADD, "New", "Create Issue");
         group.addButton(newButton);
-        newButton.onClick.addListener(toolbarButtonClickEvent -> {
-            displayedIssue.set(Issue.create());
-        });
+        newButton.onClick.addListener(toolbarButtonClickEvent -> displayedIssue.set(Issue.create()));
 
         // Delete
         ToolbarButton deleteButton = ToolbarButton.createSmall(MaterialIcon.DELETE, "Delete", "Delete issue");
         group.addButton(deleteButton);
-        deleteButton.onClick.addListener(toolbarButtonClickEvent -> {
-            deleteIssue(displayedIssue.get());
-        });
+        deleteButton.onClick.addListener(toolbarButtonClickEvent -> deleteIssue(displayedIssue.get()));
 
         // show delete button only when an issue is displayed
-        displayedIssue.bindWritingTo(issue -> {
-            deleteButton.setVisible(issue != null);
-        });
+        displayedIssue.bindWritingTo(issue -> deleteButton.setVisible(issue != null));
         return group;
     }
 
@@ -490,16 +465,25 @@ public class IssueTrackerApp implements DemoLesson {
         return createFilterTextField(searchTextHandler, "Search...");
     }
 
+    // main method to launch the Demo standalone
     public static void main(String[] args) throws Exception {
+        WebController controller = sessionContext -> {
+            RootPanel rootPanel = new RootPanel();
+            sessionContext.addRootPanel(null, rootPanel);
 
-        SimpleWebController controller = new SimpleWebController(context -> {
+            // create new instance of the Demo Class
+            DemoLesson demo = new ToolbarDemo(sessionContext);
 
-            IssueTrackerApp issueTrackerApp = new IssueTrackerApp(context);
-            issueTrackerApp.handleDemoSelected();
-            return issueTrackerApp.getRootComponent();
-        });
-        controller.setShowBackgroundImage(true);
-        new TeamAppsJettyEmbeddedServer(controller, Files.createTempDir()).start();
+            // call the method defined in the DemoLesson Interface
+            demo.handleDemoSelected();
+
+            rootPanel.setContent(demo.getRootComponent());
+
+            // show Background Image
+            String defaultBackground = "/resources/backgrounds/default-bl.jpg";
+            sessionContext.registerBackgroundImage("default", defaultBackground, defaultBackground);
+            sessionContext.setBackgroundImage("default", 0);
+        };
+        new TeamAppsJettyEmbeddedServer(controller).start();
     }
-
 }
