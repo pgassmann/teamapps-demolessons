@@ -1,7 +1,6 @@
 package org.teamapps.demolessons.p2_application.l01_backgroundtasks;
 
 import org.teamapps.demolessons.DemoLesson;
-import org.teamapps.demolessons.p1_intro.l12_toolbar.ToolbarDemo;
 import org.teamapps.icon.material.MaterialIcon;
 import org.teamapps.server.jetty.embedded.TeamAppsJettyEmbeddedServer;
 import org.teamapps.ux.component.Component;

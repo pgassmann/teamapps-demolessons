@@ -69,7 +69,6 @@ public class ResponsiveApplicationDemo implements DemoLesson {
         //create a right panel
         perspective.addView(View.createView(StandardLayout.RIGHT, MaterialIcon.FOLDER, "Left panel", new DummyComponent()));
 
-        Icon icon = AntuIcon.STATUS_SECURITY_HIGH_64;
         //create a right bottom panel
         perspective.addView(View.createView(StandardLayout.RIGHT_BOTTOM, MaterialIcon.VIEW_CAROUSEL, "Left bottom panel", null));
 
@@ -78,15 +77,16 @@ public class ResponsiveApplicationDemo implements DemoLesson {
         ToolbarButton saveButton = buttonGroup.addButton(ToolbarButton.create(MaterialIcon.SAVE, "Save", "Save changes"));
         saveButton.onClick.addListener(toolbarButtonClickEvent -> CurrentSessionContext.get().showNotification(MaterialIcon.MESSAGE, "Save was clicked!"));
         buttonGroup.addButton(ToolbarButton.create(MaterialIcon.DELETE, "Delete", "Delete some items"));
-        buttonGroup.addButton(ToolbarButton.create(AntuIcon.ACTION_CHRONOMETER_RESET_24, "AntuIcon.ACTION.CHRONOMETER_RESET_24", "Save changes")).onClick.addListener(toolbarButtonClickEvent -> {
+        buttonGroup.addButton(ToolbarButton.create(AntuIcon.ACTION_CHRONOMETER_RESET_24, "AntuIcon.ACTION_CHRONOMETER_RESET_24", "Save changes")).onClick.addListener(toolbarButtonClickEvent -> {
             CurrentSessionContext.get().showNotification(MaterialIcon.MESSAGE, "Save was clicked!");
         });
-        buttonGroup.addButton(ToolbarButton.create(AntuIcon.PLACE_DISTRIBUTOR_LOGO_UBUNTU_64, "AntuIcon.PLACES.DISTRIBUTOR_LOGO_UBUNTU_64", "Delete some items"));
+        buttonGroup.addButton(ToolbarButton.create(AntuIcon.PLACE_DISTRIBUTOR_LOGO_UBUNTU_64, "AntuIcon.PLACE_DISTRIBUTOR_LOGO_UBUNTU_64", "Delete some items"));
 //        buttonGroup.addButton(ToolbarButton.create(MaterialDesignIcon.DICE._4.withStyle(MaterialDesignIconStyles.LIGHT_BLUE_900), "MaterialDesignIcon.DICE._4", "Delete some items"));
         buttonGroup.addButton(ToolbarButton.create(AntuIcon.ACTION_AUTOCORRECTION_32.withStyle(AntuIconStyle.DARK), "AntuIcon.ACTION_AUTOCORRECTION_32", "DARK").setBackgroundColor(Color.DARK_BLUE));
         buttonGroup.addButton(ToolbarButton.create(AntuIcon.ACTION_AUTOCORRECTION_32.withStyle(AntuIconStyle.LIGHT), "AntuIcon.ACTION_AUTOCORRECTION_32", "LIGHT").setBackgroundColor(Color.LIGHT_YELLOW));
         buttonGroup.addButton(ToolbarButton.create(MaterialIcon.LAYERS, "MaterialIcon.LAYERS", "Delete some items"));
-        buttonGroup.addButton(ToolbarButton.create(AntuIcon.STATUS_SECURITY_HIGH_64, "AntuIcon.STATUS.SECURITY_HIGH_64", "Delete some items"));
+        buttonGroup.addButton(ToolbarButton.create(AntuIcon.STATUS_SECURITY_HIGH_64, "AntuIcon.STATUS_SECURITY_HIGH_64", "Delete some items"));
+        buttonGroup.addButton(ToolbarButton.create(AntuIcon.ACTION_ZOOM_SELECT_Y_24, "AntuIcon.ACTION_ZOOM_SELECT_Y_24", "last antu icon"));
         //display these buttons only when this perspective is visible
         perspective.addWorkspaceButtonGroup(buttonGroup);
         application.showPerspective(perspective);
@@ -101,7 +101,7 @@ public class ResponsiveApplicationDemo implements DemoLesson {
         perspective.addWorkspaceButtonGroup(switchButtonGroup);
         demoPerspective.addWorkspaceButtonGroup(switchButtonGroup);
 
-        ToolbarButton switchButton = ToolbarButton.create(AntuIcon.ACTION_SHOW_MENU_24, "AntuIcon.ACTION.SHOW_MENU_24","");
+        ToolbarButton switchButton = ToolbarButton.create(AntuIcon.ACTION_SHOW_MENU_24, "AntuIcon.ACTION_SHOW_MENU_24","");
         switchButtonGroup.addButton(switchButton);
         switchButton.onClick.addListener(toolbarButtonClickEvent -> {
             if (application.getActivePerspective() == demoPerspective) {
