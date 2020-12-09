@@ -1,12 +1,16 @@
 package org.teamapps.demolessons.p1_intro.l14_responsiveapplication;
 
+import org.teamapps.common.format.Color;
 import org.teamapps.demolessons.DemoLesson;
 import org.teamapps.demolessons.p1_intro.l04_richtexteditor.RichTextEditorDemo;
 import org.teamapps.demolessons.p1_intro.l07_checkbox.CheckboxDemo;
 import org.teamapps.demolessons.p1_intro.l10_responsiveform.ResponsiveFormDemo;
 import org.teamapps.demolessons.p1_intro.l11_table.TableDemo;
 import org.teamapps.demolessons.p1_intro.l13_tree.TreeDemo;
+import org.teamapps.icon.antu.AntuIcon;
+import org.teamapps.icon.antu.AntuIconStyle;
 import org.teamapps.icon.material.MaterialIcon;
+import org.teamapps.icons.Icon;
 import org.teamapps.server.jetty.embedded.TeamAppsJettyEmbeddedServer;
 import org.teamapps.ux.application.ResponsiveApplication;
 import org.teamapps.ux.application.layout.ExtendedLayout;
@@ -21,6 +25,10 @@ import org.teamapps.ux.component.toolbar.ToolbarButtonGroup;
 import org.teamapps.ux.session.CurrentSessionContext;
 import org.teamapps.ux.session.SessionContext;
 import org.teamapps.webcontroller.WebController;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.Arrays;
 
 public class ResponsiveApplicationDemo implements DemoLesson {
 
@@ -50,11 +58,13 @@ public class ResponsiveApplicationDemo implements DemoLesson {
         application.addPerspective(perspective);
 
         //create an empty left panel
-        perspective.addView(View.createView(StandardLayout.LEFT, MaterialIcon.MESSAGE, "Left panel", new DummyComponent()));
+        perspective.addView(View.createView(StandardLayout.LEFT, AntuIcon.STATUS_BATTERY_MISSING_64, "Left panel", new DummyComponent()));
 
         //create a tabbed center panel
-        perspective.addView(View.createView(StandardLayout.CENTER, MaterialIcon.SEARCH, "Center panel", new DummyComponent()));
-        perspective.addView(View.createView(StandardLayout.CENTER, MaterialIcon.PEOPLE, "Center panel 2", new DummyComponent()));
+        perspective.addView(View.createView(StandardLayout.CENTER, AntuIcon.ACTION_ACROBAT_32, "Center panel", new DummyComponent()));
+        perspective.addView(View.createView(StandardLayout.CENTER, AntuIcon.STATUS_MIC_OFF_22.withStyle(AntuIconStyle.DARK), "Center panel 2", new DummyComponent())).getPanel().setHeaderBackgroundColor(Color.BLACK.withAlpha(0.6f));
+//        System.out.println(AntuIcon.class.getFields().length);
+//        Arrays.stream(AntuIcon.class.getFields()).forEach(System.out::println);
 
         //create a right panel
         perspective.addView(View.createView(StandardLayout.RIGHT, MaterialIcon.FOLDER, "Left panel", new DummyComponent()));
@@ -67,7 +77,9 @@ public class ResponsiveApplicationDemo implements DemoLesson {
         ToolbarButton saveButton = buttonGroup.addButton(ToolbarButton.create(MaterialIcon.SAVE, "Save", "Save changes"));
         saveButton.onClick.addListener(toolbarButtonClickEvent -> CurrentSessionContext.get().showNotification(MaterialIcon.MESSAGE, "Save was clicked!"));
         buttonGroup.addButton(ToolbarButton.create(MaterialIcon.DELETE, "Delete", "Delete some items"));
-
+        buttonGroup.addButton(ToolbarButton.create(AntuIcon.ACTION_CONTRAST_24.withStyle(AntuIconStyle.DARK), "DARK Style", "AntuIcon.ACTION_CONTRAST_24").setBackgroundColor(Color.BLACK.withAlpha(0.6f)));
+        buttonGroup.addButton(ToolbarButton.create(AntuIcon.ACTION_AUTOCORRECTION_32.withStyle(AntuIconStyle.LIGHT), "LIGHT Style", "AntuIcon.ACTION_AUTOCORRECTION_32").setBackgroundColor(Color.LIGHT_YELLOW.withAlpha(0.8f)));
+        buttonGroup.addButton(ToolbarButton.create(MaterialIcon.LAYERS, "MaterialIcon.LAYERS", "Delete some items"));
         //display these buttons only when this perspective is visible
         perspective.addWorkspaceButtonGroup(buttonGroup);
         application.showPerspective(perspective);
@@ -82,7 +94,7 @@ public class ResponsiveApplicationDemo implements DemoLesson {
         perspective.addWorkspaceButtonGroup(switchButtonGroup);
         demoPerspective.addWorkspaceButtonGroup(switchButtonGroup);
 
-        ToolbarButton switchButton = ToolbarButton.create(MaterialIcon.LAYERS, "Switch Perspective","");
+        ToolbarButton switchButton = ToolbarButton.create(AntuIcon.ACTION_KT_CHANGE_TRACKER_24, "Perspective","Switch perspective");
         switchButtonGroup.addButton(switchButton);
         switchButton.onClick.addListener(toolbarButtonClickEvent -> {
             if (application.getActivePerspective() == demoPerspective) {
