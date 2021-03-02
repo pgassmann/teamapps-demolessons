@@ -5,7 +5,6 @@ import org.teamapps.demolessons.DemoLesson;
 import org.teamapps.demolessons.issuetracker.model.SchemaInfo;
 import org.teamapps.demolessons.issuetracker.model.issuetrackerdb.Issue;
 import org.teamapps.demolessons.issuetracker.model.issuetrackerdb.User;
-import org.teamapps.demolessons.p1_intro.l12_toolbar.ToolbarDemo;
 import org.teamapps.icon.material.MaterialIcon;
 import org.teamapps.server.jetty.embedded.TeamAppsJettyEmbeddedServer;
 import org.teamapps.universaldb.UniversalDB;
@@ -472,7 +471,7 @@ public class IssueTrackerApp implements DemoLesson {
             sessionContext.addRootPanel(null, rootPanel);
 
             // create new instance of the Demo Class
-            DemoLesson demo = new ToolbarDemo(sessionContext);
+            DemoLesson demo = new IssueTrackerApp(sessionContext);
 
             // call the method defined in the DemoLesson Interface
             demo.handleDemoSelected();
