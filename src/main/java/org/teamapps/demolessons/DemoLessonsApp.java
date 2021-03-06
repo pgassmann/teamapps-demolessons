@@ -20,6 +20,7 @@ import org.teamapps.demolessons.p2_application.l02_externalevent.ExternalEventsD
 import org.teamapps.demolessons.p2_application.l03_servlet.ServletDemo;
 import org.teamapps.demolessons.p2_application.l04_mustachetemplates.MustacheTemplateDemo;
 import org.teamapps.demolessons.p2_application.l05_iconviewer.IconViewerDemo;
+import org.teamapps.demolessons.p5_hibernate_sql.HibernateSQLApp;
 import org.teamapps.icon.antu.AntuIcon;
 import org.teamapps.demolessons.p4_issuetracker.IssueTrackerApp;
 import org.teamapps.icon.material.MaterialIcon;
@@ -183,6 +184,11 @@ public class DemoLessonsApp implements DemoLesson {
 
         BaseTemplateTreeNode<DemoLesson> issueTracker = new BaseTemplateTreeNode<>(MaterialIcon.BUG_REPORT, null,"IssueTracker", "Real Application with Database", null, new IssueTrackerApp(sessionContext));
         lessonsTree.addNode(issueTracker);
+
+        // Hibernate SQL
+
+        BaseTemplateTreeNode<DemoLesson> hibernateSQL = new BaseTemplateTreeNode<>(MaterialIcon.STORAGE, null,"Hibernate SQL", "Integration of other databases", null, new HibernateSQLApp(sessionContext));
+        lessonsTree.addNode(hibernateSQL);
 
         lessonsTree.onNodeSelected.addListener(node -> {
             if (node.getPayload() != null) {
