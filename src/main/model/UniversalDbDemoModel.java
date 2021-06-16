@@ -4,9 +4,10 @@ import org.teamapps.universaldb.schema.*;
 // When making changes to the Schema, you need to run maven clean install again to update the Java Pojo Classes
 public class UniversalDbDemoModel implements SchemaInfoProvider {
 
-    public String getSchema() {
+    public Schema getSchema() {
         // New Schema. creates pojos in the specified namespace
         Schema schema = Schema.create("org.teamapps.demolessons.model");
+        schema.setSchemaName("DemoLessonSchema");
 
         // When you create or change your database schema, you have to execute mvn clean install
         Database database = schema.addDatabase("myFirstUdb");
@@ -39,6 +40,6 @@ public class UniversalDbDemoModel implements SchemaInfoProvider {
                 /// Reference from employee to employer
                 .addReference("employer", company, false, "employee");
 
-        return schema.getSchema();
+        return schema;
     }
 }

@@ -2,7 +2,7 @@ package org.teamapps.demolessons.p4_issuetracker;
 
 import org.teamapps.databinding.TwoWayBindableValue;
 import org.teamapps.demolessons.DemoLesson;
-import org.teamapps.demolessons.issuetracker.model.SchemaInfo;
+import org.teamapps.demolessons.issuetracker.model.IssueTrackerSchema;
 import org.teamapps.demolessons.issuetracker.model.issuetrackerdb.Issue;
 import org.teamapps.demolessons.issuetracker.model.issuetrackerdb.User;
 import org.teamapps.icon.material.MaterialIcon;
@@ -82,7 +82,7 @@ public class IssueTrackerApp implements DemoLesson {
             if (! storagePath.mkdirs()) System.out.println("Error creating Database directory!");
         }
         try {
-            UniversalDB.createStandalone(storagePath, SchemaInfo.create());
+            UniversalDB.createStandalone(storagePath, new IssueTrackerSchema());
         } catch (Exception e) {
             e.printStackTrace();
         }

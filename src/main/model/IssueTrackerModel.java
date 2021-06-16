@@ -4,9 +4,10 @@ import org.teamapps.universaldb.schema.*;
 // When making changes to the Schema, you need to run maven clean install again to update the Java Pojo Classes
 public class IssueTrackerModel implements SchemaInfoProvider {
 
-    public String getSchema() {
+    public Schema getSchema() {
         // New Schema. creates pojos in the specified namespace
         Schema schema = Schema.create("org.teamapps.demolessons.issuetracker.model");
+        schema.setSchemaName("IssueTrackerSchema");
 
         // When you create or change your database schema, you have to execute mvn clean install
         Database database = schema.addDatabase("issueTrackerDb");
@@ -37,6 +38,6 @@ public class IssueTrackerModel implements SchemaInfoProvider {
                 .addReference("assignedTo", user, true, "assignedIssues")
                 .addReference("reporter", user, false, "reportedIssues");
 
-        return schema.getSchema();
+        return schema;
     }
 }

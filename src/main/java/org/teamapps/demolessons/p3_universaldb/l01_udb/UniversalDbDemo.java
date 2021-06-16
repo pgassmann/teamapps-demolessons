@@ -1,7 +1,7 @@
 package org.teamapps.demolessons.p3_universaldb.l01_udb;
 
 
-import org.teamapps.demolessons.model.SchemaInfo;
+import org.teamapps.demolessons.model.DemoLessonSchema;
 import org.teamapps.demolessons.model.myfirstudb.Company;
 import org.teamapps.demolessons.model.myfirstudb.Employee;
 import org.teamapps.demolessons.model.myfirstudb.EmployeeQuery;
@@ -37,7 +37,7 @@ public class UniversalDbDemo {
         if (! storagePath.exists()) {
             if (! storagePath.mkdirs()) System.out.println("Error creating Database directory!");
         }
-        UniversalDB.createStandalone(storagePath, SchemaInfo.create());
+        UniversalDB.createStandalone(storagePath, new DemoLessonSchema());
     }
     private static void clearDbEntries() {
         System.out.println("\nClear all Employees and Companies");
