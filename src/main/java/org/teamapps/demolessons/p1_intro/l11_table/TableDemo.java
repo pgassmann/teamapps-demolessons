@@ -36,7 +36,7 @@ public class TableDemo implements DemoLesson {
         rootComponent = panel;
 
         Table<Friend> table = new Table<>();
-        TableColumn<Friend> firstNameColumn = new TableColumn<>("firstName", MaterialIcon.PERSON, "Name", new TextField());
+        TableColumn<Friend, String> firstNameColumn = new TableColumn<>("firstName", MaterialIcon.PERSON, "Name", new TextField());
         firstNameColumn.setDefaultWidth(150);
         table.addColumn(firstNameColumn);
 
@@ -49,7 +49,7 @@ public class TableDemo implements DemoLesson {
         table.addColumn(new TableColumn<>("street", MaterialIcon.PERSON, "Street", streetTextField));
 
         table.addColumn(new TableColumn<>("active", MaterialIcon.PERSON, "Active", new CheckBox()));
-        table.addColumn(new TableColumn<Friend>("birthDate", MaterialIcon.PERSON, "Birth Date", new LocalDateField()).setDefaultWidth(200));
+        table.addColumn("birthDate", MaterialIcon.PERSON, "Birth Date", new LocalDateField()).setDefaultWidth(200);
 
         List<Meal> meals = Arrays.asList(
                 new Meal(MaterialIcon.CAKE, "Cake", "100 kcal"),

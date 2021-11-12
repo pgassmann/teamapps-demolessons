@@ -14,7 +14,9 @@ public class UniversalDbDemoModel implements SchemaInfoProvider {
 
         // Define the Tables, add creation and modification timestamp fields, keep deleted objects ("recycle bin")
         Table company = database.addTable("company", TableOption.TRACK_CREATION, TableOption.TRACK_MODIFICATION, TableOption.KEEP_DELETED);
-        Table employee = database.addTable("employee", TableOption.TRACK_CREATION, TableOption.TRACK_MODIFICATION, TableOption.KEEP_DELETED);
+        Table employee = database.addTable("employee", TableOption.TRACK_CREATION, TableOption.TRACK_MODIFICATION );
+        Table location = database.addTable("location", TableOption.TRACK_CREATION, TableOption.TRACK_MODIFICATION, TableOption.KEEP_DELETED);
+        Table region = database.addTable("region", TableOption.TRACK_CREATION, TableOption.TRACK_MODIFICATION, TableOption.KEEP_DELETED);
 
         // Add Fields to Table company
         company
@@ -23,13 +25,15 @@ public class UniversalDbDemoModel implements SchemaInfoProvider {
                 .addLong("value")
 
                 // References: In the field "employee" link to a item of employee
-                .addReference("employee", employee, true, "employer");
+                .addReference("employee", employee, true, "employer")
                 // Parameters: addReference(String name, Table referencedTable, boolean multiReference, String backReference)
                 // name: reference name
                 // referencedTable: other Table that is linked with this reference
                 // multiReference: whether this field can reference only one or multiple elements of the other table
                 // backReference: name of the reference in the referenced Table that links back to this table.
                 // With UniversalDB, usually every reference has a backReference in the other table
+                .addReference("location", location, false, "companies")
+        ;
 
         // Add Fields to Table employee
         employee
@@ -39,6 +43,16 @@ public class UniversalDbDemoModel implements SchemaInfoProvider {
 
                 /// Reference from employee to employer
                 .addReference("employer", company, false, "employee");
+
+        location
+                .addText("name")
+                .addInteger("rent")
+                .addReference("companies", company, true, "location")
+                .addReference("region", region, false, "locations");
+        region
+                .addText("name")
+                .addReference("locations", location, true, "region");
+
 
         return schema;
     }

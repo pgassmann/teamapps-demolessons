@@ -25,7 +25,7 @@ public class IssueTableModel extends AbstractTableModel<Issue> {
     @Override
     public List<Issue> getRecords(int startIndex, int length, Sorting sorting) {
         IssueQuery issueQuery = createQuery();
-        return issueQuery.execute(startIndex, length, createUdbSorting(sorting));
+        return issueQuery.execute();
     }
 
     private org.teamapps.universaldb.query.Sorting createUdbSorting(Sorting sorting) {

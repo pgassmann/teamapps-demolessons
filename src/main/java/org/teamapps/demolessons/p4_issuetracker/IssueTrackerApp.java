@@ -261,14 +261,14 @@ public class IssueTrackerApp implements DemoLesson {
     private Table<Issue> createIssueTable(IssueTableModel tableModel) {
         Table<Issue> table = new Table<>();
         table.setModel(tableModel);
-        table.addColumn(new TableColumn<Issue>("type", "Type", new TextField()).setMaxWidth(80));
-        table.addColumn(new TableColumn<Issue>("priority", "Priority", new TextField()).setMaxWidth(80));
-        table.addColumn(new TableColumn<Issue>("state", "State", new TextField()).setMaxWidth(80));
+        table.addColumn("type", "Type", new TextField()).setMaxWidth(80);
+        table.addColumn("priority", "Priority", new TextField()).setMaxWidth(80);
+        table.addColumn("state", "State", new TextField()).setMaxWidth(80);
         table.addColumn(new TableColumn<>("summary", "Summary", new TextField()));
         table.addColumn(new TableColumn<>("description", "Description", new TextField()));
 
         // Reporter Column with custom Value Extractor to convert referenced User to a String.
-        table.addColumn(new TableColumn<Issue>("reporter", "Reporter", new TextField())
+        table.addColumn(new TableColumn<Issue, String>("reporter", "Reporter", new TextField())
                 .setValueExtractor(issue -> {
                     if (issue.getReporter() != null) {
                         return issue.getReporter().getName();
@@ -278,7 +278,7 @@ public class IssueTrackerApp implements DemoLesson {
                 }));
 
         // Assigned To Column with custom value extractor that maps referenced users to a single, comma-separated string
-        table.addColumn(new TableColumn<Issue>("assignedTo", "assigned to", new TextField())
+        table.addColumn(new TableColumn<Issue, String>("assignedTo", "assigned to", new TextField())
                 .setValueExtractor(issue -> issue.getAssignedTo().stream()
                         .limit(3)
                         .map(User::getName)

@@ -9,8 +9,8 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <maven.compiler.source>14</maven.compiler.source>
-        <maven.compiler.target>14</maven.compiler.target>
+        <maven.compiler.source>15</maven.compiler.source>
+        <maven.compiler.target>15</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <maven.build.timestamp.format>yyyyMMdd-HHmmssSSS</maven.build.timestamp.format>
@@ -20,12 +20,12 @@
         <dependency>
             <groupId>org.teamapps</groupId>
             <artifactId>teamapps-server-jetty-embedded</artifactId>
-            <version>0.9.103</version>
+            <version>0.9.123</version>
         </dependency>
         <dependency>
             <groupId>org.teamapps</groupId>
             <artifactId>universal-db</artifactId>
-            <version>0.5.2</version>
+            <version>0.5.10</version>
             <exclusions>
                 <!--
                 exclude dependencies to use newer version of jackson,

@@ -187,8 +187,8 @@ public class DemoLessonsApp implements DemoLesson {
 
         // Hibernate SQL
 
-        BaseTemplateTreeNode<DemoLesson> hibernateSQL = new BaseTemplateTreeNode<>(MaterialIcon.STORAGE, null,"Hibernate SQL", "Integration of other databases", null, new HibernateSQLApp(sessionContext));
-        lessonsTree.addNode(hibernateSQL);
+//        BaseTemplateTreeNode<DemoLesson> hibernateSQL = new BaseTemplateTreeNode<>(MaterialIcon.STORAGE, null,"Hibernate SQL", "Integration of other databases", null, new HibernateSQLApp(sessionContext));
+//        lessonsTree.addNode(hibernateSQL);
 
         lessonsTree.onNodeSelected.addListener(node -> {
             if (node.getPayload() != null) {

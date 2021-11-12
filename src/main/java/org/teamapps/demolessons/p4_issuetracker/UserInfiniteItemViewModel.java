@@ -4,9 +4,11 @@ import org.teamapps.data.value.SortDirection;
 import org.teamapps.demolessons.issuetracker.model.issuetrackerdb.User;
 import org.teamapps.demolessons.issuetracker.model.issuetrackerdb.UserQuery;
 import org.teamapps.event.Event;
+import org.teamapps.universaldb.context.UserContext;
 import org.teamapps.universaldb.query.Sorting;
 import org.teamapps.ux.component.infiniteitemview.AbstractInfiniteItemViewModel;
 import org.teamapps.ux.component.infiniteitemview.InfiniteItemViewModel;
+import org.teamapps.ux.session.CurrentSessionContext;
 
 import java.util.List;
 
@@ -20,7 +22,8 @@ class UserInfiniteItemViewModel extends AbstractInfiniteItemViewModel<User> {
 
     @Override
     public List<User> getRecords(int startIndex, int length) {
-        return userQuery().execute(startIndex,length, createUdbSorting(sorting));
+        // return userQuery().execute(startIndex,length, createUdbSorting(sorting));
+        return userQuery().execute(sorting.getFieldName(), true, UserContext.create("de"));
     }
 
     private org.teamapps.universaldb.query.Sorting createUdbSorting(org.teamapps.data.value.Sorting sorting) {
