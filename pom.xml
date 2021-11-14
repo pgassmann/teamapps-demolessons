@@ -1,42 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.teamapps</groupId>
     <artifactId>demolessons</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <version>2.0-SNAPSHOT</version>
+
+    <modules>
+        <module>demolessons-basics</module>
+        <module>demolessons-hibernate</module>
+    </modules>
 
     <properties>
         <maven.compiler.source>15</maven.compiler.source>
         <maven.compiler.target>15</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-        <maven.build.timestamp.format>yyyyMMdd-HHmmssSSS</maven.build.timestamp.format>
+        <slf4j-version>1.7.32</slf4j-version>
+        <teamapps.version>0.9.123</teamapps.version>
+        <universal-db-version>0.5.11</universal-db-version>
+        <teamapps-universal-db-integration-version>0.11</teamapps-universal-db-integration-version>
     </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.teamapps</groupId>
-            <artifactId>teamapps-server-jetty-embedded</artifactId>
-            <version>0.9.123</version>
+            <artifactId>teamapps-universal-db-integration</artifactId>
+            <version>${teamapps-universal-db-integration-version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.teamapps</groupId>
-            <artifactId>universal-db</artifactId>
-            <version>0.5.11</version>
+            <artifactId>teamapps-server-jetty-embedded</artifactId>
+            <version>${teamapps.version}</version>
             <exclusions>
-                <!--
-                exclude dependencies to use newer version of jackson,
-                older versions causing conflicts with newer version from other dependencies
-                -->
                 <exclusion>
-                    <artifactId>jackson-databind</artifactId>
+                    <artifactId>jackson-core</artifactId>
                     <groupId>com.fasterxml.jackson.core</groupId>
                 </exclusion>
                 <exclusion>
-                    <artifactId>jackson-core</artifactId>
+                    <artifactId>jackson-databind</artifactId>
                     <groupId>com.fasterxml.jackson.core</groupId>
                 </exclusion>
                 <exclusion>
@@ -45,73 +47,21 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <dependency>
-            <groupId>org.teamapps</groupId>
-            <artifactId>teamapps-universal-db-integration</artifactId>
-            <version>0.11</version>
-        </dependency>
-        <dependency>
-            <groupId>org.teamapps</groupId>
-            <artifactId>teamapps-antu-icon-provider</artifactId>
-            <version>1.1.1</version>
-        </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.teamapps</groupId>-->
-<!--            <artifactId>teamapps-material-design-icon-provider</artifactId>-->
-<!--            <version>0.9.7</version>-->
-<!--        </dependency>-->
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.11.0</version>
-        </dependency>
-
-        <!-- The following three dependencies are only needed for the p5_hibernate_sql sample: -->
-        <dependency>
-            <groupId>org.xerial</groupId>
-            <artifactId>sqlite-jdbc</artifactId>
-            <version>3.36.0.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>5.6.1.Final</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.gwenn</groupId>
-            <artifactId>sqlite-dialect</artifactId>
-            <version>0.1.2</version>
-        </dependency>
-        <!-- -->
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>1.7.32</version>
-        </dependency>
     </dependencies>
-    <build>
-        <plugins>
-            <plugin>
+        <dependencyManagement>
+        <dependencies>
+            <dependency>
                 <groupId>org.teamapps</groupId>
-                <artifactId>universal-db-maven-plugin</artifactId>
-                <version>1.2</version>
-                <executions>
-                    <execution>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>generate-model</goal>
-                        </goals>
-                        <configuration>
-                            <modelSourceDirectory>${project.basedir}/src/main/model</modelSourceDirectory>
-                            <modelClasses>
-                                <modelClass>UniversalDbDemoModel</modelClass>
-                                <modelClass>IssueTrackerModel</modelClass>
-                            </modelClasses>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+                <artifactId>demolessons-basics</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.teamapps</groupId>
+                <artifactId>demolessons-hibernate</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+        </dependencyManagement>
+
+
 </project>
