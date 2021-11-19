@@ -10,6 +10,7 @@
     <modules>
         <module>demolessons-basics</module>
         <module>demolessons-hibernate</module>
+        <module>demolessons-application-server</module>
     </modules>
 
     <properties>
