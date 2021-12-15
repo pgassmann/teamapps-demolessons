@@ -1,5 +1,6 @@
 package org.teamapps.demolessons.appserver;
 
+import org.teamapps.application.api.application.BaseApplicationBuilder;
 import org.teamapps.application.api.password.SecurePasswordHash;
 import org.teamapps.application.server.system.bootstrap.BootstrapSessionHandler;
 import org.teamapps.application.server.system.server.ApplicationServer;
@@ -7,6 +8,7 @@ import org.teamapps.application.server.system.server.SessionRegistryHandler;
 import org.teamapps.application.server.system.session.UserSessionData;
 import org.teamapps.application.server.system.utils.ValueConverterUtils;
 import org.teamapps.demolessons.appserver.app.DemoApplicationBuilder;
+import org.teamapps.demolessons.appserver.app.DemoLessonsApplicationBuilder;
 import org.teamapps.icon.material.MaterialIcon;
 import org.teamapps.icon.material.MaterialIconStyles;
 import org.teamapps.model.controlcenter.User;
@@ -36,7 +38,9 @@ public class Server {
         applicationServer.setSessionHandler(bootstrapSessionHandler);
         applicationServer.start();
 
+
         bootstrapSessionHandler.getSystemRegistry().installAndLoadApplication(new DemoApplicationBuilder());
+        //bootstrapSessionHandler.getSystemRegistry().installAndLoadApplication(new DemoLessonsApplicationBuilder());
 
         if (User.getCount() == 0) {
             User user = User.create()
