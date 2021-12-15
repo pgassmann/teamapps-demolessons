@@ -22,7 +22,7 @@
         <dependency>
             <groupId>org.teamapps</groupId>
             <artifactId>teamapps-server-jetty-embedded</artifactId>
-            <version>0.9.123</version>
+            <version>0.9.126</version>
         </dependency>
         <dependency>
             <groupId>org.teamapps</groupId>
@@ -37,7 +37,7 @@
         <dependency>
             <groupId>org.teamapps</groupId>
             <artifactId>teamapps-antu-icon-provider</artifactId>
-            <version>1.1.1</version>
+            <version>1.2-SNAPSHOT</version>
         </dependency>
 <!--        <dependency>-->
 <!--            <groupId>org.teamapps</groupId>-->

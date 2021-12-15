@@ -8,7 +8,7 @@ import org.teamapps.ux.component.panel.Panel;
 import org.teamapps.ux.component.rootpanel.RootPanel;
 import org.teamapps.webcontroller.WebController;
 
-public class PanelExample {
+public class FirstPanel {
 
     // First Example, without DemoLesson interface
 
@@ -20,16 +20,16 @@ public class PanelExample {
             sessionContext.addRootPanel(null, rootPanel);
 
             // create new Panel with Icon and Title
-            Panel panel = new Panel(MaterialIcon.LIGHTBULB_OUTLINE, "My first Panel");
+            Panel firstPanel = new Panel(MaterialIcon.LIGHTBULB_OUTLINE, "My first Panel");
 
             // set a panel property
-            panel.setHeaderBackgroundColor(Color.GOLD);
+            firstPanel.setHeaderBackgroundColor(Color.GOLD);
 
             // add DummyComponent as panel Content
-            panel.setContent(new DummyComponent());
+            firstPanel.setContent(new DummyComponent());
 
             // add the new panel to the global container (rootPanel)
-            rootPanel.setContent(panel);
+            rootPanel.setContent(firstPanel);
 
         };
         new TeamAppsJettyEmbeddedServer(controller).start();

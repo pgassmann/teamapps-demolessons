@@ -2,15 +2,15 @@
 
 Learn how you can build complex Web-Applications within minutes using [TeamApps](https://github.com/teamapps-org/teamapps).
 
-The Lessons are organised in Packages. Each `Demo` class can be run through its main class.
-All Lessons are included in the `DemoLessonsApp`
+The Lessons are organised in Modules and Packages. Each `Demo` class can be run through its main class.
+All Basic Lessons are included in the `DemoLessonsApp`
 
 ## Requirements
 
 * Knowledge of Java
 * Interest in learning new concepts
 * Maven
-* JDK 11+
+* JDK 17+
 * IntelliJ IDEA or some other Java IDE
 
 ## First steps using IntelliJ IDEA
@@ -38,15 +38,14 @@ If all works right, you should see BUILD SUCCESS in the Console window
 
 To enable Auto completion and Validation, IDEA has to know what kind of content is in some Folders.
 
-* Right click `src/main/model` > Mark Directory as > Sources Root
-* Right click `target/generated-sources/model-api` > Mark as Generated Sources Root
+* Right click `demolessons-basics/src/main/model` > Mark Directory as > Sources Root
 
 ### Running the DemoLessonsApp
 
 Now we can start the DemoLessonsApp from IntelliJ IDEA
 
-* In the Project structure (left side oft the window) open `teamapps-demolessons/src/main/java/org.teamapps.demolessons`
-* Here you see the packages for the individual lessons and at the bottom you see the `DemoLessonsApp` Class
+* In the Project structure (left side oft the window) open `demolessons-basics/src/main/java/org.teamapps.demolessons`
+* in the folder (package) `basics` you see the packages for the individual lessons and in `common` the bottom you see the `DemoLessonsApp` Class
 * Right Click > `Debug 'DemoLessonsApp.main()'`
 * IntelliJ will compile and start the project.
 * In the console you should then see the following output in red:
@@ -57,16 +56,16 @@ Now we can start the DemoLessonsApp from IntelliJ IDEA
 ~~~
 
 This means that the DemoLessonsApp is running and the Server is listening on Port 8081.
-You can access the Application using your Browser on: https://localhost:8081
+You can access the Application using your Browser on: http://localhost:8081
 
 ### Running a single Lesson 
 
-* Open the `...Demo` Class in its package. E.g. `teamapps-demolessons/src/main/java/org.teamapps.demolessons/p1_intro/l01_panel/PanelDemo`
+* Open the `...Demo` Class in its package. E.g. `demolessons-basics/src/main/java/org.teamapps.demolessons/p1_intro/l01_panel/PanelDemo`
 * Right click on the Class and click on `Debug 'PanelDemo.main()'`
 
-This will start another Server on Port 8080. You can access a single DemoLesson using your Browser on: https://localhost:8080
+This will start another Server on Port 8080. You can access a single DemoLesson using your Browser on: http://localhost:8080
 
-You can only start one Demo at once, you need to stop the running Demo before you start another App on Port 8080. Otherwise you will get the following exception:
+You can only start one Demo at once, you need to stop the running Demo before you start another App on Port 8080, otherwise you will get the following exception:
 
 ~~~log
 Exception in thread "main" java.io.IOException: Failed to bind to 0.0.0.0/0.0.0.0:8080
