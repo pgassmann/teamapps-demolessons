@@ -18,9 +18,11 @@ import org.teamapps.demolessons.basics.p2_application.l01_backgroundtasks.Backgr
 import org.teamapps.demolessons.basics.p2_application.l02_externalevent.ExternalEventsDemo;
 import org.teamapps.demolessons.basics.p2_application.l03_servlet.ServletDemo;
 import org.teamapps.demolessons.basics.p2_application.l04_mustachetemplates.MustacheTemplateDemo;
+import org.teamapps.demolessons.basics.p2_application.l05_iconviewer.IconBrowser;
 import org.teamapps.demolessons.basics.p2_application.l05_iconviewer.IconViewerDemo;
 import org.teamapps.demolessons.basics.p4_issuetracker.IssueTrackerApp;
 import org.teamapps.icon.antu.AntuIcon;
+import org.teamapps.icon.emoji.EmojiIcon;
 import org.teamapps.icon.material.MaterialIcon;
 import org.teamapps.server.jetty.embedded.TeamAppsJettyEmbeddedServer;
 import org.teamapps.ux.application.ResponsiveApplication;
@@ -77,7 +79,6 @@ public class DemoLessonsApp implements DemoLesson {
         return responsiveApplication.getUi();
     }
 
-    @SuppressWarnings("unchecked")
     private SimpleTree<DemoLesson> createLessonsTree() {
         SimpleTree<DemoLesson> lessonsTree = new SimpleTree<>();
         lessonsTree.setTemplatesByDepth(BaseTemplate.LIST_ITEM_LARGE_ICON_TWO_LINES, BaseTemplate.LIST_ITEM_LARGE_ICON_TWO_LINES);
@@ -89,7 +90,7 @@ public class DemoLessonsApp implements DemoLesson {
         // Register all DemoLessons in lessonsTree
 
         // Intro Lessons
-        BaseTemplateTreeNode introLessons = new BaseTemplateTreeNode<>(MaterialIcon.WEB_ASSET, "Introduction", "First steps with TeamApps");
+        BaseTemplateTreeNode<DemoLesson> introLessons = new BaseTemplateTreeNode<>(MaterialIcon.WEB_ASSET, "Introduction", "First steps with TeamApps");
         lessonsTree.addNode(introLessons);
         introLessons.setExpanded(true);
 
@@ -179,7 +180,7 @@ public class DemoLessonsApp implements DemoLesson {
         l99DemoLessonsApp.setParent(experimentalLessons);
         lessonsTree.addNode(l99DemoLessonsApp);
 
-        BaseTemplateTreeNode<DemoLesson> l05_iconViewer = new BaseTemplateTreeNode(AntuIcon.APP_GCSTAR_48, null ,"IconViewer", "IconViewer using InfiniteItemView","05", new IconViewerDemo(sessionContext));
+        BaseTemplateTreeNode<DemoLesson> l05_iconViewer = new BaseTemplateTreeNode<>(AntuIcon.APP_GCSTAR_48, null ,"IconViewer", "IconViewer using InfiniteItemView",null, new IconViewerDemo(sessionContext));
         l05_iconViewer.setParent(experimentalLessons);
         lessonsTree.addNode(l05_iconViewer);
 
@@ -192,6 +193,10 @@ public class DemoLessonsApp implements DemoLesson {
 
 //        BaseTemplateTreeNode<DemoLesson> hibernateSQL = new BaseTemplateTreeNode<>(MaterialIcon.STORAGE, null,"Hibernate SQL", "Integration of other databases", null, new HibernateSQLApp(sessionContext));
 //        lessonsTree.addNode(hibernateSQL);
+
+        BaseTemplateTreeNode<DemoLesson> l05_iconBrowser = new BaseTemplateTreeNode<>(EmojiIcon.OPEN_FILE_FOLDER, null ,"Icon Browser", "IconBrowser for Antu and Emoji Icons",null , new IconBrowser());
+        // l05_iconBrowser.setParent(experimentalLessons);
+        lessonsTree.addNode(l05_iconBrowser);
 
         lessonsTree.onNodeSelected.addListener(node -> {
             if (node.getPayload() != null) {
