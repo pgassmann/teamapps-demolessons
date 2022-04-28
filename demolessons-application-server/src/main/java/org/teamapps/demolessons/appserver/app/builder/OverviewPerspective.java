@@ -8,6 +8,7 @@ import org.teamapps.application.server.system.session.PerspectiveSessionData;
 import org.teamapps.common.format.Color;
 import org.teamapps.databinding.MutableValue;
 import org.teamapps.demolessons.common.DemoLessonsApp;
+import org.teamapps.ux.application.ResponsiveApplication;
 import org.teamapps.ux.application.layout.ExtendedLayout;
 import org.teamapps.ux.application.perspective.Perspective;
 import org.teamapps.ux.application.view.View;
@@ -28,7 +29,7 @@ public class OverviewPerspective extends AbstractApplicationPerspective {
         View contentView = perspective.addView(View.createView(ExtendedLayout.CENTER, ApplicationIcons.FORM, "Content", null));
         // View previewView = perspective.addView(View.createView(ExtendedLayout.RIGHT, ApplicationIcons.VIEW_1_1, "Vorschau", null));
 
-        DemoLessonsApp demoLessonsApp = new DemoLessonsApp(CurrentSessionContext.get());
+        DemoLessonsApp demoLessonsApp = new DemoLessonsApp();
         demoLessonsApp.handleDemoSelected();
         contentView.setComponent(demoLessonsApp.getRootComponent());
 

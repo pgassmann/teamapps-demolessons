@@ -19,8 +19,8 @@ import org.teamapps.demolessons.basics.p2_application.l02_externalevent.External
 import org.teamapps.demolessons.basics.p2_application.l03_servlet.ServletDemo;
 import org.teamapps.demolessons.basics.p2_application.l04_mustachetemplates.MustacheTemplateDemo;
 import org.teamapps.demolessons.basics.p2_application.l05_iconviewer.IconViewerDemo;
-import org.teamapps.icon.antu.AntuIcon;
 import org.teamapps.demolessons.basics.p4_issuetracker.IssueTrackerApp;
+import org.teamapps.icon.antu.AntuIcon;
 import org.teamapps.icon.material.MaterialIcon;
 import org.teamapps.server.jetty.embedded.TeamAppsJettyEmbeddedServer;
 import org.teamapps.ux.application.ResponsiveApplication;
@@ -41,10 +41,16 @@ public class DemoLessonsApp implements DemoLesson {
 
     private Component rootComponent;
     private View demoView;
+    private final ResponsiveApplication responsiveApplication;
 
-    public DemoLessonsApp(SessionContext sessionContext) {
-        this.sessionContext = sessionContext;
+    public DemoLessonsApp(ResponsiveApplication responsiveApplication) {
+        this.responsiveApplication = responsiveApplication;
+        this.sessionContext = SessionContext.current();
 //        this.rootComponent = createRootComponent();
+        // handleDemoSelected();
+    }
+    public DemoLessonsApp() {
+        this(ResponsiveApplication.createApplication());
     }
 
     @Override
@@ -57,7 +63,6 @@ public class DemoLessonsApp implements DemoLesson {
     }
 
     private Component createRootComponent() {
-        ResponsiveApplication responsiveApplication = ResponsiveApplication.createApplication();
         Perspective perspective = Perspective.createPerspective();
         responsiveApplication.addPerspective(perspective);
 
@@ -170,7 +175,7 @@ public class DemoLessonsApp implements DemoLesson {
         BaseTemplateTreeNode<DemoLesson> experimentalLessons = new BaseTemplateTreeNode<>(MaterialIcon.FLASH_ON, "Experiments", "Just for Fun");
         lessonsTree.addNode(experimentalLessons);
 
-        BaseTemplateTreeNode<DemoLesson> l99DemoLessonsApp = new BaseTemplateTreeNode<>(MaterialIcon.WEB, null ,"DemoLessonsApp", "The DemoLessonsApp itself",null, new DemoLessonsApp(sessionContext));
+        BaseTemplateTreeNode<DemoLesson> l99DemoLessonsApp = new BaseTemplateTreeNode<>(MaterialIcon.WEB, null ,"DemoLessonsApp", "The DemoLessonsApp itself",null, new DemoLessonsApp());
         l99DemoLessonsApp.setParent(experimentalLessons);
         lessonsTree.addNode(l99DemoLessonsApp);
 
@@ -203,9 +208,13 @@ public class DemoLessonsApp implements DemoLesson {
 
     public static void main(String[] args) throws Exception {
         WebController controller = sessionContext -> {
+
+            // Start UniversalDB for IssueTrackerApp
+            IssueTrackerApp.startDb();
+
             RootPanel rootPanel = new RootPanel();
             sessionContext.addRootPanel(null, rootPanel);
-            DemoLessonsApp demoLessonsApp = new DemoLessonsApp(sessionContext);
+            DemoLessonsApp demoLessonsApp = new DemoLessonsApp();
             demoLessonsApp.handleDemoSelected();
             rootPanel.setContent(demoLessonsApp.getRootComponent());
 

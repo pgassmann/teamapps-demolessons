@@ -1,10 +1,11 @@
 package org.teamapps.demolessons.basics.p4_issuetracker;
 
+import org.teamapps.data.value.SortDirection;
 import org.teamapps.databinding.TwoWayBindableValue;
 import org.teamapps.demolessons.common.DemoLesson;
 import org.teamapps.demolessons.issuetracker.model.IssueTrackerSchema;
-import org.teamapps.demolessons.issuetracker.model.issuetrackerdb.Issue;
-import org.teamapps.demolessons.issuetracker.model.issuetrackerdb.User;
+import org.teamapps.demolessons.issuetracker.model.issuetracker.Issue;
+import org.teamapps.demolessons.issuetracker.model.issuetracker.User;
 import org.teamapps.icon.material.MaterialIcon;
 import org.teamapps.server.jetty.embedded.TeamAppsJettyEmbeddedServer;
 import org.teamapps.universaldb.UniversalDB;
@@ -39,8 +40,8 @@ import java.util.stream.Collectors;
 
 public class IssueTrackerApp implements DemoLesson {
 
-    private Component rootComponent;
-    private SessionContext context;
+    private final Component rootComponent;
+    private final SessionContext context;
 
     private TextField typeField;
     private TextField priorityField;
@@ -54,18 +55,26 @@ public class IssueTrackerApp implements DemoLesson {
     private final TwoWayBindableValue<Issue> displayedIssue = TwoWayBindableValue.create();
     private Table<Issue> issueTable;
     private IssueTableModel issueTableModel;
-    private ResponsiveApplication issueTrackerApplication;
+    // create a responsive application that will run on desktops as well as on smart phones
+    private final ResponsiveApplication issueTrackerApplication;
     private Perspective userPerspective;
     private Perspective issuePerspective;
 
     // Constructor, only set session context instance variable
     public IssueTrackerApp(SessionContext context) {
+        issueTrackerApplication = ResponsiveApplication.createApplication();
         this.context = context;
-        startDb();
+        // startDb();
         createDemoData();
         this.rootComponent = createUI();
     }
-
+    // Alternative Constructor used by Application Server
+    public IssueTrackerApp(ResponsiveApplication responsiveApplication) {
+        issueTrackerApplication = responsiveApplication;
+        this.context = SessionContext.current();
+        createDemoData();
+        this.rootComponent = createUI();
+    }
     // Method called from DemoLessons App
     @Override
     public void handleDemoSelected() {
@@ -76,7 +85,7 @@ public class IssueTrackerApp implements DemoLesson {
     }
 
 
-    private static void startDb() {
+    public static void startDb() {
         File storagePath = new File("./server-data/db-storage");
         if (!storagePath.exists()) {
             if (! storagePath.mkdirs()) System.out.println("Error creating Database directory!");
@@ -174,8 +183,6 @@ public class IssueTrackerApp implements DemoLesson {
 
     // Design of the IssueTracker Application
     private Component createUI() {
-        // create a responsive application that will run on desktops as well as on smart phones
-        issueTrackerApplication = ResponsiveApplication.createApplication();
 
         // create perspective with default layout
         issuePerspective = createIssuePerspective();
@@ -221,6 +228,7 @@ public class IssueTrackerApp implements DemoLesson {
         // Issue Table with a Table Model for Query and Filtering
         issueTableModel = new IssueTableModel();
         issueTable = createIssueTable(issueTableModel);
+        issueTable.setSorting(Issue.FIELD_SUMMARY, SortDirection.ASC);
         View tableView = View.createView(StandardLayout.CENTER, MaterialIcon.REPORT_PROBLEM, "Issue List", issueTable);
         issuePerspective.addView(tableView);
 
@@ -247,7 +255,7 @@ public class IssueTrackerApp implements DemoLesson {
 
         // When an issue is selected in the table,
         // update displayedIssue which will call updateForm(issue)
-        issueTable.onRowSelected.addListener(issue -> {
+        issueTable.onSingleRowSelected.addListener(issue -> {
             displayedIssue.set(issue);
             // setting focus is helper for the mobile view where only one view is shown at a time.
             // show the form when an element is selected in the list.
@@ -430,7 +438,7 @@ public class IssueTrackerApp implements DemoLesson {
             issue.save();
             context.showNotification(MaterialIcon.INFO, "Issue successfully saved");
             issueTable.refreshData();
-            issueTable.selectSingleRow(issue, true);
+            issueTable.setSelectedRecord(issue, true);
         }
     }
 
@@ -470,8 +478,11 @@ public class IssueTrackerApp implements DemoLesson {
             RootPanel rootPanel = new RootPanel();
             sessionContext.addRootPanel(null, rootPanel);
 
+            startDb();
+
             // create new instance of the Demo Class
             DemoLesson demo = new IssueTrackerApp(sessionContext);
+
 
             // call the method defined in the DemoLesson Interface
             demo.handleDemoSelected();

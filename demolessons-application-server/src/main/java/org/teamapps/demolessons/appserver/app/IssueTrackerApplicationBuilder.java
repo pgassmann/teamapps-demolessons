@@ -8,7 +8,9 @@ import org.teamapps.application.api.privilege.ApplicationPrivilegeProvider;
 import org.teamapps.application.api.privilege.ApplicationRole;
 import org.teamapps.application.api.privilege.PrivilegeGroup;
 import org.teamapps.application.api.versioning.ApplicationVersion;
+import org.teamapps.demolessons.basics.p4_issuetracker.IssueTrackerApp;
 import org.teamapps.demolessons.common.DemoLessonsApp;
+import org.teamapps.demolessons.issuetracker.model.IssueTrackerSchema;
 import org.teamapps.icon.material.MaterialIcon;
 import org.teamapps.universaldb.schema.SchemaInfoProvider;
 import org.teamapps.ux.application.ResponsiveApplication;
@@ -16,12 +18,17 @@ import org.teamapps.ux.application.ResponsiveApplication;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import java.util.ResourceBundle;
 
-public class DemoLessonsApplicationBuilder extends AbstractBaseApplicationBuilder {
-    public DemoLessonsApplicationBuilder() {
-        super("demoLessons", MaterialIcon.HELP, "Demo Lessons App", "Learn TeamApps");
+public class IssueTrackerApplicationBuilder extends AbstractBaseApplicationBuilder {
+    public IssueTrackerApplicationBuilder() {
+        super("issueTracker", MaterialIcon.BUG_REPORT, "Issue Tracker", "Learn TeamApps");
     }
+
+
+//    @Override
+//    public Component getUi() {
+//        return new DemoLessonsApp(SessionContext.current()).getRootComponent();
+//    }
 
     @Override
     public ApplicationVersion getApplicationVersion() {
@@ -45,8 +52,7 @@ public class DemoLessonsApplicationBuilder extends AbstractBaseApplicationBuilde
 
     @Override
     public SchemaInfoProvider getDatabaseModel() {
-        // return new IssueTrackerSchema();
-        return null;
+        return new IssueTrackerSchema();
     }
 
     @Override
@@ -61,6 +67,6 @@ public class DemoLessonsApplicationBuilder extends AbstractBaseApplicationBuilde
 
     @Override
     public void build(ResponsiveApplication responsiveApplication, ApplicationInstanceData applicationInstanceData) {
-        new DemoLessonsApp(responsiveApplication).handleDemoSelected();
+        new IssueTrackerApp(responsiveApplication).handleDemoSelected();
     }
 }

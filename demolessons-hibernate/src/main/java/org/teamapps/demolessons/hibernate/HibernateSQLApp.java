@@ -63,23 +63,6 @@ public class HibernateSQLApp implements DemoLesson {
 		this.rootComponent = createUI();
 	}
 
-	public static void main(String[] args) throws Exception {
-		WebController controller = sessionContext -> {
-			RootPanel rootPanel = new RootPanel();
-			sessionContext.addRootPanel(null, rootPanel);
-
-			// create new instance of the Demo Class
-			HibernateSQLApp app = new HibernateSQLApp(sessionContext);
-
-			rootPanel.setContent(app.getRootComponent());
-
-			// show Background Image
-			String defaultBackground = "/resources/backgrounds/default-bl.jpg";
-			sessionContext.registerBackgroundImage("default", defaultBackground, defaultBackground);
-			sessionContext.setBackgroundImage("default", 0);
-		};
-		new TeamAppsJettyEmbeddedServer(controller).start();
-	}
 
 	public Component getRootComponent() {
 		return rootComponent;
@@ -118,7 +101,7 @@ public class HibernateSQLApp implements DemoLesson {
 
 		// When a Invoice is selected in the table,
 		// update displayedInvoice which will call updateForm(invoice)
-		invoicesTable.onRowSelected.addListener(invoice -> {
+		invoicesTable.onSingleRowSelected.addListener(invoice -> {
 			displayedInvoice.set(invoice);
 			// setting focus is helper for the mobile view where only one view is shown at a time.
 			// show the form when an element is selected in the list.
@@ -179,8 +162,7 @@ public class HibernateSQLApp implements DemoLesson {
 
 		table.setForceFitWidth(true);
 		table.setDisplayAsList(true);
-		table.setSortField(Invoice.FIELD_CREATED);
-		table.setSortDirection(SortDirection.DESC);
+		table.setSorting(Invoice.FIELD_CREATED, SortDirection.DESC);
 
 		return table;
 	}
@@ -235,5 +217,23 @@ public class HibernateSQLApp implements DemoLesson {
 				detailEmail.setValue(customer.getEmail());
 			}
 		}
+	}
+
+	public static void main(String[] args) throws Exception {
+		WebController controller = sessionContext -> {
+			RootPanel rootPanel = new RootPanel();
+			sessionContext.addRootPanel(null, rootPanel);
+
+			// create new instance of the Demo Class
+			HibernateSQLApp app = new HibernateSQLApp(sessionContext);
+
+			rootPanel.setContent(app.getRootComponent());
+
+			// show Background Image
+			String defaultBackground = "/resources/backgrounds/default-bl.jpg";
+			sessionContext.registerBackgroundImage("default", defaultBackground, defaultBackground);
+			sessionContext.setBackgroundImage("default", 0);
+		};
+		new TeamAppsJettyEmbeddedServer(controller, 8083).start();
 	}
 }

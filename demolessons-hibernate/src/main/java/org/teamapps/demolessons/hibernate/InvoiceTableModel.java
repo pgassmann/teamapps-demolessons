@@ -4,6 +4,7 @@ import org.hibernate.Session;
 import org.teamapps.data.value.SortDirection;
 import org.teamapps.data.value.Sorting;
 import org.teamapps.demolessons.hibernate.models.Invoice;
+import org.teamapps.demolessons.issuetracker.model.issuetracker.Issue;
 import org.teamapps.ux.component.table.AbstractTableModel;
 
 import javax.persistence.criteria.*;
@@ -36,14 +37,14 @@ public class InvoiceTableModel extends AbstractTableModel<Invoice> {
 	}
 
 	@Override
-	public List<Invoice> getRecords(int startIndex, int length, Sorting sorting) {
+	public List<Invoice> getRecords(int startIndex, int length) {
 		CriteriaBuilder cb = session.getCriteriaBuilder();
 		CriteriaQuery<Invoice> cq = cb.createQuery(Invoice.class);
 		Root root = cq.from(Invoice.class);
 		cq.where(createFiltersPredicate(cb, root));
 		if (sorting.getFieldName() != null) {
 			Path orderPath = root.get(sorting.getFieldName());
-			if (sorting.getSorting() == SortDirection.ASC) {
+			if (this.sorting.getSortDirection() == SortDirection.ASC) {
 				cq.orderBy(cb.asc(orderPath));
 			} else {
 				cq.orderBy(cb.desc(orderPath));

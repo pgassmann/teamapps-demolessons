@@ -1,8 +1,8 @@
 package org.teamapps.demolessons.basics.p4_issuetracker;
 
 import org.teamapps.data.extract.BeanPropertyExtractor;
-import org.teamapps.demolessons.issuetracker.model.issuetrackerdb.Group;
-import org.teamapps.demolessons.issuetracker.model.issuetrackerdb.User;
+import org.teamapps.demolessons.issuetracker.model.issuetracker.Group;
+import org.teamapps.demolessons.issuetracker.model.issuetracker.User;
 import org.teamapps.icon.material.MaterialIcon;
 import org.teamapps.ux.application.layout.StandardLayout;
 import org.teamapps.ux.application.perspective.Perspective;
@@ -14,7 +14,7 @@ import org.teamapps.ux.component.field.combobox.ComboBox;
 import org.teamapps.ux.component.field.upload.FileField;
 import org.teamapps.ux.component.form.ResponsiveForm;
 import org.teamapps.ux.component.form.ResponsiveFormLayout;
-import org.teamapps.ux.component.infiniteitemview.InfiniteItemView;
+import org.teamapps.ux.component.infiniteitemview.InfiniteItemView2;
 import org.teamapps.ux.component.template.BaseTemplate;
 
 import java.util.Arrays;
@@ -30,7 +30,7 @@ public class UserPerspective {
 
     public Perspective getPerspective(){
         Perspective usersPerspective = Perspective.createPerspective();
-        InfiniteItemView<User> userItemView = createUserItemView();
+        InfiniteItemView2<User> userItemView = createUserItemView();
 
         View userListView = View.createView(StandardLayout.CENTER, MaterialIcon.PERSON, "Users", userItemView);
         usersPerspective.addView(userListView);
@@ -66,11 +66,11 @@ public class UserPerspective {
         return form;
     }
 
-    private InfiniteItemView<User> createUserItemView() {
-        InfiniteItemView<User> userItemView = new InfiniteItemView<>();
+    private InfiniteItemView2<User> createUserItemView() {
+        InfiniteItemView2<User> userItemView = new InfiniteItemView2<>();
         userItemView.setModel(new UserInfiniteItemViewModel());
         userItemView.setItemTemplate(BaseTemplate.ITEM_VIEW_ITEM);
-        userItemView.setRowHeight(80);
+        userItemView.setItemHeight(80);
 
         // Map Properties
         BeanPropertyExtractor<User> userPropertyExtractor = new BeanPropertyExtractor<>();

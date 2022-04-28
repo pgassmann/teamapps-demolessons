@@ -9,6 +9,7 @@ import org.teamapps.application.server.system.session.UserSessionData;
 import org.teamapps.application.server.system.utils.ValueConverterUtils;
 import org.teamapps.demolessons.appserver.app.DemoApplicationBuilder;
 import org.teamapps.demolessons.appserver.app.DemoLessonsApplicationBuilder;
+import org.teamapps.demolessons.appserver.app.IssueTrackerApplicationBuilder;
 import org.teamapps.icon.material.MaterialIcon;
 import org.teamapps.icon.material.MaterialIconStyles;
 import org.teamapps.model.controlcenter.User;
@@ -39,8 +40,9 @@ public class Server {
         applicationServer.start();
 
 
-        bootstrapSessionHandler.getSystemRegistry().installAndLoadApplication(new DemoApplicationBuilder());
-        //bootstrapSessionHandler.getSystemRegistry().installAndLoadApplication(new DemoLessonsApplicationBuilder());
+        //bootstrapSessionHandler.getSystemRegistry().installAndLoadApplication(new DemoApplicationBuilder());
+        bootstrapSessionHandler.getSystemRegistry().installAndLoadApplication(new DemoLessonsApplicationBuilder());
+        bootstrapSessionHandler.getSystemRegistry().installAndLoadApplication(new IssueTrackerApplicationBuilder());
 
         if (User.getCount() == 0) {
             User user = User.create()

@@ -1,7 +1,7 @@
 package org.teamapps.demolessons.basics.p4_issuetracker;
 
-import org.teamapps.demolessons.issuetracker.model.issuetrackerdb.Issue;
-import org.teamapps.demolessons.issuetracker.model.issuetrackerdb.User;
+import org.teamapps.demolessons.issuetracker.model.issuetracker.Issue;
+import org.teamapps.demolessons.issuetracker.model.issuetracker.User;
 import org.teamapps.event.Event;
 import org.teamapps.icon.material.MaterialIcon;
 import org.teamapps.ux.component.Component;
@@ -18,18 +18,16 @@ public class IssueContextMenuProvider implements Function<Issue, Component> {
     private final SimpleItemView<Object> contextMenuContent;
     private Issue selectedIssue;
     private User currentUser = User.getById(2); // TODO
-    private Table<Issue> table;
 
     public IssueContextMenuProvider(Table<Issue> table) {
-        this.table = table;
         contextMenuContent = new SimpleItemView<>();
         SimpleItemGroup<Object> menuItemGroup = contextMenuContent.addSingleColumnGroup(MaterialIcon.SWAP_VERT, "Issue Quick Edit");
         menuItemGroup.addItem(MaterialIcon.PEOPLE, "Assign to Me", "I will take care of that")
-                .onClick.addListener(s -> {
-            assignIssueToMe(selectedIssue);
-            table.closeContextMenu();
-            //table.refreshData();
-            onIssueChanged.fire(selectedIssue);
+            .onClick.addListener(s -> {
+                assignIssueToMe(selectedIssue);
+                table.closeContextMenu();
+                table.refreshData();
+                onIssueChanged.fire(selectedIssue);
         });
         menuItemGroup.addItem(MaterialIcon.BUG_REPORT, "DONE", "mark as DONE")
                 .onClick.addListener(s -> {

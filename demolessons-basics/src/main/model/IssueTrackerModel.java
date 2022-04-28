@@ -10,7 +10,7 @@ public class IssueTrackerModel implements SchemaInfoProvider {
         schema.setSchemaName("IssueTrackerSchema");
 
         // When you create or change your database schema, you have to execute mvn clean install
-        Database database = schema.addDatabase("issueTrackerDb");
+        Database database = schema.addDatabase("issueTracker");
 
         // Define the Tables, add creation and modification timestamp fields, keep deleted objects ("recycle bin")
         Table user = database.addTable("user", TableOption.TRACK_CREATION, TableOption.TRACK_MODIFICATION, TableOption.KEEP_DELETED);

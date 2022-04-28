@@ -19,31 +19,27 @@
     </properties>
 
     <dependencies>
+<!--        Following dependencies are needed for the content of demolessons-basics
+            They are disabled here, because they are part of the teamapps-application-server dependency
+            defined in the parent pom.xml in the root folder of this project
+-->
+<!--
         <dependency>
             <groupId>org.teamapps</groupId>
             <artifactId>teamapps-server-jetty-embedded</artifactId>
-            <version>0.9.126</version>
+            <version>0.9.148</version>
         </dependency>
         <dependency>
             <groupId>org.teamapps</groupId>
             <artifactId>universal-db</artifactId>
-            <version>0.5.11</version>
+            <version>0.5.17</version>
         </dependency>
-                <dependency>
-            <groupId>org.teamapps</groupId>
-            <artifactId>teamapps-universal-db-integration</artifactId>
-            <version>0.11</version>
-        </dependency>
+-->
         <dependency>
             <groupId>org.teamapps</groupId>
-            <artifactId>teamapps-antu-icon-provider</artifactId>
-            <version>1.2-SNAPSHOT</version>
+            <artifactId>teamapps-antu-icons</artifactId>
+            <version>1.2.0</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.teamapps</groupId>-->
-<!--            <artifactId>teamapps-material-design-icon-provider</artifactId>-->
-<!--            <version>0.9.7</version>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>

@@ -1,10 +1,11 @@
 package org.teamapps.demolessons.basics.p4_issuetracker;
 
 import org.teamapps.data.value.SortDirection;
-import org.teamapps.data.value.Sorting;
-import org.teamapps.demolessons.issuetracker.model.issuetrackerdb.Issue;
-import org.teamapps.demolessons.issuetracker.model.issuetrackerdb.IssueQuery;
+import org.teamapps.demolessons.issuetracker.model.issuetracker.Issue;
+import org.teamapps.demolessons.issuetracker.model.issuetracker.IssueQuery;
+import org.teamapps.universaldb.context.UserContext;
 import org.teamapps.universaldb.index.text.TextFilter;
+import org.teamapps.universaldb.query.Sorting;
 import org.teamapps.ux.component.table.AbstractTableModel;
 
 import java.util.HashMap;
@@ -15,7 +16,11 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class IssueTableModel extends AbstractTableModel<Issue> {
     private String fullTextSearchString;
-    private Map<String, String> textFilterByFieldName = new HashMap<>();
+    private final Map<String, String> textFilterByFieldName = new HashMap<>();
+
+    public IssueTableModel() {
+        setSorting(new org.teamapps.data.value.Sorting(Issue.FIELD_SUMMARY, SortDirection.ASC));
+    }
 
     @Override
     public int getCount() {
@@ -23,17 +28,10 @@ public class IssueTableModel extends AbstractTableModel<Issue> {
     }
 
     @Override
-    public List<Issue> getRecords(int startIndex, int length, Sorting sorting) {
+    public List<Issue> getRecords(int start, int length) {
         IssueQuery issueQuery = createQuery();
-        return issueQuery.execute();
-    }
-
-    private org.teamapps.universaldb.query.Sorting createUdbSorting(Sorting sorting) {
-        if (sorting != null && sorting.getFieldName() != null) {
-            return new org.teamapps.universaldb.query.Sorting(sorting.getFieldName(), sorting.getSorting() == SortDirection.ASC);
-        } else {
-            return null;
-        }
+        Sorting udBSorting = new Sorting(sorting.getFieldName(), (sorting.getSortDirection() == SortDirection.ASC));
+        return issueQuery.execute(start, length, udBSorting, UserContext.create("de"));
     }
 
     private IssueQuery createQuery() {
