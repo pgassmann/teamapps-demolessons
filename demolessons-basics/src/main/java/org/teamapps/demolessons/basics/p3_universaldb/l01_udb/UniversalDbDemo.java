@@ -1,6 +1,7 @@
 package org.teamapps.demolessons.basics.p3_universaldb.l01_udb;
 
 
+import org.teamapps.demolessons.issuetracker.model.IssueTrackerSchema;
 import org.teamapps.demolessons.model.DemoLessonSchema;
 import org.teamapps.demolessons.model.myfirstudb.*;
 import org.teamapps.universaldb.UniversalDB;
@@ -42,12 +43,16 @@ public class UniversalDbDemo {
 //        complexQuery("A");
     }
 
-    private static void startDb() throws Exception {
-        File storagePath = new File("./server-data/db-storage");
-        if (! storagePath.exists()) {
+    public static void startDb() {
+        File storagePath = new File("./data/db-storage");
+        if (!storagePath.exists()) {
             if (! storagePath.mkdirs()) System.out.println("Error creating Database directory!");
         }
-        UniversalDB.createStandalone(storagePath, new DemoLessonSchema());
+        try {
+            UniversalDB.createStandalone(storagePath, new DemoLessonSchema());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private static void printSummary(){
@@ -283,4 +288,3 @@ public class UniversalDbDemo {
     }
 
 }
-

@@ -86,7 +86,7 @@ public class IssueTrackerApp implements DemoLesson {
 
 
     public static void startDb() {
-        File storagePath = new File("./server-data/db-storage");
+        File storagePath = new File("./data/issues-db");
         if (!storagePath.exists()) {
             if (! storagePath.mkdirs()) System.out.println("Error creating Database directory!");
         }

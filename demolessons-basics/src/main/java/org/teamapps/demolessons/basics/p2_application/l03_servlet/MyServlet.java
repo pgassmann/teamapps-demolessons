@@ -1,22 +1,23 @@
 package org.teamapps.demolessons.basics.p2_application.l03_servlet;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
 
 public class MyServlet extends HttpServlet {
-    private ServletNotificationManager myNotificationManager;
+    private final ServletNotificationManager myNotificationManager;
 
     public MyServlet(ServletNotificationManager notificationManager) {
         myNotificationManager = notificationManager;
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // curl example:
         // curl localhost:8080/api/fooget?param=get
 
@@ -30,7 +31,7 @@ public class MyServlet extends HttpServlet {
 
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         // curl example:
         // curl -X POST -d "@/tmp/testfile" localhost:8080/api/barpost?param=get

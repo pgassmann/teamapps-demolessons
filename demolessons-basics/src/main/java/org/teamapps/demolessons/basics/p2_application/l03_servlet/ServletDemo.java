@@ -13,14 +13,14 @@ import org.teamapps.ux.component.toolbar.ToolbarButtonGroup;
 import org.teamapps.ux.session.SessionContext;
 import org.teamapps.webcontroller.WebController;
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-import javax.servlet.ServletRegistration;
+import jakarta.servlet.ServletContextEvent;
+import jakarta.servlet.ServletContextListener;
+import jakarta.servlet.ServletRegistration;
 
 public class ServletDemo implements DemoLesson {
 
-    private ServletNotificationManager notificationManager;
-    private static ServletNotificationManager staticNotificationManager = new ServletNotificationManager();
+    private final ServletNotificationManager notificationManager;
+    private static final ServletNotificationManager staticNotificationManager = new ServletNotificationManager();
 
     public ServletDemo(SessionContext sessionContext, ServletNotificationManager notificationManager) {
         this.notificationManager = notificationManager;
