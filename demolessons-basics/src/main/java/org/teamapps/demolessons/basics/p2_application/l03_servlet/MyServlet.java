@@ -19,7 +19,7 @@ public class MyServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // curl example:
-        // curl localhost:8080/api/fooget?param=get
+        // curl http://localhost:8080/api/get-foo?param=get
 
         PrintWriter writer = response.getWriter();
 
@@ -34,7 +34,8 @@ public class MyServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         // curl example:
-        // curl -X POST -d "@/tmp/testfile" localhost:8080/api/barpost?param=get
+        // curl -d "param1=value1&param2=value2" http://localhost:8080/api/post-bar?param0=get
+        // curl -X POST -d "@/tmp/testfile" http://localhost:8080/api/post-bar?param0=get
 
         String postPathInfo = request.getRequestURI();
         PrintWriter respWriter = response.getWriter();
