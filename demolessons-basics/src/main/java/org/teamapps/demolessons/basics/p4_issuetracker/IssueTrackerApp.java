@@ -328,8 +328,8 @@ public class IssueTrackerApp implements DemoLesson {
         stateField = new TextField();
         summaryField = new TextField();
         descriptionField = new MultiLineTextField();
-        descriptionField.setMinHeight(Length.ofPixels(200));
-        reporterComboBox = new ComboBox<>(BaseTemplate.LIST_ITEM_SMALL_ICON_SINGLE_LINE);
+        descriptionField.setMinHeight(Length.ofPixels(50));
+        reporterComboBox = new ComboBox<>(BaseTemplate.LIST_ITEM_MEDIUM_ICON_TWO_LINES);
         reporterComboBox.setModel(s -> User.filter().parseFullTextFilter(s).execute());
         reporterComboBox.setShowClearButton(true);
         reporterComboBox.setPropertyExtractor((user, propertyName) -> switch (propertyName) {
