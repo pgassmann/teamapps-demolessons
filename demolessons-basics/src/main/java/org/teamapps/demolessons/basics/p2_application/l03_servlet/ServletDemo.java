@@ -17,6 +17,11 @@ import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.ServletRegistration;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+
 public class ServletDemo implements DemoLesson {
 
     private final ServletNotificationManager notificationManager;
@@ -97,8 +102,32 @@ public class ServletDemo implements DemoLesson {
             public void contextDestroyed(ServletContextEvent sce) {  }
         });
 
+        copyResourceFileToTmpFolder();
+
         // Start Server after adding the Servlet
         server.start();
+    }
+
+    private static void copyResourceFileToTmpFolder()  {
+        try {
+            String currentPath = new File(".").getCanonicalPath();
+            System.out.println("Current dir:" + currentPath);
+
+            File sourceFile = new File(currentPath + "/demolessons-basics/src/main/resources/org/teamapps/demolessons/basics/p2_application/l03_servlet/parameter-testfile.txt");
+            System.out.println("source path:" + sourceFile.getAbsolutePath());
+
+            if (sourceFile.exists()) {
+                File destinationFile = new File("/tmp/parameter-testfile.txt");
+                Files.copy(sourceFile.toPath(), destinationFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            }
+            else {
+                System.err.println("WARNING: Parameter file not found!");
+            }
+        }
+        catch (IOException exc) {
+            System.out.println("Failed to copy resource file: " + System.lineSeparator() + exc.getMessage());
+        }
+
     }
 
 }
