@@ -45,6 +45,13 @@ public class ResponsiveFormDemo implements DemoLesson {
         layout.addLabelAndField(MaterialIcon.HOME, "Street", "street", new TextField());
         layout.addLabelAndField(MaterialIcon.CHAT, "Active", "isActive", new CheckBox());
         layout.addLabelAndField(MaterialIcon.CHILD_FRIENDLY, "Birth Date", "birthDate", new LocalDateField());
+        layout.addSection();
+        layout.addSection(MaterialIcon.SETTINGS, "Settings");
+        layout.addLabelAndField(MaterialIcon.SECURITY,"Password", new TextField(), false);
+        layout.addLabelAndField(MaterialIcon.PHONE,"Phone number", new TextField(), true);
+        layout.addLabelAndField(MaterialIcon.WIFI,"Mobile number", new TextField(), false);
+        layout.addLabelAndField(MaterialIcon.MAIL,"Mail address", new TextField(), false);
+        layout.addLabelAndField(MaterialIcon.ACCOUNT_BALANCE,"Bank account", new TextField(), false);
 
         InstantDateTimeField createdAtField = new InstantDateTimeField();
         createdAtField.setEditingMode(FieldEditingMode.DISABLED);

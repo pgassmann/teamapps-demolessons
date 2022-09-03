@@ -11,6 +11,7 @@ import org.teamapps.ux.component.field.Button;
 import org.teamapps.ux.component.field.FieldEditingMode;
 import org.teamapps.ux.component.field.TextField;
 import org.teamapps.ux.component.flexcontainer.VerticalLayout;
+import org.teamapps.ux.component.format.Shadow;
 import org.teamapps.ux.component.panel.Panel;
 import org.teamapps.ux.component.rootpanel.RootPanel;
 import org.teamapps.ux.component.template.BaseTemplateRecord;
@@ -51,7 +52,8 @@ public class VerticalLayoutDemo implements DemoLesson {
         TextField textField2 = new TextField();
         textField2.setValue("Multiple Components can be added to VerticalLayout. Click the Button to dynamically add more");
         verticalLayout.addComponent(textField2);
-
+        verticalLayout.setHtmlTitle("Vertical Layout Titel");
+        verticalLayout.setShadow(Shadow.withSize(7.333f));
         // onTextInput immediately fires when something is written. onValueChanged only fires when the user moves focus from the Field.
         textField1.onTextInput.addListener(text -> textField2.setValue("New Content: " + text));
 

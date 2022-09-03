@@ -38,7 +38,7 @@ public class IssueContextMenuProvider implements Function<Issue, Component> {
     private void assignIssueToMe(Issue selectedIssue) {
         selectedIssue.setAssignedTo(currentUser);
         selectedIssue.save();
-        CurrentSessionContext.get().showNotification(MaterialIcon.BUG_REPORT, "Issue assigned to You");
+        CurrentSessionContext.get().showNotification(MaterialIcon.BUG_REPORT, "Issue assigned to " + currentUser.getName());
     }
 
     @Override
