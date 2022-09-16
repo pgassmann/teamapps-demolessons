@@ -8,16 +8,13 @@ import org.teamapps.ux.component.field.richtext.RichTextEditor;
 import org.teamapps.ux.component.flexcontainer.VerticalLayout;
 import org.teamapps.ux.component.panel.Panel;
 import org.teamapps.ux.component.rootpanel.RootPanel;
-import org.teamapps.ux.session.SessionContext;
 import org.teamapps.webcontroller.WebController;
 
 public class RichTextEditorDemo implements DemoLesson {
 
-    private Component rootComponent;
-    private SessionContext context;
+    private final Component rootComponent;
 
-    public RichTextEditorDemo(SessionContext context) {
-        this.context = context;
+    public RichTextEditorDemo() {
 
         // create new Panel and define it as the DemoLesson rootComponent
         Panel panel = new Panel(MaterialIcon.LIGHTBULB_OUTLINE, "Rich Text Editor Demo");
@@ -50,7 +47,7 @@ public class RichTextEditorDemo implements DemoLesson {
             sessionContext.addRootPanel(null, rootPanel);
 
             // create new instance of the Demo Class
-            DemoLesson demo = new RichTextEditorDemo(sessionContext);
+            DemoLesson demo = new RichTextEditorDemo();
 
             // call the method defined in the DemoLesson Interface
             demo.handleDemoSelected();

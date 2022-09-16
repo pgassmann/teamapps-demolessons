@@ -25,7 +25,6 @@ import org.teamapps.ux.component.rootpanel.RootPanel;
 import org.teamapps.ux.component.table.Table;
 import org.teamapps.ux.component.table.TableColumn;
 import org.teamapps.ux.css.CssAlignItems;
-import org.teamapps.ux.session.SessionContext;
 import org.teamapps.webcontroller.WebController;
 
 import java.time.LocalDate;
@@ -39,7 +38,6 @@ public class HibernateSQLApp implements DemoLesson {
 
 	private final TwoWayBindableValue<Invoice> displayedInvoice = TwoWayBindableValue.create();
 	private final Component rootComponent;
-	private final SessionContext context;
 	private final Session dbSession;
 	private TextField detailIdentifier;
 	private NumberField detailSum;
@@ -55,8 +53,7 @@ public class HibernateSQLApp implements DemoLesson {
 	private Perspective invoicePerspective;
 
 	// Constructor, only set session context instance variable
-	public HibernateSQLApp(SessionContext context) {
-		this.context = context;
+	public HibernateSQLApp() {
 		HibernateSQLDb hibernateSQLDb = HibernateSQLDb.getInstance();
 		hibernateSQLDb.ensureInitialized();
 		dbSession = hibernateSQLDb.createSession();
@@ -225,7 +222,7 @@ public class HibernateSQLApp implements DemoLesson {
 			sessionContext.addRootPanel(null, rootPanel);
 
 			// create new instance of the Demo Class
-			HibernateSQLApp app = new HibernateSQLApp(sessionContext);
+			HibernateSQLApp app = new HibernateSQLApp();
 
 			rootPanel.setContent(app.getRootComponent());
 

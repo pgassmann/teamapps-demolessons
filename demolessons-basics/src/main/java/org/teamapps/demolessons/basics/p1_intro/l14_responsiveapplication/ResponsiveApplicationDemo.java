@@ -22,17 +22,14 @@ import org.teamapps.ux.component.rootpanel.RootPanel;
 import org.teamapps.ux.component.toolbar.ToolbarButton;
 import org.teamapps.ux.component.toolbar.ToolbarButtonGroup;
 import org.teamapps.ux.session.CurrentSessionContext;
-import org.teamapps.ux.session.SessionContext;
 import org.teamapps.webcontroller.WebController;
 
 public class ResponsiveApplicationDemo implements DemoLesson {
 
-    private Component rootComponent;
-    private SessionContext context;
+    private final Component rootComponent;
 
     // Constructor, only set session context instance variable
-    public ResponsiveApplicationDemo(SessionContext context) {
-        this.context = context;
+    public ResponsiveApplicationDemo() {
         this.rootComponent = createRootComponent();
     }
 
@@ -109,24 +106,24 @@ public class ResponsiveApplicationDemo implements DemoLesson {
         View leftTreeView = View.createView(ExtendedLayout.LEFT, MaterialIcon.HELP, "LEFT", new DummyComponent());
         demoPerspective.addView(leftTreeView);
 
-        leftTreeView.setComponent(new TreeDemo(context).getRootComponent());
+        leftTreeView.setComponent(new TreeDemo().getRootComponent());
 
         View mainView = View.createView(ExtendedLayout.CENTER, MaterialIcon.HELP, "CENTER", new DummyComponent());
         demoPerspective.addView(mainView);
-        mainView.setComponent(new TableDemo(context).getRootComponent());
+        mainView.setComponent(new TableDemo().getRootComponent());
 
 
         View rightView = View.createView(ExtendedLayout.RIGHT, MaterialIcon.HELP, "RIGHT", new DummyComponent());
         demoPerspective.addView(rightView);
-        rightView.setComponent(new ResponsiveFormDemo(context).getRootComponent());
+        rightView.setComponent(new ResponsiveFormDemo().getRootComponent());
 
         View rightView2 = View.createView(ExtendedLayout.RIGHT, MaterialIcon.HELP, "RIGHT 2", null);
         demoPerspective.addView(rightView2);
 
-        View RightBottomView = View.createView(ExtendedLayout.RIGHT_BOTTOM, MaterialIcon.HELP, "RIGHT_BOTTOM", new RichTextEditorDemo(context).getRootComponent());
+        View RightBottomView = View.createView(ExtendedLayout.RIGHT_BOTTOM, MaterialIcon.HELP, "RIGHT_BOTTOM", new RichTextEditorDemo().getRootComponent());
         demoPerspective.addView(RightBottomView);
 
-        View outerRightView = View.createView(ExtendedLayout.OUTER_RIGHT, MaterialIcon.HELP, "OUTER_RIGHT", new CheckboxDemo(context).getRootComponent());
+        View outerRightView = View.createView(ExtendedLayout.OUTER_RIGHT, MaterialIcon.HELP, "OUTER_RIGHT", new CheckboxDemo().getRootComponent());
         demoPerspective.addView(outerRightView);
 
         return demoPerspective;
@@ -139,7 +136,7 @@ public class ResponsiveApplicationDemo implements DemoLesson {
             sessionContext.addRootPanel(null, rootPanel);
 
             // create new instance of the Demo Class
-            DemoLesson demo = new ResponsiveApplicationDemo(sessionContext);
+            DemoLesson demo = new ResponsiveApplicationDemo();
 
             // call the method defined in the DemoLesson Interface
             demo.handleDemoSelected();

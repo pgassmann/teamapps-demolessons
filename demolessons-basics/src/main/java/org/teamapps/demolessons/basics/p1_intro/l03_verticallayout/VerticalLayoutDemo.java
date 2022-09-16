@@ -14,7 +14,6 @@ import org.teamapps.ux.component.flexcontainer.VerticalLayout;
 import org.teamapps.ux.component.panel.Panel;
 import org.teamapps.ux.component.rootpanel.RootPanel;
 import org.teamapps.ux.component.template.BaseTemplateRecord;
-import org.teamapps.ux.session.SessionContext;
 import org.teamapps.webcontroller.WebController;
 
 public class VerticalLayoutDemo implements DemoLesson {
@@ -22,7 +21,7 @@ public class VerticalLayoutDemo implements DemoLesson {
     private Component rootComponent = new DummyComponent();
 
     // Constructor, only set session context instance variable
-    public VerticalLayoutDemo(SessionContext context) {
+    public VerticalLayoutDemo() {
     }
 
     public Component getRootComponent(){
@@ -76,7 +75,7 @@ public class VerticalLayoutDemo implements DemoLesson {
             sessionContext.addRootPanel(null, rootPanel);
 
             // create new instance of the Demo Class
-            VerticalLayoutDemo demoInstance = new VerticalLayoutDemo(sessionContext);
+            VerticalLayoutDemo demoInstance = new VerticalLayoutDemo();
 
             // call the method defined in the DemoLesson Interface
             demoInstance.handleDemoSelected();

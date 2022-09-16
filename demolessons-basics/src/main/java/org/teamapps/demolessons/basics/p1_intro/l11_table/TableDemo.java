@@ -18,7 +18,6 @@ import org.teamapps.ux.component.table.Table;
 import org.teamapps.ux.component.table.TableColumn;
 import org.teamapps.ux.component.template.BaseTemplate;
 import org.teamapps.ux.component.template.BaseTemplateRecord;
-import org.teamapps.ux.session.SessionContext;
 import org.teamapps.webcontroller.WebController;
 
 import java.time.LocalDate;
@@ -28,9 +27,9 @@ import java.util.Map;
 
 public class TableDemo implements DemoLesson {
 
-    private Component rootComponent;
+    private final Component rootComponent;
 
-    public TableDemo(SessionContext sessionContext) {
+    public TableDemo() {
 
         Panel panel = new Panel(MaterialIcon.LIGHTBULB_OUTLINE, "Table Demo");
         rootComponent = panel;
@@ -87,6 +86,7 @@ public class TableDemo implements DemoLesson {
 
         table.setEditable(true);
 
+        @SuppressWarnings("rawtypes")
         Button<BaseTemplateRecord> saveButton = Button.create(MaterialIcon.SAVE, "Save Records");
         panel.setRightHeaderField(new TextField().setEmptyText("..."));
 
@@ -131,7 +131,7 @@ public class TableDemo implements DemoLesson {
             sessionContext.addRootPanel(null, rootPanel);
 
             // create new instance of the Demo Class
-            DemoLesson demo = new TableDemo(sessionContext);
+            DemoLesson demo = new TableDemo();
 
             // call the method defined in the DemoLesson Interface
             demo.handleDemoSelected();

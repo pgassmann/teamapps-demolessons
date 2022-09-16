@@ -14,15 +14,16 @@ import org.teamapps.webcontroller.WebController;
 
 public class ButtonDemo implements DemoLesson {
 
-    private Component rootComponent;
+    private final Component rootComponent;
 
-    public ButtonDemo(SessionContext sessionContext) {
+    public ButtonDemo() {
 
         Panel panel = new Panel(MaterialIcon.LIGHTBULB_OUTLINE, "Button Demo");
         rootComponent = panel;
 
+        @SuppressWarnings("rawtypes")
         Button<BaseTemplateRecord> button = Button.create("Do it! & Expand dropdownComponent of Button", new DummyComponent("foo"));
-        button.onClicked.addListener(() -> sessionContext.showNotification(MaterialIcon.FLAG, "Button clicked!"));
+        button.onClicked.addListener(() -> SessionContext.current().showNotification(MaterialIcon.FLAG, "Button clicked!"));
         panel.setContent(button);
 
     }
@@ -42,7 +43,7 @@ public class ButtonDemo implements DemoLesson {
             sessionContext.addRootPanel(null, rootPanel);
 
             // create new instance of the Demo Class
-            DemoLesson demo = new ButtonDemo(sessionContext);
+            DemoLesson demo = new ButtonDemo();
 
             // call the method defined in the DemoLesson Interface
             demo.handleDemoSelected();

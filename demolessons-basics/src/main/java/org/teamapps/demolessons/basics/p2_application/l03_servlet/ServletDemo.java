@@ -27,10 +27,10 @@ public class ServletDemo implements DemoLesson {
 
         notificationManager.onNotificationPosted.addListener(text -> sessionContext.showNotification(MaterialIcon.ALARM, text));
     }
-    public ServletDemo(SessionContext sessionContext) {
+    public ServletDemo() {
         this.notificationManager = staticNotificationManager;
 
-        notificationManager.onNotificationPosted.addListener(text -> sessionContext.showNotification(MaterialIcon.ALARM, text));
+        notificationManager.onNotificationPosted.addListener(text -> SessionContext.current().showNotification(MaterialIcon.ALARM, text));
     }
 
     @Override

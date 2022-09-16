@@ -8,16 +8,15 @@ import org.teamapps.ux.component.Component;
 import org.teamapps.ux.component.dummy.DummyComponent;
 import org.teamapps.ux.component.panel.Panel;
 import org.teamapps.ux.component.rootpanel.RootPanel;
-import org.teamapps.ux.session.SessionContext;
 import org.teamapps.webcontroller.WebController;
 
 public class PanelDemo implements DemoLesson {
 
     // Field rootComponent is the Content of this Demo
-    private Component rootComponent;
+    private final Component rootComponent;
 
     // Constructor
-    public PanelDemo(SessionContext context) {
+    public PanelDemo() {
 
         // create new Panel and define it as the DemoLesson rootComponent
         Panel panel = new Panel(MaterialIcon.LIGHTBULB_OUTLINE, "My first Panel");
@@ -45,7 +44,7 @@ public class PanelDemo implements DemoLesson {
             sessionContext.addRootPanel(null, rootPanel);
 
             // get the rootComponent of the Demo and set it as the content of the global container (rootPanel)
-            Component rootComponent = new PanelDemo(sessionContext).getRootComponent();
+            Component rootComponent = new PanelDemo().getRootComponent();
             rootPanel.setContent(rootComponent);
 
         };

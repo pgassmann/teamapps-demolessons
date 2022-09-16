@@ -61,9 +61,9 @@ public class IssueTrackerApp implements DemoLesson {
     private Perspective issuePerspective;
 
     // Constructor, only set session context instance variable
-    public IssueTrackerApp(SessionContext context) {
+    public IssueTrackerApp() {
         issueTrackerApplication = ResponsiveApplication.createApplication();
-        this.context = context;
+        this.context = SessionContext.current();
         // startDb();
         createDemoData();
         this.rootComponent = createUI();
@@ -483,7 +483,7 @@ public class IssueTrackerApp implements DemoLesson {
             startDb();
 
             // create new instance of the Demo Class
-            DemoLesson demo = new IssueTrackerApp(sessionContext);
+            DemoLesson demo = new IssueTrackerApp();
 
 
             // call the method defined in the DemoLesson Interface

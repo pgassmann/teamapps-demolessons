@@ -16,7 +16,7 @@ import org.teamapps.webcontroller.WebController;
 public class CheckboxDemo implements DemoLesson {
 
     private Component rootComponent = new DummyComponent();
-    private SessionContext context;
+    private final SessionContext context;
 
     // additional instance variables
     private static Panel panel;
@@ -25,8 +25,8 @@ public class CheckboxDemo implements DemoLesson {
     private static boolean lightOn;
 
     // Constructor, only set session context instance variable
-    public CheckboxDemo(SessionContext context) {
-        this.context = context;
+    public CheckboxDemo() {
+        this.context = SessionContext.current();
     }
 
     private static void handleLightSwitchPressed(Boolean checked) {
@@ -87,7 +87,7 @@ public class CheckboxDemo implements DemoLesson {
             sessionContext.addRootPanel(null, rootPanel);
 
             // create new instance of the Demo Class
-            DemoLesson demo = new CheckboxDemo(sessionContext);
+            DemoLesson demo = new CheckboxDemo();
 
             // call the method defined in the DemoLesson Interface
             demo.handleDemoSelected();

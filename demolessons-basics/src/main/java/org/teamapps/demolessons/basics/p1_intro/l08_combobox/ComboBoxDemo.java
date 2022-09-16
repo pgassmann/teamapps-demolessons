@@ -18,10 +18,10 @@ import java.util.Arrays;
 
 public class ComboBoxDemo implements DemoLesson {
 
-    private Component rootComponent;
+    private final Component rootComponent;
 
     // Constructor, only set session context instance variable
-    public ComboBoxDemo(SessionContext sessionContext) {
+    public ComboBoxDemo() {
 
         Panel panel = new Panel(MaterialIcon.LIGHTBULB_OUTLINE, "ComboBox Demo");
         rootComponent = panel;
@@ -32,7 +32,7 @@ public class ComboBoxDemo implements DemoLesson {
         /* ComboBox of Strings*/
         verticalLayout.addComponent(new Label("ComboBox of Strings"));
         ComboBox<String> stringComboBox = ComboBox.createForList(Arrays.asList("Cake", "Spaghetti", "Fries", "Icecream", "Pizza", "Chocolate"));
-        stringComboBox.onValueChanged.addListener(s -> sessionContext.showNotification(MaterialIcon.ARROW_DROP_DOWN, s));
+        stringComboBox.onValueChanged.addListener(s -> SessionContext.current().showNotification(MaterialIcon.ARROW_DROP_DOWN, s));
         stringComboBox.setShowClearButton(true);
         verticalLayout.addComponent(stringComboBox);
 
@@ -82,7 +82,7 @@ public class ComboBoxDemo implements DemoLesson {
             sessionContext.addRootPanel(null, rootPanel);
 
             // create new instance of the Demo Class
-            DemoLesson demo = new ComboBoxDemo(sessionContext);
+            DemoLesson demo = new ComboBoxDemo();
 
             // call the method defined in the DemoLesson Interface
             demo.handleDemoSelected();

@@ -22,10 +22,10 @@ import java.util.List;
 
 public class PropertyExtractorDemo implements DemoLesson {
 
-    private Component rootComponent;
+    private final Component rootComponent;
 
     // Constructor, only set session context instance variable
-    public PropertyExtractorDemo(SessionContext sessionContext) {
+    public PropertyExtractorDemo() {
 
         Panel panel = new Panel(MaterialIcon.LIGHTBULB_OUTLINE, "Property Extractor and (Tag)ComboBox Demo");
         rootComponent = panel;
@@ -67,7 +67,7 @@ public class PropertyExtractorDemo implements DemoLesson {
         /* Define string representation of object for search and autocomplete */
         mealComboBox.setRecordToStringFunction(meal -> meal.getName()+" ("+ meal.getCalories()+")");
 
-        mealComboBox.onValueChanged.addListener(s -> sessionContext.showNotification(s.getIcon(), s.getName()));
+        mealComboBox.onValueChanged.addListener(s -> SessionContext.current().showNotification(s.getIcon(), s.getName()));
 
 
         /* Second Combobox uses a BeanPropertyExtractor */
@@ -134,7 +134,7 @@ public class PropertyExtractorDemo implements DemoLesson {
             sessionContext.addRootPanel(null, rootPanel);
 
             // create new instance of the Demo Class
-            DemoLesson demo = new PropertyExtractorDemo(sessionContext);
+            DemoLesson demo = new PropertyExtractorDemo();
 
             // call the method defined in the DemoLesson Interface
             demo.handleDemoSelected();

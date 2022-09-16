@@ -19,15 +19,14 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class BackgroundTasksDemo implements DemoLesson {
 
-    private SessionContext sessionContext;
 
-    public BackgroundTasksDemo(SessionContext sessionContext) {
-        this.sessionContext = sessionContext;
+    public BackgroundTasksDemo() {
     }
 
     @Override
     public Component getRootComponent() {
         VerticalLayout verticalLayout = new VerticalLayout();
+        @SuppressWarnings("rawtypes")
         Button<BaseTemplateRecord> button = Button.create(MaterialIcon.ALARM, "Calculate Pi");
         ProgressDisplay progressDisplay = new ProgressDisplay();
         verticalLayout.addComponent(button);
@@ -45,7 +44,7 @@ public class BackgroundTasksDemo implements DemoLesson {
 
             future.thenAcceptWithCurrentSessionContext(pi -> {
                 if (pi != null) {
-                    sessionContext.showNotification(MaterialIcon.ALARM, "Pi is " + pi);
+                    SessionContext.current().showNotification(MaterialIcon.ALARM, "Pi is " + pi);
                 }
             });
 
@@ -91,7 +90,7 @@ public class BackgroundTasksDemo implements DemoLesson {
             sessionContext.addRootPanel(null, rootPanel);
 
             // create new instance of the Demo Class
-            DemoLesson demo = new BackgroundTasksDemo(sessionContext);
+            DemoLesson demo = new BackgroundTasksDemo();
 
             // call the method defined in the DemoLesson Interface
             demo.handleDemoSelected();

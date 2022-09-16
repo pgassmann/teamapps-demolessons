@@ -21,9 +21,9 @@ import java.util.List;
 
 public class TreeDemo implements DemoLesson {
 
-    private Component rootComponent;
+    private final Component rootComponent;
 
-    public TreeDemo(SessionContext sessionContext) {
+    public TreeDemo() {
 
         /* SimpleTree */
         SimpleTree<Void> simpleTree = new SimpleTree<>();
@@ -35,7 +35,7 @@ public class TreeDemo implements DemoLesson {
         simpleTree.addNode(new BaseTemplateTreeNode<Void>(MaterialIcon.LOCAL_GROCERY_STORE, "Store").setParent(locations));
         simpleTree.setTemplatesByDepth(BaseTemplate.LIST_ITEM_MEDIUM_ICON_SINGLE_LINE, BaseTemplate.LIST_ITEM_SMALL_ICON_SINGLE_LINE);
 
-        simpleTree.onNodeSelected.addListener(node -> sessionContext.showNotification(MaterialIcon.MAP, node.getCaption()));
+        simpleTree.onNodeSelected.addListener(node -> SessionContext.current().showNotification(MaterialIcon.MAP, node.getCaption()));
 
         /* Tree with a Model */
         SimpleTreeModel<Void> simpleTreeModel = new SimpleTreeModel<>();
@@ -100,7 +100,7 @@ public class TreeDemo implements DemoLesson {
             sessionContext.addRootPanel(null, rootPanel);
 
             // create new instance of the Demo Class
-            DemoLesson demo = new TreeDemo(sessionContext);
+            DemoLesson demo = new TreeDemo();
 
             // call the method defined in the DemoLesson Interface
             demo.handleDemoSelected();

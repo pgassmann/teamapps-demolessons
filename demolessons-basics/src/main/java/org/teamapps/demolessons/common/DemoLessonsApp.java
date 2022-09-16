@@ -34,12 +34,9 @@ import org.teamapps.ux.component.rootpanel.RootPanel;
 import org.teamapps.ux.component.template.BaseTemplate;
 import org.teamapps.ux.component.template.BaseTemplateTreeNode;
 import org.teamapps.ux.component.tree.SimpleTree;
-import org.teamapps.ux.session.SessionContext;
 import org.teamapps.webcontroller.WebController;
 
 public class DemoLessonsApp implements DemoLesson {
-
-    private final SessionContext sessionContext;
 
     private Component rootComponent;
     private View demoView;
@@ -47,7 +44,6 @@ public class DemoLessonsApp implements DemoLesson {
 
     public DemoLessonsApp(ResponsiveApplication responsiveApplication) {
         this.responsiveApplication = responsiveApplication;
-        this.sessionContext = SessionContext.current();
 //        this.rootComponent = createRootComponent();
         // handleDemoSelected();
     }
@@ -94,59 +90,59 @@ public class DemoLessonsApp implements DemoLesson {
         lessonsTree.addNode(introLessons);
         introLessons.setExpanded(true);
 
-        BaseTemplateTreeNode<DemoLesson> l01_Panel = new BaseTemplateTreeNode<>(MaterialIcon.WEB_ASSET, null ,"Panel", "First lesson (PanelDemo)","1", new PanelDemo(sessionContext));
+        BaseTemplateTreeNode<DemoLesson> l01_Panel = new BaseTemplateTreeNode<>(MaterialIcon.WEB_ASSET, null ,"Panel", "First lesson (PanelDemo)","1", new PanelDemo());
         l01_Panel.setParent(introLessons);
         lessonsTree.addNode(l01_Panel);
 
-        BaseTemplateTreeNode<DemoLesson> l02_TextField = new BaseTemplateTreeNode<>(MaterialIcon.INPUT, null ," TextField", "with event handling","2", new TextFieldDemo(sessionContext));
+        BaseTemplateTreeNode<DemoLesson> l02_TextField = new BaseTemplateTreeNode<>(MaterialIcon.INPUT, null ," TextField", "with event handling","2", new TextFieldDemo());
         l02_TextField.setParent(introLessons);
         lessonsTree.addNode(l02_TextField);
 
-        BaseTemplateTreeNode<DemoLesson> l03_verticallayout = new BaseTemplateTreeNode<>(MaterialIcon.INPUT, null ,"Vertical Layout", "Multiple components","3", new VerticalLayoutDemo(sessionContext));
+        BaseTemplateTreeNode<DemoLesson> l03_verticallayout = new BaseTemplateTreeNode<>(MaterialIcon.INPUT, null ,"Vertical Layout", "Multiple components","3", new VerticalLayoutDemo());
         l03_verticallayout.setParent(introLessons);
         lessonsTree.addNode(l03_verticallayout);
 
-        BaseTemplateTreeNode<DemoLesson> l04_richtexteditor = new BaseTemplateTreeNode<>(MaterialIcon.INPUT, null ,"Rich Text Editor", "Formatted text","4", new RichTextEditorDemo(sessionContext));
+        BaseTemplateTreeNode<DemoLesson> l04_richtexteditor = new BaseTemplateTreeNode<>(MaterialIcon.INPUT, null ,"Rich Text Editor", "Formatted text","4", new RichTextEditorDemo());
         l04_richtexteditor.setParent(introLessons);
         lessonsTree.addNode(l04_richtexteditor);
 
-        BaseTemplateTreeNode<DemoLesson> l05_label = new BaseTemplateTreeNode<>(MaterialIcon.INPUT, null ,"Labels", "TextField labels","5", new LabelDemo(sessionContext));
+        BaseTemplateTreeNode<DemoLesson> l05_label = new BaseTemplateTreeNode<>(MaterialIcon.INPUT, null ,"Labels", "TextField labels","5", new LabelDemo());
         l05_label.setParent(introLessons);
         lessonsTree.addNode(l05_label);
 
-        BaseTemplateTreeNode<DemoLesson> l06_button = new BaseTemplateTreeNode<>(MaterialIcon.INPUT, null ,"Button", "Button","6", new ButtonDemo(sessionContext));
+        BaseTemplateTreeNode<DemoLesson> l06_button = new BaseTemplateTreeNode<>(MaterialIcon.INPUT, null ,"Button", "Button","6", new ButtonDemo());
         l06_button.setParent(introLessons);
         lessonsTree.addNode(l06_button);
 
-        BaseTemplateTreeNode<DemoLesson> l07_checkbox = new BaseTemplateTreeNode<>(MaterialIcon.INPUT, null ,"CheckBox", "Switches","7", new CheckboxDemo(sessionContext));
+        BaseTemplateTreeNode<DemoLesson> l07_checkbox = new BaseTemplateTreeNode<>(MaterialIcon.INPUT, null ,"CheckBox", "Switches","7", new CheckboxDemo());
         l07_checkbox.setParent(introLessons);
         lessonsTree.addNode(l07_checkbox);
 
-        BaseTemplateTreeNode<DemoLesson> l08_combobox = new BaseTemplateTreeNode<>(MaterialIcon.INPUT, null ,"ComboBox", "with BeanPropertyExtractor","8", new ComboBoxDemo(sessionContext));
+        BaseTemplateTreeNode<DemoLesson> l08_combobox = new BaseTemplateTreeNode<>(MaterialIcon.INPUT, null ,"ComboBox", "with BeanPropertyExtractor","8", new ComboBoxDemo());
         l08_combobox.setParent(introLessons);
         lessonsTree.addNode(l08_combobox);
 
-        BaseTemplateTreeNode<DemoLesson> l09_propertyextractor = new BaseTemplateTreeNode<>(MaterialIcon.INPUT, null ,"PropertyExtractor", "with TagComboBox and Property Mapping","9", new PropertyExtractorDemo(sessionContext));
+        BaseTemplateTreeNode<DemoLesson> l09_propertyextractor = new BaseTemplateTreeNode<>(MaterialIcon.INPUT, null ,"PropertyExtractor", "with TagComboBox and Property Mapping","9", new PropertyExtractorDemo());
         l09_propertyextractor.setParent(introLessons);
         lessonsTree.addNode(l09_propertyextractor);
 
-        BaseTemplateTreeNode<DemoLesson> l10_responsiveform = new BaseTemplateTreeNode<>(MaterialIcon.INPUT, null ,"ResponsiveForm", "Complete Form with Data saving","10", new ResponsiveFormDemo(sessionContext));
+        BaseTemplateTreeNode<DemoLesson> l10_responsiveform = new BaseTemplateTreeNode<>(MaterialIcon.INPUT, null ,"ResponsiveForm", "Complete Form with Data saving","10", new ResponsiveFormDemo());
         l10_responsiveform.setParent(introLessons);
         lessonsTree.addNode(l10_responsiveform);
 
-        BaseTemplateTreeNode<DemoLesson> l11_table = new BaseTemplateTreeNode<>(MaterialIcon.INPUT, null ,"Table", "Table with various Fields","11", new TableDemo(sessionContext));
+        BaseTemplateTreeNode<DemoLesson> l11_table = new BaseTemplateTreeNode<>(MaterialIcon.INPUT, null ,"Table", "Table with various Fields","11", new TableDemo());
         l11_table.setParent(introLessons);
         lessonsTree.addNode(l11_table);
 
-        BaseTemplateTreeNode<DemoLesson> l12_toolbar = new BaseTemplateTreeNode<>(MaterialIcon.INPUT, null ,"Toolbar", "Toolbar and Custom Icons","12", new ToolbarDemo(sessionContext));
+        BaseTemplateTreeNode<DemoLesson> l12_toolbar = new BaseTemplateTreeNode<>(MaterialIcon.INPUT, null ,"Toolbar", "Toolbar and Custom Icons","12", new ToolbarDemo());
         l12_toolbar.setParent(introLessons);
         lessonsTree.addNode(l12_toolbar);
 
-        BaseTemplateTreeNode<DemoLesson> l13_tree = new BaseTemplateTreeNode<>(MaterialIcon.INPUT, null ,"Tree", "SimpleTree","13", new TreeDemo(sessionContext));
+        BaseTemplateTreeNode<DemoLesson> l13_tree = new BaseTemplateTreeNode<>(MaterialIcon.INPUT, null ,"Tree", "SimpleTree","13", new TreeDemo());
         l13_tree.setParent(introLessons);
         lessonsTree.addNode(l13_tree);
 
-        BaseTemplateTreeNode<DemoLesson> l14_responsiveapplication = new BaseTemplateTreeNode<>(MaterialIcon.INPUT, null ,"Responsive Application", "Layout Design","14", new ResponsiveApplicationDemo(sessionContext));
+        BaseTemplateTreeNode<DemoLesson> l14_responsiveapplication = new BaseTemplateTreeNode<>(MaterialIcon.INPUT, null ,"Responsive Application", "Layout Design","14", new ResponsiveApplicationDemo());
         l14_responsiveapplication.setParent(introLessons);
         lessonsTree.addNode(l14_responsiveapplication);
 
@@ -155,19 +151,19 @@ public class DemoLessonsApp implements DemoLesson {
         BaseTemplateTreeNode<DemoLesson> applicationLessons = new BaseTemplateTreeNode<>(MaterialIcon.APPS, "Applications", "More than UI");
         lessonsTree.addNode(applicationLessons);
 
-        BaseTemplateTreeNode<DemoLesson> l01_backgroundtasks = new BaseTemplateTreeNode<>(MaterialIcon.INPUT, null ,"Background Tasks", "Background calculations...","01", new BackgroundTasksDemo(sessionContext));
+        BaseTemplateTreeNode<DemoLesson> l01_backgroundtasks = new BaseTemplateTreeNode<>(MaterialIcon.INPUT, null ,"Background Tasks", "Background calculations...","01", new BackgroundTasksDemo());
         l01_backgroundtasks.setParent(applicationLessons);
         lessonsTree.addNode(l01_backgroundtasks);
 
-        BaseTemplateTreeNode<DemoLesson> l02_externalevent = new BaseTemplateTreeNode<>(MaterialIcon.INPUT, null ,"External Event", "Events between sessions","02", new ExternalEventsDemo(sessionContext));
+        BaseTemplateTreeNode<DemoLesson> l02_externalevent = new BaseTemplateTreeNode<>(MaterialIcon.INPUT, null ,"External Event", "Events between sessions","02", new ExternalEventsDemo());
         l02_externalevent.setParent(applicationLessons);
         lessonsTree.addNode(l02_externalevent);
 
-        BaseTemplateTreeNode<DemoLesson> l03_servlet = new BaseTemplateTreeNode<>(MaterialIcon.INPUT, null ,"Servlet", "Create Events from an additional Endpoint","03", new ServletDemo(sessionContext));
+        BaseTemplateTreeNode<DemoLesson> l03_servlet = new BaseTemplateTreeNode<>(MaterialIcon.INPUT, null ,"Servlet", "Create Events from an additional Endpoint","03", new ServletDemo());
         l03_servlet.setParent(applicationLessons);
         lessonsTree.addNode(l03_servlet);
 
-        BaseTemplateTreeNode<DemoLesson> l04_mustachetemplate = new BaseTemplateTreeNode<>(MaterialIcon.INPUT, null ,"MustacheTemplate", "Versatile Custom Elements","03", new MustacheTemplateDemo(sessionContext));
+        BaseTemplateTreeNode<DemoLesson> l04_mustachetemplate = new BaseTemplateTreeNode<>(MaterialIcon.INPUT, null ,"MustacheTemplate", "Versatile Custom Elements","03", new MustacheTemplateDemo());
         l04_mustachetemplate.setParent(applicationLessons);
         lessonsTree.addNode(l04_mustachetemplate);
 
@@ -180,18 +176,18 @@ public class DemoLessonsApp implements DemoLesson {
         l99DemoLessonsApp.setParent(experimentalLessons);
         lessonsTree.addNode(l99DemoLessonsApp);
 
-        BaseTemplateTreeNode<DemoLesson> l05_iconViewer = new BaseTemplateTreeNode<>(AntuIcon.APP_GCSTAR_48, null ,"IconViewer", "IconViewer using InfiniteItemView",null, new IconViewerDemo(sessionContext));
+        BaseTemplateTreeNode<DemoLesson> l05_iconViewer = new BaseTemplateTreeNode<>(AntuIcon.APP_GCSTAR_48, null ,"IconViewer", "IconViewer using InfiniteItemView",null, new IconViewerDemo());
         l05_iconViewer.setParent(experimentalLessons);
         lessonsTree.addNode(l05_iconViewer);
 
         // Issue Tracker
 
-        BaseTemplateTreeNode<DemoLesson> issueTracker = new BaseTemplateTreeNode<>(MaterialIcon.BUG_REPORT, null,"IssueTracker", "Real Application with Database", null, new IssueTrackerApp(sessionContext));
+        BaseTemplateTreeNode<DemoLesson> issueTracker = new BaseTemplateTreeNode<>(MaterialIcon.BUG_REPORT, null,"IssueTracker", "Real Application with Database", null, new IssueTrackerApp());
         lessonsTree.addNode(issueTracker);
 
         // Hibernate SQL
 
-//        BaseTemplateTreeNode<DemoLesson> hibernateSQL = new BaseTemplateTreeNode<>(MaterialIcon.STORAGE, null,"Hibernate SQL", "Integration of other databases", null, new HibernateSQLApp(sessionContext));
+//        BaseTemplateTreeNode<DemoLesson> hibernateSQL = new BaseTemplateTreeNode<>(MaterialIcon.STORAGE, null,"Hibernate SQL", "Integration of other databases", null, new HibernateSQLApp());
 //        lessonsTree.addNode(hibernateSQL);
 
         BaseTemplateTreeNode<DemoLesson> l05_iconBrowser = new BaseTemplateTreeNode<>(EmojiIcon.OPEN_FILE_FOLDER, null ,"Icon Browser", "IconBrowser for Antu and Emoji Icons",null , new IconBrowser());

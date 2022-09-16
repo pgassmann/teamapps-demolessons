@@ -1,13 +1,11 @@
 package org.teamapps.demolessons.appserver;
 
-import org.teamapps.application.api.application.BaseApplicationBuilder;
 import org.teamapps.application.api.password.SecurePasswordHash;
 import org.teamapps.application.server.system.bootstrap.BootstrapSessionHandler;
 import org.teamapps.application.server.system.server.ApplicationServer;
 import org.teamapps.application.server.system.server.SessionRegistryHandler;
 import org.teamapps.application.server.system.session.UserSessionData;
 import org.teamapps.application.server.system.utils.ValueConverterUtils;
-import org.teamapps.demolessons.appserver.app.DemoApplicationBuilder;
 import org.teamapps.demolessons.appserver.app.DemoLessonsApplicationBuilder;
 import org.teamapps.demolessons.appserver.app.IssueTrackerApplicationBuilder;
 import org.teamapps.icon.material.MaterialIcon;

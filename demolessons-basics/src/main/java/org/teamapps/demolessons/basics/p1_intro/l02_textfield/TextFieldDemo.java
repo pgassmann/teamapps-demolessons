@@ -14,11 +14,11 @@ import org.teamapps.webcontroller.WebController;
 public class TextFieldDemo implements DemoLesson {
 
     private Component rootComponent = new DummyComponent();
-    private SessionContext context;
+    private final SessionContext context;
 
     // Constructor, only set session context instance variable
-    public TextFieldDemo(SessionContext context) {
-        this.context = context;
+    public TextFieldDemo() {
+        this.context = SessionContext.current();
     }
 
     public Component getRootComponent(){
@@ -70,7 +70,7 @@ public class TextFieldDemo implements DemoLesson {
             sessionContext.addRootPanel(null, rootPanel);
 
             // create new instance of the Demo Class
-            TextFieldDemo textFieldDemo = new TextFieldDemo(sessionContext);
+            TextFieldDemo textFieldDemo = new TextFieldDemo();
 
             // call the method defined in the DemoLesson Interface
             textFieldDemo.handleDemoSelected();

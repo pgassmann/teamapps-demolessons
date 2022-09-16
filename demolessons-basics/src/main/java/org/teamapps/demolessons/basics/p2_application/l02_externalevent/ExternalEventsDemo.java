@@ -14,20 +14,20 @@ import org.teamapps.webcontroller.WebController;
 
 public class ExternalEventsDemo implements DemoLesson {
 
-    private SessionContext sessionContext;
-    private NotificationManager notificationManager;
-    private static NotificationManager staticNotificationManager = new NotificationManager();
+    private final SessionContext sessionContext;
+    private final NotificationManager notificationManager;
+    private static final NotificationManager staticNotificationManager = new NotificationManager();
 
     public ExternalEventsDemo(SessionContext sessionContext, NotificationManager notificationManager) {
-        this.sessionContext = sessionContext;
+        this.sessionContext = SessionContext.current();
         this.notificationManager = notificationManager;
 
         notificationManager.onNotificationPosted.addListener(text -> sessionContext.showNotification(MaterialIcon.ALARM, text));
     }
 
     // When created without notification Manager, use the global Notification manager defined as static Class variable
-    public ExternalEventsDemo(SessionContext sessionContext) {
-        this.sessionContext = sessionContext;
+    public ExternalEventsDemo() {
+        this.sessionContext = SessionContext.current();
         this.notificationManager = staticNotificationManager;
 
         notificationManager.onNotificationPosted.addListener(text -> sessionContext.showNotification(MaterialIcon.ALARM, text));

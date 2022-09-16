@@ -19,10 +19,10 @@ import org.teamapps.webcontroller.WebController;
 
 public class ToolbarDemo implements DemoLesson {
 
-    private Component rootComponent;
+    private final Component rootComponent;
 
     // Constructor, only set session context instance variable
-    public ToolbarDemo(SessionContext sessionContext) {
+    public ToolbarDemo() {
 
         Panel panel = new Panel(MaterialIcon.LIGHTBULB_OUTLINE, "Toolbar Demo");
         rootComponent = panel;
@@ -40,7 +40,7 @@ public class ToolbarDemo implements DemoLesson {
         buttonGroup1.addButton(ToolbarButton.create(MaterialIcon.CLOUD_UPLOAD, "Load", "Open existing"));
 
         /* Create custom icon by combining two Icons using CompositeIcon.of() and withStyle() */
-        Icon deleteFolderIcon = CompositeIcon.of(MaterialIcon.FOLDER, MaterialIcon.DELETE.withStyle(MaterialIconStyles.PLAIN_RED_500));
+        Icon<CompositeIcon, Void> deleteFolderIcon = CompositeIcon.of(MaterialIcon.FOLDER, MaterialIcon.DELETE.withStyle(MaterialIconStyles.PLAIN_RED_500));
         buttonGroup1.addButton(ToolbarButton.create(deleteFolderIcon, "Delete Folder", "Delete current Folder"));
         buttonGroup1.addButton(ToolbarButton.create(MaterialIcon.SEND, "Senden", "send Mail"));
 
@@ -53,9 +53,9 @@ public class ToolbarDemo implements DemoLesson {
         buttonGroup2.addButton(robotButton2);
 
         /* ToolbarButtons have onClick events */
-        robotButton.onClick.addListener(toolbarButtonClickEvent -> toggleRobot(sessionContext, robotButton, robotButton2));
+        robotButton.onClick.addListener(toolbarButtonClickEvent -> toggleRobot(robotButton, robotButton2));
 
-        robotButton2.onClick.addListener(toolbarButtonClickEvent -> toggleRobot(sessionContext, robotButton, robotButton2));
+        robotButton2.onClick.addListener(toolbarButtonClickEvent -> toggleRobot(robotButton, robotButton2));
 
         // Toolbar belongs to the Panel, it is not part of the panel content.
         // Content can be anything.
@@ -73,14 +73,14 @@ public class ToolbarDemo implements DemoLesson {
             /* Manually fire onValueChanged event on textField2 */
             textField2.onValueChanged.fire(textField2.getValue());
         });
-        textField2.onValueChanged.addListener(s -> sessionContext.showNotification(MaterialIcon.NOTIFICATIONS, s));
+        textField2.onValueChanged.addListener(s -> SessionContext.current().showNotification(MaterialIcon.NOTIFICATIONS, s));
 
     }
 
-    private static void toggleRobot(SessionContext context, ToolbarButton robotButton, ToolbarButton robotButton2) {
+    private static void toggleRobot(ToolbarButton robotButton, ToolbarButton robotButton2) {
         boolean robotStatus = robotButton.isVisible();
         if (robotStatus) {
-            context.showNotification(MaterialIcon.SCHOOL, "Learning!");
+            SessionContext.current().showNotification(MaterialIcon.SCHOOL, "Learning!");
 
         }
         robotButton.setVisible(!robotButton.isVisible());
@@ -102,7 +102,7 @@ public class ToolbarDemo implements DemoLesson {
             sessionContext.addRootPanel(null, rootPanel);
 
             // create new instance of the Demo Class
-            DemoLesson demo = new ToolbarDemo(sessionContext);
+            DemoLesson demo = new ToolbarDemo();
 
             // call the method defined in the DemoLesson Interface
             demo.handleDemoSelected();

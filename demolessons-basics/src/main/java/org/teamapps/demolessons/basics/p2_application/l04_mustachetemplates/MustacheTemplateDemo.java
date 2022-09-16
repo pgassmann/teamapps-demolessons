@@ -11,7 +11,6 @@ import org.teamapps.ux.component.infiniteitemview.ListInfiniteItemViewModel;
 import org.teamapps.ux.component.panel.Panel;
 import org.teamapps.ux.component.rootpanel.RootPanel;
 import org.teamapps.ux.component.template.htmltemplate.MustacheTemplate;
-import org.teamapps.ux.session.SessionContext;
 import org.teamapps.webcontroller.WebController;
 
 import java.io.IOException;
@@ -20,10 +19,7 @@ import java.time.LocalDate;
 
 public class MustacheTemplateDemo implements DemoLesson {
 
-	private SessionContext sessionContext;
-
-	public MustacheTemplateDemo(SessionContext sessionContext) {
-		this.sessionContext = sessionContext;
+	public MustacheTemplateDemo() {
 	}
 
 	@Override
@@ -63,7 +59,7 @@ public class MustacheTemplateDemo implements DemoLesson {
 			sessionContext.addRootPanel(null, rootPanel);
 
 			// create new instance of the Demo Class
-			DemoLesson demo = new MustacheTemplateDemo(sessionContext);
+			DemoLesson demo = new MustacheTemplateDemo();
 
 			// call the method defined in the DemoLesson Interface
 			demo.handleDemoSelected();

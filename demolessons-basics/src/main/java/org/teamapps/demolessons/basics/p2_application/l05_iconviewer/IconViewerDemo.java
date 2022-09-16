@@ -21,7 +21,6 @@ import org.teamapps.ux.component.panel.Panel;
 import org.teamapps.ux.component.rootpanel.RootPanel;
 import org.teamapps.ux.component.template.BaseTemplate;
 import org.teamapps.ux.component.template.BaseTemplateRecord;
-import org.teamapps.ux.component.template.Template;
 import org.teamapps.ux.session.SessionContext;
 import org.teamapps.webcontroller.WebController;
 
@@ -29,14 +28,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class IconViewerDemo implements DemoLesson {
-
-	private SessionContext sessionContext;
-	private Template itemTemplate = BaseTemplate.ITEM_VIEW_ITEM;
 	private AntuIconStyle iconStyle;
 	private final ListInfiniteItemViewModel<AntuIcon> iconViewModel = new ListInfiniteItemViewModel<>(AntuIcon.getIcons());
 
-	public IconViewerDemo(SessionContext sessionContext) {
-		this.sessionContext = sessionContext;
+	public IconViewerDemo() {
 	}
 
 	@Override
@@ -54,7 +49,7 @@ public class IconViewerDemo implements DemoLesson {
 
 		VerticalLayout verticalLayout = new VerticalLayout();
 		// New Component: ResponsiveForm
-		ResponsiveForm responsiveForm = new ResponsiveForm<>(100,200,0);
+		ResponsiveForm<?> responsiveForm = new ResponsiveForm<>(100,200,0);
 		verticalLayout.addComponent(responsiveForm);
 
 		ResponsiveFormLayout layout = responsiveForm.addResponsiveFormLayout(400);
@@ -83,7 +78,7 @@ public class IconViewerDemo implements DemoLesson {
 				}
 				return null;
 		});
-		styleSelector.setRecordToStringFunction(style -> style.getFolder());
+		styleSelector.setRecordToStringFunction(AntuIconStyle::getFolder);
 		styleSelector.setShowClearButton(false);
 		styleSelector.setValue(AntuIconStyle.LIGHT);
 		iconViewComponent.setBodyBackgroundColor(Color.WHITE.withAlpha(0.8f));
@@ -115,7 +110,6 @@ public class IconViewerDemo implements DemoLesson {
 			case BaseTemplate.PROPERTY_CAPTION -> antuIcon.getIconId();
 			default -> null;
 		});
-		AntuIconStyle iconStyle = AntuIconStyle.LIGHT;
 		iconView.setModel(iconViewModel);
 		Panel panel = new Panel(null, "Icons");
 		panel.setContent(iconView);
@@ -124,7 +118,6 @@ public class IconViewerDemo implements DemoLesson {
 		searchField.onTextInput.addListener(s -> iconViewModel.setRecords(AntuIcon.getIcons().stream().filter(icon -> s == null || icon.getIconId().contains(s.toUpperCase())).collect(Collectors.toList())));
 		panel.setRightHeaderField(searchField);
 		iconView.onItemClicked.addListener(iconItemClickedEventData -> {
-			String iconId = iconItemClickedEventData.getRecord().toString();
 
 			// Custom Notification with VERY LARGE ICON
 			TemplateField<BaseTemplateRecord<Void>> templateField = new TemplateField<>(BaseTemplate.LIST_ITEM_EXTRA_VERY_LARGE_ICON_TWO_LINES);
@@ -133,7 +126,7 @@ public class IconViewerDemo implements DemoLesson {
 			iconNotification.setContent(templateField);
 			iconNotification.setShowProgressBar(false);
 			iconNotification.setDisplayTimeInMillis(5000);
-			sessionContext.showNotification(iconNotification, NotificationPosition.TOP_RIGHT);
+			SessionContext.current().showNotification(iconNotification, NotificationPosition.TOP_RIGHT);
 		});
 		return panel;
 	}
@@ -145,7 +138,7 @@ public class IconViewerDemo implements DemoLesson {
 			sessionContext.addRootPanel(null, rootPanel);
 
 			// create new instance of the Demo Class
-			DemoLesson demo = new IconViewerDemo(sessionContext);
+			DemoLesson demo = new IconViewerDemo();
 
 			// call the method defined in the DemoLesson Interface
 			demo.handleDemoSelected();

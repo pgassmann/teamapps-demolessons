@@ -24,7 +24,7 @@ public class ResponsiveFormDemo implements DemoLesson {
     private Friend saved_friend;
     private final ResponsiveForm<Friend> form;
 
-    public ResponsiveFormDemo(SessionContext sessionContext) {
+    public ResponsiveFormDemo() {
 
         Panel panel = new Panel(MaterialIcon.LIGHTBULB_OUTLINE, "Responsive Form Demo");
         rootComponent = panel;
@@ -54,7 +54,7 @@ public class ResponsiveFormDemo implements DemoLesson {
         saveButton.onClicked.addListener(aBoolean -> {
             saved_friend = new Friend();
             this.form.applyFieldValuesToRecord(saved_friend);
-            sessionContext.showNotification(MaterialIcon.SAVE, "Successfully saved your Friend " + saved_friend.getFirstName());
+            SessionContext.current().showNotification(MaterialIcon.SAVE, "Successfully saved your Friend " + saved_friend.getFirstName());
         });
 
         // Button to load the values from the instance variable saved_friend
@@ -65,7 +65,7 @@ public class ResponsiveFormDemo implements DemoLesson {
             if (saved_friend != null) {
                 this.form.applyRecordValuesToFields(saved_friend);
             } else {
-                sessionContext.showNotification(MaterialIcon.ERROR, "No saved Friend found");
+                SessionContext.current().showNotification(MaterialIcon.ERROR, "No saved Friend found");
             }
         });
 
@@ -91,7 +91,7 @@ public class ResponsiveFormDemo implements DemoLesson {
             sessionContext.addRootPanel(null, rootPanel);
 
             // create new instance of the Demo Class
-            DemoLesson demo = new ResponsiveFormDemo(sessionContext);
+            DemoLesson demo = new ResponsiveFormDemo();
 
             // call the method defined in the DemoLesson Interface
             demo.handleDemoSelected();

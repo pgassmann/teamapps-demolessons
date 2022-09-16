@@ -9,16 +9,13 @@ import org.teamapps.ux.component.field.TextField;
 import org.teamapps.ux.component.flexcontainer.VerticalLayout;
 import org.teamapps.ux.component.panel.Panel;
 import org.teamapps.ux.component.rootpanel.RootPanel;
-import org.teamapps.ux.session.SessionContext;
 import org.teamapps.webcontroller.WebController;
 
 public class LabelDemo implements DemoLesson {
 
-    private Component rootComponent;
-    private SessionContext context;
+    private final Component rootComponent;
 
-    public LabelDemo(SessionContext context) {
-        this.context = context;
+    public LabelDemo() {
 
         Panel panel = new Panel(MaterialIcon.LIGHTBULB_OUTLINE, "Label Demo");
         rootComponent = panel;
@@ -57,7 +54,7 @@ public class LabelDemo implements DemoLesson {
             sessionContext.addRootPanel(null, rootPanel);
 
             // create new instance of the Demo Class
-            DemoLesson demo = new LabelDemo(sessionContext);
+            DemoLesson demo = new LabelDemo();
 
             // call the method defined in the DemoLesson Interface
             demo.handleDemoSelected();
