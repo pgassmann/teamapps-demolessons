@@ -6,7 +6,7 @@ import org.teamapps.demolessons.common.DemoLesson;
 import org.teamapps.icon.material.MaterialIcon;
 import org.teamapps.server.jetty.embedded.TeamAppsJettyEmbeddedServer;
 import org.teamapps.ux.component.Component;
-import org.teamapps.ux.component.infiniteitemview.InfiniteItemView;
+import org.teamapps.ux.component.infiniteitemview.InfiniteItemView2;
 import org.teamapps.ux.component.infiniteitemview.ListInfiniteItemViewModel;
 import org.teamapps.ux.component.panel.Panel;
 import org.teamapps.ux.component.rootpanel.RootPanel;
@@ -25,14 +25,14 @@ public class MustacheTemplateDemo implements DemoLesson {
 	@Override
 	public Component getRootComponent() {
 		Panel panel = new Panel();
-		InfiniteItemView<StoreItem> itemView = new InfiniteItemView<>();
+		InfiniteItemView2<StoreItem> itemView = new InfiniteItemView2<>();
         itemView.setItemTemplate(new MustacheTemplate(loadResourceString("/org/teamapps/demolessons/basics/p2_application/l04_mustachetemplates/store-item.html")));
         ListInfiniteItemViewModel<StoreItem> model = new ListInfiniteItemViewModel<>();
         model.addRecord(new StoreItem("My first book", "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/BLW_Manuscript_Book_of_Hours%2C_about_1480-90.jpg/640px-BLW_Manuscript_Book_of_Hours%2C_about_1480-90.jpg", 27.5, LocalDate.of(1990, 2, 23)));
         model.addRecord(new StoreItem("Coconut", "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Coconut_on_white_background.jpg/640px-Coconut_on_white_background.jpg", 2.95, LocalDate.now().minusDays(2)));
         itemView.setModel(model);
         itemView.setItemWidth(0);
-        itemView.setRowHeight(100);
+        itemView.setItemHeight(100);
 
         // add custom property isNew to (default) BeanPropertyExtractor
         itemView.setItemPropertyExtractor(new BeanPropertyExtractor<StoreItem>().addProperty("isNew", storeItem -> LocalDate.now().minusDays(30).compareTo(storeItem.getReleaseDate()) < 0));
