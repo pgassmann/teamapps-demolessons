@@ -1,6 +1,5 @@
 package org.teamapps.demolessons.basics.p2_application.l03_servlet;
 
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,8 +17,10 @@ public class MyServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        // curl example:
-        // curl http://localhost:8080/api/get-foo?param=get
+        // for testing:
+        //    either:    type in the console (curl is a command line tool and can be used for sending HTTP requests):
+        //               curl http://localhost:8080/api/get-foo?param=get
+        //    or:        put the URL "http://localhost:8080/api/get-foo?param=get" in an extra tab of your browser
 
         PrintWriter writer = response.getWriter();
 
@@ -33,9 +34,11 @@ public class MyServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        // curl example:
-        // curl -d "param1=value1&param2=value2" http://localhost:8080/api/post-bar?param0=get
-        // curl -X POST -d "@/tmp/testfile" http://localhost:8080/api/post-bar?param0=get
+        // for testing:
+        //    type in the console (curl is a command line tool for Linux and can be used for sending HTTP requests):
+        //       curl -d "param1=value1&param2=value2" http://localhost:8080/api/post-bar?param0=get
+        //          or
+        //       curl -X POST -d "@/tmp/testfile" http://localhost:8080/api/post-bar?param0=get
 
         String postPathInfo = request.getRequestURI();
         PrintWriter respWriter = response.getWriter();

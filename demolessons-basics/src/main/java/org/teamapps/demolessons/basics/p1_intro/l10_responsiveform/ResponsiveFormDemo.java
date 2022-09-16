@@ -4,10 +4,7 @@ import org.teamapps.demolessons.common.DemoLesson;
 import org.teamapps.icon.material.MaterialIcon;
 import org.teamapps.server.jetty.embedded.TeamAppsJettyEmbeddedServer;
 import org.teamapps.ux.component.Component;
-import org.teamapps.ux.component.field.Button;
-import org.teamapps.ux.component.field.CheckBox;
-import org.teamapps.ux.component.field.FieldEditingMode;
-import org.teamapps.ux.component.field.TextField;
+import org.teamapps.ux.component.field.*;
 import org.teamapps.ux.component.field.datetime.InstantDateTimeField;
 import org.teamapps.ux.component.field.datetime.LocalDateField;
 import org.teamapps.ux.component.form.ResponsiveForm;
@@ -22,10 +19,10 @@ import java.time.LocalDate;
 
 public class ResponsiveFormDemo implements DemoLesson {
 
-    private Component rootComponent;
+    private final Component rootComponent;
 
     private Friend saved_friend;
-    private ResponsiveForm<Friend> form;
+    private final ResponsiveForm<Friend> form;
 
     public ResponsiveFormDemo(SessionContext sessionContext) {
 
@@ -33,7 +30,7 @@ public class ResponsiveFormDemo implements DemoLesson {
         rootComponent = panel;
 
         // New Component: ResponsiveForm
-        // reference in field so it's accessible in other methods
+        // reference in field, so it's accessible in other methods
         this.form = new ResponsiveForm<>(100, 200, 0);
         panel.setContent(this.form);
 
@@ -51,6 +48,7 @@ public class ResponsiveFormDemo implements DemoLesson {
         layout.addLabelAndField(MaterialIcon.ACCESS_TIME, "Created at", "createdAt", createdAtField);
 
         // Button to save the Values of the Form to the instance variable saved_friend
+        @SuppressWarnings("rawtypes")
         Button<BaseTemplateRecord> saveButton = Button.create(MaterialIcon.SAVE, "Save");
         layout.addLabelAndComponent(saveButton);
         saveButton.onClicked.addListener(aBoolean -> {
@@ -60,6 +58,7 @@ public class ResponsiveFormDemo implements DemoLesson {
         });
 
         // Button to load the values from the instance variable saved_friend
+        @SuppressWarnings("rawtypes")
         Button<BaseTemplateRecord> loadButton = Button.create(MaterialIcon.FILE_UPLOAD, "Load previously saved Friend");
         layout.addLabelAndComponent(loadButton);
         loadButton.onClicked.addListener(aBoolean -> {

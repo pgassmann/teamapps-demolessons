@@ -20,11 +20,9 @@ import org.teamapps.webcontroller.WebController;
 public class VerticalLayoutDemo implements DemoLesson {
 
     private Component rootComponent = new DummyComponent();
-    private SessionContext context;
 
     // Constructor, only set session context instance variable
     public VerticalLayoutDemo(SessionContext context) {
-        this.context = context;
     }
 
     public Component getRootComponent(){
