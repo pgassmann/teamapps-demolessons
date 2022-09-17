@@ -2,22 +2,17 @@ package org.teamapps.demolessons.appserver.app.builder;
 
 import org.teamapps.application.api.application.ApplicationInstanceData;
 import org.teamapps.application.api.application.perspective.AbstractApplicationPerspective;
-import org.teamapps.application.api.application.perspective.ApplicationPerspective;
 import org.teamapps.application.api.theme.ApplicationIcons;
-import org.teamapps.application.server.system.session.PerspectiveSessionData;
 import org.teamapps.common.format.Color;
 import org.teamapps.databinding.MutableValue;
 import org.teamapps.demolessons.common.DemoLessonsApp;
-import org.teamapps.ux.application.ResponsiveApplication;
 import org.teamapps.ux.application.layout.ExtendedLayout;
 import org.teamapps.ux.application.perspective.Perspective;
 import org.teamapps.ux.application.view.View;
-import org.teamapps.ux.session.CurrentSessionContext;
 
 public class OverviewPerspective extends AbstractApplicationPerspective {
     public OverviewPerspective(ApplicationInstanceData applicationInstanceData, MutableValue<String> perspectiveInfoBadgeValue) {
         super(applicationInstanceData, perspectiveInfoBadgeValue);
-        PerspectiveSessionData perspectiveSessionData = (PerspectiveSessionData) getApplicationInstanceData();
         createUi();
     }
 
