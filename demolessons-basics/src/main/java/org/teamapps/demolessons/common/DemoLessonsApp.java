@@ -14,6 +14,7 @@ import org.teamapps.demolessons.basics.p1_intro.l11_table.TableDemo;
 import org.teamapps.demolessons.basics.p1_intro.l12_toolbar.ToolbarDemo;
 import org.teamapps.demolessons.basics.p1_intro.l13_tree.TreeDemo;
 import org.teamapps.demolessons.basics.p1_intro.l14_responsiveapplication.ResponsiveApplicationDemo;
+import org.teamapps.demolessons.basics.p1_intro.l15_customizedcomponent.TernaryCheckboxDemo;
 import org.teamapps.demolessons.basics.p2_application.l01_backgroundtasks.BackgroundTasksDemo;
 import org.teamapps.demolessons.basics.p2_application.l02_externalevent.ExternalEventsDemo;
 import org.teamapps.demolessons.basics.p2_application.l03_servlet.ServletDemo;
@@ -145,6 +146,10 @@ public class DemoLessonsApp implements DemoLesson {
         BaseTemplateTreeNode<DemoLesson> l14_responsiveapplication = new BaseTemplateTreeNode<>(MaterialIcon.INPUT, null ,"Responsive Application", "Layout Design","14", new ResponsiveApplicationDemo());
         l14_responsiveapplication.setParent(introLessons);
         lessonsTree.addNode(l14_responsiveapplication);
+
+        BaseTemplateTreeNode<DemoLesson> l15_customizedcomponent = new BaseTemplateTreeNode<>(MaterialIcon.INDETERMINATE_CHECK_BOX, null ,"Customized Component", "build a TernaryCheckbox component","15", new TernaryCheckboxDemo());
+        l15_customizedcomponent.setParent(introLessons);
+        lessonsTree.addNode(l15_customizedcomponent);
 
         // Application Lessons
 
